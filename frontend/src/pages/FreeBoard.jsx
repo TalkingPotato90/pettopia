@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -12,11 +11,20 @@ function handleClick(event) {
 
 function FreeBoard() {
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="inherit" href="/" onClick={handleClick}>
+    <Link
+      underline="hover"
+      key="1"
+      color="inherit"
+      href="/"
+      onClick={handleClick}
+    >
       Home
     </Link>,
     <Link
-      underline="hover" key="2" color="inherit" href="/material-ui/getting-started/installation/"
+      underline="hover"
+      key="2"
+      color="inherit"
+      href="/material-ui/getting-started/installation/"
       onClick={handleClick}
     >
       커뮤니티

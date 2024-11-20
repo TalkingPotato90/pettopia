@@ -1,31 +1,43 @@
-import { fixupConfigRules } from "@eslint/compat";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import reactPlugin from "eslint-plugin-react";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
-
+/** @type {import('eslint').Linter.Config[]} */
 export default [
-    ...fixupConfigRules(
-        compat.extends(require.resolve("eslint-config-react-app"))
-    ),
-    {
-        rules: {
-            "no-var": "error", // var 금지
-            "no-multiple-empty-lines": "error", // 여러 줄 공백 금지
-            "no-console": ["error", { allow: ["warn", "error", "info"] }], // console.log() 금지
-            eqeqeq: "error", // 일치 연산자 사용 필수
-            "dot-notation": "error", // 가능하다면 dot notation 사용
-            "no-unused-vars": "error", // 사용하지 않는 변수 금지
-            "react/jsx-no-useless-fragment": "error", // 불필요한 Fragment 금지
+  {
+    files: ["**/*.{js,mjs,cjs,jsx}"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.jest, // Jest 환경 추가
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+      },
     },
+    plugins: {
+      react: reactPlugin, // react 플러그인 추가
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+      "react/jsx-uses-vars": "error", // JSX 내 변수 사용 감지
+      "no-var": "error", // var 금지
+      "no-multiple-empty-lines": "error", // 여러 줄 공백 금지
+      "no-console": ["error", { allow: ["warn", "error", "info"] }], // console.log 제한
+      eqeqeq: "error", // === 사용 필수
+      "dot-notation": "error", // dot notation 사용 권장
+      "no-unused-vars": "error", // 사용하지 않는 변수 금지
+    },
+  },
+  pluginJs.configs.recommended
 ];
