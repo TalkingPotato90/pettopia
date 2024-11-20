@@ -8,8 +8,8 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/freeboard" element={<FreeBoard/>}/>
-        <Route path="/mypage/main" element={<MyPageMain/>}/>
+        <Route path="/community/freeboard" element={<FreeBoard />}/>
+        <Route path="/mypage/main" element={<MyPageMain />}/>
       </Routes>
     </div>
   );
