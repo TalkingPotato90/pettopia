@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/freeboard" element={<FreeBoard/>}/>
+        <Route path="/community/freeboard" element={<FreeBoard/>}/>
       </Routes>
     </div>
   );
