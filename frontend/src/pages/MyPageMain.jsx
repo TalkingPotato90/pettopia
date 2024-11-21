@@ -1,15 +1,17 @@
-import { Box } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import {
+  Avatar,
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import defaultAvatar from '../assets/defaultAvatar.png';
-import { Stack } from '@mui/material';
-import { Typography } from '@mui/material';
-import { Button } from '@mui/material';
-import { TextField } from '@mui/material';
-import { Radio } from '@mui/material';
-import { RadioGroup } from '@mui/material';
-import { FormControlLabel } from '@mui/material';
-import { FormControl } from '@mui/material';
-import { FormLabel } from '@mui/material';
 import React from 'react';
 
 function MyPageMain() {
