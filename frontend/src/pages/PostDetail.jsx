@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'; // 엄지 척 아이콘
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt'; // 엄지 아래 아이콘
