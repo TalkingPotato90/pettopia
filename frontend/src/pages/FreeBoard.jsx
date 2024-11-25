@@ -41,8 +41,8 @@ function FreeBoard() {
   };
 
   // 검색어를 업데이트하는 함수
-  const handleSearch = (searchTerm) => {
-    setSearchTerm(searchTerm);
+  const handleSearch = () => {
+    setSearchTerm(inputTerm);
   };
 
   return (
