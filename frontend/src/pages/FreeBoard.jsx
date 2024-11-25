@@ -25,6 +25,28 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import defaultAvatar from '../assets/defaultAvatar.png';
 
+function FreeBoard() {
+  const [sort, setSort] = useState(''); // 정렬 상태 관리
+
+  // 정렬 기준 변경 시 상태 업데이트
+  const handleSortChange = (newSort) => {
+    setSort(newSort);
+  };
+
+  return (
+    <Stack spacing={2}>
+      <TopBreadcrumbs />
+      <Title />
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
+        <SortTable onSortChange={handleSortChange} />
+        <SearchForm />
+        <SearchButton />
+      </Box>
+      <TableContents sort={sort} />
+    </Stack>
+  );
+}
+
 function TopBreadcrumbs() {
   const handleClick = (event) => {
     event.preventDefault();
@@ -69,7 +91,9 @@ function TopBreadcrumbs() {
 function Title() {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'flex-start', pl: 10 }}>
-      <Typography variant="h4">자유게시판</Typography>
+      <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+        자유게시판
+      </Typography>
     </Box>
   );
 }
@@ -422,28 +446,6 @@ function WriteButton() {
     >
       글 작성
     </Button>
-  );
-}
-
-function FreeBoard() {
-  const [sort, setSort] = useState(''); // 정렬 상태 관리
-
-  // 정렬 기준 변경 시 상태 업데이트
-  const handleSortChange = (newSort) => {
-    setSort(newSort);
-  };
-
-  return (
-    <Stack spacing={2}>
-      <TopBreadcrumbs />
-      <Title />
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
-        <SortTable onSortChange={handleSortChange} />
-        <SearchForm />
-        <SearchButton />
-      </Box>
-      <TableContents sort={sort} />
-    </Stack>
   );
 }
 
