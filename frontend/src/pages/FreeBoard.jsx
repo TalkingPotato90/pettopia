@@ -1,25 +1,29 @@
-import * as React from 'react';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
+import { useState } from 'react';
+import {
+  Breadcrumbs,
+  Typography,
+  Box,
+  Link,
+  Stack,
+  FormControl,
+  OutlinedInput,
+  InputAdornment,
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Pagination,
+} from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import defaultAvatar from '../assets/defaultAvatar.png';
 
 function TopBreadcrumbs() {
   const handleClick = (event) => {
@@ -70,11 +74,13 @@ function Title() {
   );
 }
 
-function SortForm() {
-  const [sort, setSort] = React.useState('');
+function SortTable({ onSortChange }) {
+  const [sort, setSort] = useState('');
 
   const handleChange = (event) => {
-    setSort(event.target.value);
+    const newSort = event.target.value;
+    setSort(newSort);
+    onSortChange(newSort); // 부모 컴포넌트에 값 전달
   };
 
   return (
@@ -90,8 +96,8 @@ function SortForm() {
         <MenuItem disabled value="">
           <em>정렬</em>
         </MenuItem>
+        <MenuItem value="byDate">작성일순</MenuItem>
         <MenuItem value="byView">조회순</MenuItem>
-        <MenuItem value="byDate">날짜순</MenuItem>
         <MenuItem value="byRecommend">추천순</MenuItem>
       </Select>
     </FormControl>
@@ -141,23 +147,129 @@ function SearchButton() {
   );
 }
 
-function TableContents() {
-  const createData = (number, title, author, date, view, recommend) => {
-    return { number, title, author, date, view, recommend };
+function TableContents({ sort }) {
+  const columns = [
+    { id: 'number', label: '글번호', minWidth: 25 },
+    { id: 'title', label: '제목', minWidth: 200 },
+    { id: 'author', label: '작성자', minWidth: 80 },
+    {
+      id: 'date',
+      label: '작성일',
+      minWidth: 80,
+      format: (value) => value.toISOString,
+    },
+    { id: 'view', label: '조회수', minWidth: 35 },
+    { id: 'recommend', label: '추천수', minWidth: 35 },
+  ];
+
+  const createData = (number, title, avatar, author, date, view, recommend) => {
+    return { number, title, avatar, author, date, view, recommend };
   };
 
   const rows = [
     createData(
       1,
       '강아지 귀여워',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      10,
+      10,
+    ),
+    createData(
+      2,
+      '고양이도 귀여움',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      9,
+      9,
+    ),
+    createData(
+      3,
+      '강아지 귀여워',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      8,
+      8,
+    ),
+    createData(
+      4,
+      '고양이도 귀여움',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      6,
+      6,
+    ),
+    createData(
+      5,
+      '강아지 귀여워',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      7,
+      7,
+    ),
+    createData(
+      6,
+      '고양이도 귀여움',
+      null,
       '핫도그',
       new Date().toISOString().split('T')[0],
       15,
       100,
     ),
     createData(
-      2,
+      7,
+      '강아지 귀여워',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      15,
+      100,
+    ),
+    createData(
+      8,
       '고양이도 귀여움',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      15,
+      100,
+    ),
+    createData(
+      9,
+      '강아지 귀여워',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      15,
+      100,
+    ),
+    createData(
+      10,
+      '고양이도 귀여움',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      15,
+      100,
+    ),
+    createData(
+      11,
+      '강아지 귀여워',
+      null,
+      '핫도그',
+      new Date().toISOString().split('T')[0],
+      15,
+      100,
+    ),
+    createData(
+      12,
+      '고양이도 귀여움',
+      null,
       '핫도그',
       new Date().toISOString().split('T')[0],
       15,
@@ -165,63 +277,174 @@ function TableContents() {
     ),
   ];
 
+  const [page, setPage] = useState(1);
+  const [rowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // sort 기준에 따라 정렬
+  const sortedRows = [...rows].sort((a, b) => {
+    switch (sort) {
+      case 'byDate':
+        return new Date(b.date) - new Date(a.date); // 작성일 기준 내림차순
+      case 'byView':
+        return b.view - a.view; // 조회수 기준 내림차순
+      case 'byRecommend':
+        return b.recommend - a.recommend; // 추천수 기준 내림차순
+      default:
+        return 0;
+    }
+  });
+
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', pl: 10, pr: 10 }}>
-      <TableContainer component={Paper} style={styles.table}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        pl: 10,
+        pr: 10,
+        flexDirection: 'column',
+      }}
+    >
+      <TableContainer
+        component={Paper}
+        sx={{ maxHeight: 440, border: '1px solid gray' }}
+      >
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">글번호</TableCell>
-              <TableCell align="center">제목</TableCell>
-              <TableCell align="center">작성자</TableCell>
-              <TableCell align="center">작성일</TableCell>
-              <TableCell align="center">조회수</TableCell>
-              <TableCell align="center">추천수</TableCell>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align="center"
+                  style={{
+                    minWidth: column.minWidth,
+                    fontWeight: 'bold',
+                    backgroundColor: '#f5f5f5',
+                  }}
+                  sx={{ height: '10px', padding: '7px' }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.number}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell align="center" component="th" scope="row">
-                  {row.number}
-                </TableCell>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.author}</TableCell>
-                <TableCell align="center">{row.date}</TableCell>
-                <TableCell align="center">{row.view}</TableCell>
-                <TableCell align="center">{row.recommend}</TableCell>
-              </TableRow>
-            ))}
+            {sortedRows
+              .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+              .map((row) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      if (column.id === 'author') {
+                        return (
+                          <TableCell
+                            key={column.id}
+                            align="center"
+                            sx={{ height: '10px', padding: '7px' }}
+                          >
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <img
+                                src={row.avatar || defaultAvatar}
+                                alt="avatar"
+                                style={{
+                                  width: '24px',
+                                  height: '24px',
+                                  borderRadius: '50%',
+                                  marginRight: '8px',
+                                }}
+                              />
+                              {value}
+                            </Box>
+                          </TableCell>
+                        );
+                      }
+                      return (
+                        <TableCell
+                          key={column.id}
+                          align="center"
+                          sx={{ height: '10px', padding: '7px' }}
+                        >
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack
+        spacing={2}
+        sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}
+        direction="row"
+      >
+        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+          <Pagination
+            count={Math.ceil(rows.length / rowsPerPage)} // 페이지 개수를 계산
+            page={page} // 현재 페이지
+            onChange={handleChangePage} // 페이지 변경 함수
+            color="primary"
+            sx={{ display: 'flex', justifyContent: 'center' }}
+          />
+        </Box>
+
+        <WriteButton />
+      </Stack>
     </Box>
   );
 }
 
+function WriteButton() {
+  const handleClick = (event) => {
+    event.preventDefault();
+    alert('글작성 클릭');
+  };
+
+  return (
+    <Button
+      sx={{ height: '40px' }}
+      variant="contained"
+      color="primary"
+      onClick={handleClick}
+    >
+      글 작성
+    </Button>
+  );
+}
+
 function FreeBoard() {
+  const [sort, setSort] = useState(''); // 정렬 상태 관리
+
+  // 정렬 기준 변경 시 상태 업데이트
+  const handleSortChange = (newSort) => {
+    setSort(newSort);
+  };
+
   return (
     <Stack spacing={2}>
       <TopBreadcrumbs />
       <Title />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
-        <SortForm />
+        <SortTable onSortChange={handleSortChange} />
         <SearchForm />
         <SearchButton />
       </Box>
-      <TableContents />
+      <TableContents sort={sort} />
     </Stack>
   );
 }
-
-const styles = {
-  table: {
-    margin: '20px auto',
-    display: 'flex',
-  },
-};
 
 export default FreeBoard;
