@@ -27,10 +27,22 @@ import defaultAvatar from '../assets/defaultAvatar.png';
 
 function FreeBoard() {
   const [sort, setSort] = useState(''); // 정렬 상태 관리
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
+  const [inputTerm, setInputTerm] = useState(''); // 입력된 검색어 상태 관리
 
   // 정렬 기준 변경 시 상태 업데이트
   const handleSortChange = (newSort) => {
     setSort(newSort);
+  };
+
+  // 검색어 입력 시 상태 업데이트 (SearchButton 클릭 전까지는 searchTerm 변경 안 함)
+  const handleSearchChange = (event) => {
+    setInputTerm(event.target.value);
+  };
+
+  // 검색어를 업데이트하는 함수
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
   };
 
   return (
@@ -39,10 +51,14 @@ function FreeBoard() {
       <Title />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
         <SortTable onSortChange={handleSortChange} />
-        <SearchForm />
-        <SearchButton />
+        <SearchForm
+          value={inputTerm}
+          onSearchChange={handleSearchChange}
+          onSearch={handleSearch}
+        />
+        <SearchButton onSearch={handleSearch} />
       </Box>
-      <TableContents sort={sort} />
+      <TableContents sort={sort} searchTerm={searchTerm} />
     </Stack>
   );
 }
@@ -128,7 +144,14 @@ function SortTable({ onSortChange }) {
   );
 }
 
-function SearchForm() {
+function SearchForm({ value, onSearchChange, onSearch }) {
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onSearch(value); // Enter 키를 눌렀을 때 검색어로 필터링
+    }
+  };
+
   return (
     <FormControl
       sx={{ width: { xs: '100%', md: '25ch' }, height: '40px' }}
@@ -139,6 +162,9 @@ function SearchForm() {
         id="search"
         placeholder="Search…"
         sx={{ flexGrow: 1 }}
+        value={value}
+        onChange={onSearchChange} // 검색어 입력 시 상태 업데이트
+        onKeyPress={handleKeyPress} // Enter 키 처리
         startAdornment={
           <InputAdornment position="start" sx={{ color: 'text.primary' }}>
             <SearchRoundedIcon fontSize="small" />
@@ -152,10 +178,10 @@ function SearchForm() {
   );
 }
 
-function SearchButton() {
+function SearchButton({ onSearch }) {
   const handleClick = (event) => {
     event.preventDefault();
-    alert('검색 클릭');
+    onSearch(); // 검색 버튼 클릭 시 검색어 상태로 필터링
   };
 
   return (
@@ -171,7 +197,7 @@ function SearchButton() {
   );
 }
 
-function TableContents({ sort }) {
+function TableContents({ sort, searchTerm }) {
   const columns = [
     { id: 'number', label: '글번호', minWidth: 25 },
     { id: 'title', label: '제목', minWidth: 200 },
@@ -204,7 +230,7 @@ function TableContents({ sort }) {
       2,
       '고양이도 귀여움',
       null,
-      '핫도그',
+      '피카츄',
       new Date().toISOString().split('T')[0],
       9,
       9,
@@ -222,7 +248,7 @@ function TableContents({ sort }) {
       4,
       '고양이도 귀여움',
       null,
-      '핫도그',
+      '피카츄',
       new Date().toISOString().split('T')[0],
       6,
       6,
@@ -240,7 +266,7 @@ function TableContents({ sort }) {
       6,
       '고양이도 귀여움',
       null,
-      '핫도그',
+      '피카츄',
       new Date().toISOString().split('T')[0],
       15,
       100,
@@ -249,7 +275,7 @@ function TableContents({ sort }) {
       7,
       '강아지 귀여워',
       null,
-      '핫도그',
+      '피카츄',
       new Date().toISOString().split('T')[0],
       15,
       100,
@@ -304,12 +330,16 @@ function TableContents({ sort }) {
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(10);
 
+  const filteredRows = rows.filter((row) => {
+    return row.title.includes(searchTerm) || row.author.includes(searchTerm); // 제목이나 작성자가 검색어를 포함하는 경우만 필터링
+  });
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   // sort 기준에 따라 정렬
-  const sortedRows = [...rows].sort((a, b) => {
+  const sortedRows = [...filteredRows].sort((a, b) => {
     switch (sort) {
       case 'byDate':
         return new Date(b.date) - new Date(a.date); // 작성일 기준 내림차순
@@ -417,7 +447,7 @@ function TableContents({ sort }) {
       >
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
           <Pagination
-            count={Math.ceil(rows.length / rowsPerPage)} // 페이지 개수를 계산
+            count={Math.ceil(filteredRows.length / rowsPerPage)} // 페이지 개수를 계산
             page={page} // 현재 페이지
             onChange={handleChangePage} // 페이지 변경 함수
             color="primary"
