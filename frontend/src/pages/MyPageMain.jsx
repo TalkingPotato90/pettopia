@@ -129,12 +129,10 @@ function NeutralizationRadioGroupComponent() {
 
   return (
     <FormControl>
-      <FormLabel id="demo-controlled-radio-buttons-group">
-        중성화 여부
-      </FormLabel>
+      <FormLabel id="neutralization-radio-buttons-group">중성화 여부</FormLabel>
       <RadioGroup
         row
-        aria-labelledby="demo-controlled-radio-buttons-group"
+        aria-labelledby="neutralization-radio-buttons-group"
         name="controlled-radio-buttons-group"
         value={value}
         onChange={handleChange}
