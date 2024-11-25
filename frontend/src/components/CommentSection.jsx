@@ -1,7 +1,12 @@
-import React from 'react';
 import Comment from './Comment';
 
-const CommentSection = ({ comments, newComment, onCommentChange, onAddComment, setNewComment }) => {
+const CommentSection = ({
+  comments,
+  newComment,
+  onCommentChange,
+  onAddComment,
+  setNewComment,
+}) => {
   const renderComments = (parentId = null, level = 0) => {
     return comments
       .filter((comment) => comment.parentId === parentId)
