@@ -393,6 +393,22 @@ function TableContents({ sort, searchTerm }) {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       const value = row[column.id];
+                      if (column.id === 'title') {
+                        return (
+                          <TableCell
+                            key={column.id}
+                            align="center"
+                            sx={{
+                              height: '10px',
+                              padding: '7px',
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => alert(row.title)}
+                          >
+                            {value}
+                          </TableCell>
+                        );
+                      }
                       if (column.id === 'author') {
                         return (
                           <TableCell
