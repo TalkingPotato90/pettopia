@@ -23,7 +23,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import defaultAvatar from '../assets/defaultAvatar.png';
 
-function FreeBoard() {
+function FreeBoard({ isLoggedIn }) {
   const [sort, setSort] = useState(''); // 정렬 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [inputTerm, setInputTerm] = useState(''); // 입력된 검색어 상태 관리
@@ -56,7 +56,11 @@ function FreeBoard() {
         />
         <SearchButton onSearch={handleSearch} />
       </Box>
-      <TableContents sort={sort} searchTerm={searchTerm} />
+      <TableContents
+        sort={sort}
+        searchTerm={searchTerm}
+        isLoggedIn={isLoggedIn}
+      />
     </Stack>
   );
 }
@@ -154,7 +158,7 @@ function SearchButton({ onSearch }) {
   );
 }
 
-function TableContents({ sort, searchTerm }) {
+function TableContents({ sort, searchTerm, isLoggedIn }) {
   const columns = [
     { id: 'number', label: '글번호', minWidth: 25 },
     { id: 'title', label: '제목', minWidth: 200 },
@@ -428,7 +432,7 @@ function TableContents({ sort, searchTerm }) {
           />
         </Box>
 
-        <WriteButton />
+        {isLoggedIn && <WriteButton />}
       </Stack>
     </Box>
   );
