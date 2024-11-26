@@ -1,16 +1,30 @@
+import { useState } from 'react';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 const ReactionButtons = () => {
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
+
+  const handleLike = () => {
+    setLikes(likes + 1);
+  };
+
+  const handleDislike = () => {
+    setDislikes(dislikes + 1);
+  };
+
   return (
     <div style={styles.buttonContainer}>
-      <button style={styles.likeButton}>
+      <button style={styles.likeButton} onClick={handleLike}>
         <ThumbUpAltIcon style={styles.icon} />
         추천
+        <span style={styles.counter}>{likes}</span>
       </button>
-      <button style={styles.dislikeButton}>
+      <button style={styles.dislikeButton} onClick={handleDislike}>
         <ThumbDownAltIcon style={styles.icon} />
         비추천
+        <span style={styles.counter}>{dislikes}</span>
       </button>
     </div>
   );
@@ -28,7 +42,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '10px',
-    width: '120px',
+    width: '150px',
     height: '50px',
     fontSize: '16px',
     backgroundColor: '#4CAF50',
@@ -42,7 +56,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '10px',
-    width: '120px',
+    width: '150px',
     height: '50px',
     fontSize: '16px',
     backgroundColor: '#f44336',
@@ -53,6 +67,12 @@ const styles = {
   },
   icon: {
     fontSize: '20px',
+  },
+  counter: {
+    marginLeft: '10px',
+    fontSize: '18px',
+    fontWeight: 'bold',
+    color: '#fff',
   },
 };
 
