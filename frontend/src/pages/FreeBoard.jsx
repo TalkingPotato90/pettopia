@@ -24,6 +24,7 @@ import {
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import defaultAvatar from '../assets/defaultAvatar.png';
+import TopNavBar from '../components/TopNavBar';
 
 function FreeBoard() {
   const [sort, setSort] = useState(''); // 정렬 상태 관리
@@ -47,6 +48,7 @@ function FreeBoard() {
 
   return (
     <Stack spacing={2}>
+      <TopNavBar />
       <TopBreadcrumbs />
       <Title />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
@@ -95,7 +97,7 @@ function TopBreadcrumbs() {
 
   return (
     <Breadcrumbs
-      sx={{ display: 'flex', justifyContent: 'flex-start', pt: 5, pl: 10 }}
+      sx={{ display: 'flex', justifyContent: 'flex-start', pl: 10 }}
       separator={<NavigateNextIcon fontSize="small" />}
       aria-label="breadcrumb"
     >
