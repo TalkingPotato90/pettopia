@@ -37,20 +37,22 @@
     </tr>
         <tr>
       <td>주요 담당업무</td>
-      <td align="center">보안</a></td>
-      <td align="center">DB 관리</a></td>
-      <td align="center">CI/CD</a></td>
+      <td align="center">🔐 보안</a></td>
+      <td align="center">🛢️ DB 관리</a></td>
+      <td align="center">📢 CI/CD</a></td>
     </tr>
   </table>
 
 ## 🌈 주차별 목표
 - 1주차
   - [x] 프로젝트 주제 선정
-  - [] 프로젝트 계획서
-  - [] ui 설계
-  - [] DB 설계
-  - [] React 공부하기
-  - [] 환경설정하기
+  - [x] 프로젝트 계획서
+  - [x] ui 설계
+  - [x] React 공부하기
+  - [x] 환경설정하기
+- 2주차
+  - [] 화면 구현하기
+  - [x] React 공부하기
 
 ## 기술스택
 ![Java](https://img.shields.io/badge/jdk21-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
