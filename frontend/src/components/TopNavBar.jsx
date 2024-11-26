@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -22,6 +22,7 @@ function TopNavBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -38,12 +39,12 @@ function TopNavBar() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     // 로그아웃 로직 추가
-    navigate('/community/freeboard');
+    navigate(location.pathname);
   };
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    navigate('/community/freeboard');
+    navigate(location.pathname);
   };
 
   return (
