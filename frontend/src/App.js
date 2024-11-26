@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import FreeBoard from './pages/FreeBoard';
 import MyPageMain from './pages/MyPageMain';
@@ -96,20 +97,30 @@ const posts = [
 ];
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <div>
-      <TopNavBar />
+      <TopNavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
         <Route
           path="/community/freeboard"
-          element={<FreeBoard posts={posts} />}
+          element={<FreeBoard posts={posts} isLoggedIn={isLoggedIn} />}
         />
         <Route path="/mypage/main" element={<MyPageMain />} />
         <Route
           path="/community/postdetail/:postId"
           element={<PostDetail posts={posts} />}
         />
-        <Route path="/home/login" element={<Login />} />
+        <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
       </Routes>
     </div>
   );

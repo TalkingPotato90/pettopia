@@ -18,9 +18,8 @@ import defaultAvatar from '../assets/defaultAvatar.png';
 const pages = ['홈', '커뮤니티'];
 const userName = '핫도그';
 
-function TopNavBar() {
+function TopNavBar({ isLoggedIn, onLogout }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -37,13 +36,7 @@ function TopNavBar() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    // 로그아웃 로직 추가
-    navigate(location.pathname);
-  };
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+    onLogout();
     navigate(location.pathname);
   };
 
@@ -152,7 +145,7 @@ function TopNavBar() {
               </>
             ) : (
               <Button
-                onClick={handleLogin}
+                onClick={() => navigate('/home/login')}
                 variant="contained"
                 color="primary"
                 sx={{ ml: 2, mr: 2 }}
