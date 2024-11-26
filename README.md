@@ -17,7 +17,7 @@
   </tr>
   <tr>
     <td>팀 페이지</td>
-<td align="center"><a href="https://www.notion.so/Team-Project-Template-13dbd3f53d9080419167fc56b655bd45"><img src ="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white"></a></td>
+<td align="center"><a href="https://shadowed-plier-7d6.notion.site/Pettopia-13dbd3f53d9080419167fc56b655bd45"><img src ="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white"></a></td>
   </tr>
 </table>
 
