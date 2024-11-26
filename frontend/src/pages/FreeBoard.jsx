@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import {
-  Breadcrumbs,
   Typography,
   Box,
-  Link,
   Stack,
   FormControl,
   OutlinedInput,
@@ -21,8 +19,8 @@ import {
   Paper,
   Pagination,
 } from '@mui/material';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import defaultAvatar from '../assets/defaultAvatar.png';
 
 function FreeBoard() {
@@ -47,7 +45,7 @@ function FreeBoard() {
 
   return (
     <Stack spacing={2}>
-      <TopBreadcrumbs />
+      <CommunityBreadCrumbs />
       <Title />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
         <SortTable onSortChange={handleSortChange} />
@@ -60,47 +58,6 @@ function FreeBoard() {
       </Box>
       <TableContents sort={sort} searchTerm={searchTerm} />
     </Stack>
-  );
-}
-
-function TopBreadcrumbs() {
-  const handleClick = (event) => {
-    event.preventDefault();
-    alert('breadcrumbs 클릭');
-  };
-
-  const breadcrumbs = [
-    <Link
-      underline="hover"
-      key="1"
-      color="inherit"
-      href="/"
-      onClick={handleClick}
-    >
-      Home
-    </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="inherit"
-      href="/material-ui/getting-started/installation/"
-      onClick={handleClick}
-    >
-      커뮤니티
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      자유게시판
-    </Typography>,
-  ];
-
-  return (
-    <Breadcrumbs
-      sx={{ display: 'flex', justifyContent: 'flex-start', pt: 2, pl: 10 }}
-      separator={<NavigateNextIcon fontSize="small" />}
-      aria-label="breadcrumb"
-    >
-      {breadcrumbs}
-    </Breadcrumbs>
   );
 }
 
