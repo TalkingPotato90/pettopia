@@ -4,6 +4,7 @@ import FreeBoard from './pages/FreeBoard';
 import MyPageMain from './pages/MyPageMain';
 import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
+import TopNavBar from './components/TopNavBar';
 
 const posts = [
   {
@@ -97,6 +98,7 @@ const posts = [
 function App() {
   return (
     <div>
+      <TopNavBar />
       <Routes>
         <Route
           path="/community/freeboard"
