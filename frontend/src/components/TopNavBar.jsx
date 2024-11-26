@@ -20,6 +20,7 @@ const userName = '핫도그';
 
 function TopNavBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -35,8 +36,14 @@ function TopNavBar() {
   };
 
   const handleLogout = () => {
+    setIsLoggedIn(false);
     // 로그아웃 로직 추가
-    navigate('/home/login');
+    navigate('/community/freeboard');
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    navigate('/community/freeboard');
   };
 
   return (
@@ -120,25 +127,38 @@ function TopNavBar() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
-            <Tooltip title="myPage">
-              <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
-                <Avatar src={defaultAvatar} />
-              </IconButton>
-            </Tooltip>
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 'bold', color: 'white', ml: 2, mr: 2 }}
-            >
-              {userName} 님
-            </Typography>
-            <Button
-              onClick={handleLogout}
-              variant="contained"
-              color="primary"
-              sx={{ ml: 2, mr: 2 }}
-            >
-              로그아웃
-            </Button>
+            {isLoggedIn ? (
+              <>
+                <Tooltip title="myPage">
+                  <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
+                    <Avatar src={defaultAvatar} />
+                  </IconButton>
+                </Tooltip>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 'bold', color: 'white', ml: 2, mr: 2 }}
+                >
+                  {userName} 님
+                </Typography>
+                <Button
+                  onClick={handleLogout}
+                  variant="contained"
+                  color="primary"
+                  sx={{ ml: 2, mr: 2 }}
+                >
+                  로그아웃
+                </Button>
+              </>
+            ) : (
+              <Button
+                onClick={handleLogin}
+                variant="contained"
+                color="primary"
+                sx={{ ml: 2, mr: 2 }}
+              >
+                로그인
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>
