@@ -6,6 +6,7 @@ import MyPageMain from './pages/MyPageMain';
 import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
 import TopNavBar from './components/TopNavBar';
+import PostWrite from './pages/PostWrite';
 
 const posts = [
   {
@@ -121,6 +122,7 @@ function App() {
           element={<PostDetail posts={posts} />}
         />
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/community/postwrite" element={<PostWrite />} />
       </Routes>
     </div>
   );
