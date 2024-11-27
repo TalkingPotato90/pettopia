@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Typography,
   Box,
@@ -44,7 +45,7 @@ function FreeBoard({ isLoggedIn }) {
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1}>
       <CommunityBreadCrumbs />
       <Title />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
@@ -439,17 +440,14 @@ function TableContents({ sort, searchTerm, isLoggedIn }) {
 }
 
 function WriteButton() {
-  const handleClick = (event) => {
-    event.preventDefault();
-    alert('글작성 클릭');
-  };
+  const navigate = useNavigate();
 
   return (
     <Button
       sx={{ height: '40px' }}
       variant="contained"
       color="primary"
-      onClick={handleClick}
+      onClick={() => navigate('/community/postwrite')}
     >
       글 작성
     </Button>
