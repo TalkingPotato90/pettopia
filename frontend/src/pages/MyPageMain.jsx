@@ -4,7 +4,8 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
+  CssBaseline,
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -13,14 +14,15 @@ import {
   Stack,
   TextField,
   Typography,
-  Grid2,
-  Divider,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import defaultAvatar from '../assets/defaultAvatar.png';
+import AppTheme from '../theme/AppTheme';
+import ColorModeSelect from '../theme/ColorModeSelect';
+import MuiCard from '@mui/material/Card';
 
-function MyPageMain() {
+function MyPageMain(props) {
   const [hasPet, setHasPet] = useState(false);
 
   const handlePetCheckboxChange = (event) => {
@@ -28,35 +30,86 @@ function MyPageMain() {
   };
 
   return (
-    <Container sx={{ mt: 4 }}>
-      <Box sx={{ mb: 4 }}>{header()}</Box>
-      {editCategory(defaultAvatar, '회원정보', '회원 정보 수정')}
-      <Box sx={{ mb: 4 }}>
-        {inputDefaultInformation('닉네임', '이명화', '1998-06-03', false)}
-      </Box>
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <InformationContainer direction="column" justifyContent="space-between">
+        <ColorModeSelect
+          sx={{ position: 'fixed', top: '1rem', right: '1rem' }}
+        />
 
-      <Divider />
+        <Card variant="outlined">
+          <Box sx={{ mb: 4 }}>{header()}</Box>
+          {editCategory(defaultAvatar, '회원정보', '회원 정보 수정')}
+          <Box sx={{ mb: 4 }}>
+            {inputDefaultInformation('닉네임', '이명화', '1998-06-03', false)}
+          </Box>
 
-      <FormControlLabel
-        control={
-          <Checkbox checked={hasPet} onChange={handlePetCheckboxChange} />
-        }
-        label="반려동물 여부"
-        sx={{ mb: 4 }}
-      />
+          <Divider />
 
-      {hasPet && (
-        <Box sx={{ mb: 4 }}>
-          {editCategory(defaultAvatar, '반려동물', '반려동물 프로필 등록')}
-          {inputDefaultInformation('이름', '돌멩이', '1998-05-13', true)}
-        </Box>
-      )}
+          <FormControlLabel
+            control={
+              <Checkbox checked={hasPet} onChange={handlePetCheckboxChange} />
+            }
+            label="반려동물 여부"
+            sx={{ mb: 4 }}
+          />
 
-      <Box sx={{ mb: 4 }}>{introduce()}</Box>
-      <Button variant="contained">수정</Button>
-    </Container>
+          {hasPet && (
+            <Box sx={{ mb: 4 }}>
+              {editCategory(defaultAvatar, '반려동물', '반려동물 프로필 등록')}
+              {inputDefaultInformation('이름', '돌멩이', '1998-05-13', true)}
+            </Box>
+          )}
+
+          <Box sx={{ mb: 4 }}>{introduce()}</Box>
+          <Button variant="contained">수정</Button>
+        </Card>
+      </InformationContainer>
+    </AppTheme>
   );
 }
+
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'center',
+  width: '100%',
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  margin: 'auto',
+  [theme.breakpoints.up('sm')]: {
+    maxWidth: '1440px',
+  },
+  boxShadow:
+    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  ...theme.applyStyles('dark', {
+    boxShadow:
+      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
+  }),
+}));
+
+const InformationContainer = styled(Stack)(({ theme }) => ({
+  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+  minHeight: '100%',
+  padding: theme.spacing(2),
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(4),
+  },
+  '&::before': {
+    content: '""',
+    display: 'block',
+    position: 'absolute',
+    zIndex: -1,
+    inset: 0,
+    backgroundImage:
+      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
+    backgroundRepeat: 'no-repeat',
+    ...theme.applyStyles('dark', {
+      backgroundImage:
+        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+    }),
+  },
+}));
 
 function header() {
   return (
@@ -79,8 +132,8 @@ function editCategory(image, alt, title) {
 
 function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
   return (
-    <Grid2 container spacing={2}>
-      <Grid2 xs={4}>
+    <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ flex: 1 }}>
         <TextField
           required
           id="outlined-required"
@@ -88,8 +141,8 @@ function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
           defaultValue={name}
           fullWidth
         />
-      </Grid2>
-      <Grid2 xs={4}>
+      </Box>
+      <Box sx={{ flex: 1 }}>
         <TextField
           disabled={!isAnimal}
           id={isAnimal ? 'outlined-helperText' : 'outlined-disabled'}
@@ -97,12 +150,12 @@ function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
           defaultValue={birthday}
           fullWidth
         />
-      </Grid2>
-      <Grid2 xs={4}>
+      </Box>
+      <Box sx={{ flex: 1 }}>
         <GenderRadioGroupComponent />
         {isAnimal && <NeutralizationRadioGroupComponent />}
-      </Grid2>
-    </Grid2>
+      </Box>
+    </Box>
   );
 }
 
@@ -114,25 +167,14 @@ function GenderRadioGroupComponent() {
   };
 
   return (
-    <FormControl
-      component="fieldset"
-      sx={{
-        mt: 0,
-        position: 'relative',
-        top: '-15px',
-      }}
-    >
-      <FormLabel sx={{ mb: 1 }}>성별</FormLabel>
+    <FormControl component="fieldset">
+      <FormLabel>성별</FormLabel>
       <RadioGroup
         row
         name="gender"
         value={value}
         onChange={handleChange}
-        sx={{
-          gap: 2,
-          position: 'relative',
-          top: '-10px',
-        }}
+        sx={{ gap: 2 }}
       >
         <FormControlLabel value="male" control={<Radio />} label="남" />
         <FormControlLabel value="female" control={<Radio />} label="여" />
@@ -149,25 +191,14 @@ function NeutralizationRadioGroupComponent() {
   };
 
   return (
-    <FormControl
-      component="fieldset"
-      sx={{
-        mt: 0,
-        position: 'relative',
-        top: '-15px',
-      }}
-    >
-      <FormLabel sx={{ mb: 1 }}>중성화 여부</FormLabel>
+    <FormControl component="fieldset">
+      <FormLabel>중성화 여부</FormLabel>
       <RadioGroup
         row
         name="neutralization"
         value={value}
         onChange={handleChange}
-        sx={{
-          gap: 2,
-          position: 'relative',
-          top: '-10px',
-        }}
+        sx={{ gap: 2 }}
       >
         <FormControlLabel value="yes" control={<Radio />} label="예" />
         <FormControlLabel value="no" control={<Radio />} label="아니오" />
@@ -178,70 +209,45 @@ function NeutralizationRadioGroupComponent() {
 
 function introduce() {
   return (
-    <Grid2 container spacing={2} alignItems="flex-start">
-      <Grid2 xs={8}>
+    <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ flex: 2 }}>
         <TextField
           id="outlined-multiline-static"
           label="소개 및 특이사항"
-          multiline
-          rows={4}
           fullWidth
           defaultValue="돌멩이는 가만히 있는 것을 좋아합니다."
         />
-      </Grid2>
-      <Grid2 xs={4}>{InputFileUpload()}</Grid2>
-    </Grid2>
+      </Box>
+      <Box sx={{ flex: 1 }}>{InputFileUpload()}</Box>
+    </Box>
   );
 }
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  whiteSpace: 'nowrap',
-  width: 1,
-});
 
 function InputFileUpload() {
   return (
     <Box
       component="form"
       sx={{
-        '& .MuiTextField-root': { width: '100%' },
         display: 'flex',
         flexDirection: 'column',
         gap: 1,
       }}
-      noValidate
-      autoComplete="off"
     >
       <TextField
         id="outlined-read-only-input"
         label="프로필 사진 등록"
         defaultValue="사진을 업로드하세요."
         disabled
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            display: 'flex',
-            alignItems: 'center',
-          },
-        }}
       />
       <Button
         component="label"
         variant="contained"
         startIcon={<CloudUploadIcon />}
-        sx={{
-          whiteSpace: 'nowrap',
-          textTransform: 'none',
-          height: '36px',
-        }}
       >
         Upload
-        <VisuallyHiddenInput
+        <input
           type="file"
+          hidden
           onChange={(event) => event.target.files}
           multiple
         />
