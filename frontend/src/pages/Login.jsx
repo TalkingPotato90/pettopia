@@ -1,10 +1,12 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
+import {
+  Box,
+  Button,
+  CssBaseline,
+  Stack,
+  styled,
+  Typography,
+} from '@mui/material';
 import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
 import { GoogleIcon, KakaoIcon, NaverIcon, SitemarkIcon } from './CustomIcons';
 import AppTheme from '../theme/AppTheme';
 import ColorModeSelect from '../theme/ColorModeSelect';
