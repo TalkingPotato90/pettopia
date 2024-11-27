@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Typography,
   Box,
   Stack,
   FormControl,
@@ -23,6 +22,7 @@ import {
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import defaultAvatar from '../assets/defaultAvatar.png';
+import CommunityTitle from '../components/CommunityTitle';
 
 function FreeBoard({ isLoggedIn }) {
   const [sort, setSort] = useState(''); // 정렬 상태 관리
@@ -47,7 +47,7 @@ function FreeBoard({ isLoggedIn }) {
   return (
     <Stack spacing={1}>
       <CommunityBreadCrumbs />
-      <Title />
+      <CommunityTitle />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
         <SortTable onSortChange={handleSortChange} />
         <SearchForm
@@ -63,16 +63,6 @@ function FreeBoard({ isLoggedIn }) {
         isLoggedIn={isLoggedIn}
       />
     </Stack>
-  );
-}
-
-function Title() {
-  return (
-    <Box sx={{ display: 'flex', justifyContent: 'flex-start', pl: 10 }}>
-      <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-        자유게시판
-      </Typography>
-    </Box>
   );
 }
 
