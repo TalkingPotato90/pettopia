@@ -154,21 +154,21 @@ function TableContents({ sort, searchTerm, posts, isLoggedIn }) {
   const navigate = useNavigate();
 
   const columns = [
-    { id: 'number', label: '글번호', minWidth: 25 },
+    { id: 'id', label: '글번호', minWidth: 25 },
     { id: 'title', label: '제목', minWidth: 200 },
     { id: 'author', label: '작성자', minWidth: 80 },
     {
       id: 'date',
       label: '작성일',
       minWidth: 80,
-      format: (value) => value.toISOString,
+      format: (value) => value.toISOString(),
     },
     { id: 'view', label: '조회수', minWidth: 35 },
     { id: 'recommend', label: '추천수', minWidth: 35 },
   ];
 
   const rows = posts.map((post) => ({
-    number: post.id,
+    id: post.id,
     title: post.title,
     avatar: post.avatar || null,
     author: post.author,
@@ -254,7 +254,7 @@ function TableContents({ sort, searchTerm, posts, isLoggedIn }) {
                               cursor: 'pointer',
                             }}
                             onClick={() =>
-                              navigate(`/community/postDetail/${row.number}`)
+                              navigate(`/community/postDetail/${row.id}`)
                             }
                           >
                             {value}

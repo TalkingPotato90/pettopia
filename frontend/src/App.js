@@ -10,6 +10,8 @@ import { CssBaseline } from '@mui/material';
 import AppTheme from './theme/AppTheme';
 import posts from './data/posts'; // 외부 데이터 파일 import
 import Home from './pages/Home';
+import MyPageActivity from './pages/MyPageActivity';
+import myPosts from './data/myPosts';
 
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -39,6 +41,10 @@ function App(props) {
         />
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/community/postwrite" element={<PostWrite />} />
+        <Route
+          path="/mypage/activity"
+          element={<MyPageActivity myPosts={myPosts} />}
+        />
       </Routes>
     </AppTheme>
   );
