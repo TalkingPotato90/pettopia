@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,9 +12,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logoWhite from '../assets/logoWhite.png';
 import defaultAvatar from '../assets/defaultAvatar.png';
 import ColorModeSelect from '../theme/ColorModeSelect';
+import { SitemarkIcon } from '../pages/CustomIcons';
 
 const pages = ['홈', '커뮤니티'];
 const userName = '핫도그';
@@ -45,28 +45,9 @@ function TopNavBar({ isLoggedIn, onLogout }) {
     <AppBar position="static" sx={{ backgroundColor: '#808080' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img
-            src={logoWhite}
-            alt="logoWhite"
-            style={{ width: '24px', heigth: 'auto', paddingRight: '7px' }}
-          />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Courier New',
-              fontWeight: 600,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Pettopia
-          </Typography>
-
+          <Link to="/home/login">
+            <SitemarkIcon style={{ width: '24px', height: '24px' }} />
+          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
