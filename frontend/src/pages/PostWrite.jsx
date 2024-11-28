@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Stack, Typography, Box, TextField, Button } from '@mui/material';
+import {
+  Stack,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import ReactQuillEditor from '../components/ReactQuillEditor';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import CommunityTitle from '../components/CommunityTitle';
@@ -40,6 +51,7 @@ function PostWrite() {
           variant="outlined"
           size="small"
           placeholder="글 제목을 작성해주세요."
+          autoFocus
         />
       </Box>
 
@@ -70,18 +82,23 @@ function PostWrite() {
 function Buttons() {
   const buttons = ['등록', '취소'];
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const confirmCancel = () => {
+    setIsModalOpen(false);
+    navigate('/community/freeboard');
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleRegister = () => {
     alert('등록');
   };
 
   const handleCancel = () => {
-    const confirmCancel = window.confirm(
-      '작성한 내용이 모두 사라집니다. 취소하시겠습니까?',
-    );
-    if (confirmCancel) {
-      navigate('/community/freeboard');
-    }
+    setIsModalOpen(true);
   };
 
   return (
@@ -89,7 +106,7 @@ function Buttons() {
       {buttons.map((buttonText, index) => {
         return (
           <Button
-            key={{ index }}
+            key={index}
             sx={{
               height: '40px',
               marginRight: index === 0 ? '10px' : '0',
@@ -102,6 +119,36 @@ function Buttons() {
           </Button>
         );
       })}
+
+      <Dialog
+        open={isModalOpen}
+        onClose={closeModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          작성한 내용이 모두 사라집니다.
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            취소하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            onClick={confirmCancel}
+            sx={{ '&:hover': { color: 'primary.main' } }}
+          >
+            확인
+          </Button>
+          <Button
+            onClick={closeModal}
+            sx={{ '&:hover': { color: 'error.main' } }}
+          >
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
