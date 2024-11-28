@@ -1,14 +1,6 @@
-import {
-  Box,
-  Button,
-  CssBaseline,
-  Stack,
-  styled,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Stack, styled, Typography } from '@mui/material';
 import MuiCard from '@mui/material/Card';
 import { GoogleIcon, KakaoIcon, NaverIcon, SitemarkIcon } from './CustomIcons';
-import AppTheme from '../theme/AppTheme';
 import ColorModeSelect from '../theme/ColorModeSelect';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -53,51 +45,46 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function Login(props) {
+export default function Login() {
   return (
-    <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <SignInContainer direction="column" justifyContent="space-between">
-        <ColorModeSelect
-          sx={{ position: 'fixed', top: '1rem', right: '1rem' }}
-        />
-        <Card variant="outlined">
-          <SitemarkIcon />
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+    <SignInContainer direction="column" justifyContent="space-between">
+      <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
+      <Card variant="outlined">
+        <SitemarkIcon />
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+        >
+          소셜 로그인
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => alert('카카오 로그인')}
+            startIcon={<KakaoIcon />}
           >
-            소셜 로그인
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('카카오 로그인')}
-              startIcon={<KakaoIcon />}
-            >
-              카카오 계정으로 로그인 하기
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('네이버 로그인')}
-              startIcon={<NaverIcon />}
-            >
-              네이버 계정으로 로그인하기
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('구글 로그인')}
-              startIcon={<GoogleIcon />}
-            >
-              구글 계정으로 로그인하기
-            </Button>
-          </Box>
-        </Card>
-      </SignInContainer>
-    </AppTheme>
+            카카오 계정으로 로그인 하기
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => alert('네이버 로그인')}
+            startIcon={<NaverIcon />}
+          >
+            네이버 계정으로 로그인하기
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => alert('구글 로그인')}
+            startIcon={<GoogleIcon />}
+          >
+            구글 계정으로 로그인하기
+          </Button>
+        </Box>
+      </Card>
+    </SignInContainer>
   );
 }
