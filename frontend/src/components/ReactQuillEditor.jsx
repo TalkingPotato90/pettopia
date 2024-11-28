@@ -6,6 +6,8 @@ function ReactQuillEditor({ style, value, onChange }) {
     toolbar: {
       container: [
         [{ header: [1, 2, 3, 4, 5, false] }],
+        [{ size: [] }],
+        [{ font: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [
           { list: 'ordered' },
