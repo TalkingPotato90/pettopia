@@ -328,7 +328,7 @@ function TableContents({ sort, searchTerm, isLoggedIn }) {
                   style={{
                     minWidth: column.minWidth,
                     fontWeight: 'bold',
-                    backgroundColor: '#f5f5f5',
+                    borderBottom: '1px solid gray',
                   }}
                   sx={{ height: '10px', padding: '7px' }}
                 >
