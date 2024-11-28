@@ -1,6 +1,6 @@
-import { Box, Button, Stack, styled, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, styled } from '@mui/material';
 import MuiCard from '@mui/material/Card';
-import { GoogleIcon, KakaoIcon, NaverIcon, SitemarkIcon } from './CustomIcons';
+import { FullLogoIcon, GoogleIcon, KakaoIcon, NaverIcon } from './CustomIcons';
 import ColorModeSelect from '../theme/ColorModeSelect';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -50,14 +50,8 @@ export default function Login() {
     <SignInContainer direction="column" justifyContent="space-between">
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <Card variant="outlined">
-        <SitemarkIcon />
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-        >
-          소셜 로그인
-        </Typography>
+        <FullLogoIcon />
+        <Divider />
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Button
             fullWidth
