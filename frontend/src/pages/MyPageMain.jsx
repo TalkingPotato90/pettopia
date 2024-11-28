@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  Avatar,
   Box,
   Button,
   Checkbox,
@@ -16,8 +15,9 @@ import {
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import defaultAvatar from '../assets/defaultAvatar.png';
 import MuiCard from '@mui/material/Card';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PetsIcon from '@mui/icons-material/Pets';
 
 function MyPageMain() {
   const [hasPet, setHasPet] = useState(false);
@@ -30,7 +30,7 @@ function MyPageMain() {
     <InformationContainer direction="column" justifyContent="space-between">
       <Card variant="outlined">
         <Box sx={{ mb: 4 }}>{header()}</Box>
-        {editCategory(defaultAvatar, '회원정보', '회원 정보 수정')}
+        {editCategory('human', '회원정보', '회원 정보 수정')}
         <Box sx={{ mb: 4 }}>
           {inputDefaultInformation('닉네임', '이명화', '1998-06-03', false)}
         </Box>
@@ -47,7 +47,7 @@ function MyPageMain() {
 
         {hasPet && (
           <Box sx={{ mb: 4 }}>
-            {editCategory(defaultAvatar, '반려동물', '반려동물 프로필 등록')}
+            {editCategory('pet', '반려동물', '반려동물 프로필 등록')}
             {inputDefaultInformation('이름', '돌멩이', '1998-05-13', true)}
           </Box>
         )}
@@ -112,9 +112,11 @@ function header() {
 }
 
 function editCategory(image, alt, title) {
+  const IconComponent = image === 'human' ? AccountCircleIcon : PetsIcon;
+
   return (
     <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-      <Avatar alt={alt} src={image} sx={{ width: 24, height: 24 }} />
+      <IconComponent alt={alt} />
       <Typography variant="subtitle1">{title}</Typography>
     </Stack>
   );
@@ -203,7 +205,7 @@ function introduce() {
       <Box sx={{ flex: 2 }}>
         <TextField
           id="outlined-multiline-static"
-          label="소개 및 특이사항"
+          label="한줄소개"
           fullWidth
           defaultValue="돌멩이는 가만히 있는 것을 좋아합니다."
         />
