@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logoWhite from '../assets/logoWhite.png';
 import defaultAvatar from '../assets/defaultAvatar.png';
+import ColorModeSelect from '../theme/ColorModeSelect';
 
 const pages = ['홈', '커뮤니티'];
 const userName = '핫도그';
@@ -154,6 +155,7 @@ function TopNavBar({ isLoggedIn, onLogout }) {
               </Button>
             )}
           </Box>
+          <ColorModeSelect sx={{ mr: 2, display: 'flex' }} />
         </Toolbar>
       </Container>
     </AppBar>

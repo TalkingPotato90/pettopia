@@ -7,6 +7,8 @@ import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
 import TopNavBar from './components/TopNavBar';
 import PostWrite from './pages/PostWrite';
+import { CssBaseline } from '@mui/material';
+import AppTheme from './theme/AppTheme';
 
 const posts = [
   {
@@ -97,7 +99,7 @@ const posts = [
   },
 ];
 
-function App() {
+function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleLogin = () => {
@@ -109,7 +111,8 @@ function App() {
   };
 
   return (
-    <div>
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
       <TopNavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
         <Route
@@ -124,7 +127,7 @@ function App() {
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/community/postwrite" element={<PostWrite />} />
       </Routes>
-    </div>
+    </AppTheme>
   );
 }
 
