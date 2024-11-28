@@ -24,7 +24,7 @@ import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import defaultAvatar from '../assets/defaultAvatar.png';
 import CommunityTitle from '../components/CommunityTitle';
 
-function FreeBoard({ isLoggedIn }) {
+function FreeBoard({ posts, isLoggedIn }) {
   const [sort, setSort] = useState(''); // 정렬 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [inputTerm, setInputTerm] = useState(''); // 입력된 검색어 상태 관리
@@ -60,6 +60,7 @@ function FreeBoard({ isLoggedIn }) {
       <TableContents
         sort={sort}
         searchTerm={searchTerm}
+        posts={posts}
         isLoggedIn={isLoggedIn}
       />
     </Stack>
@@ -149,7 +150,9 @@ function SearchButton({ onSearch }) {
   );
 }
 
-function TableContents({ sort, searchTerm, isLoggedIn }) {
+function TableContents({ sort, searchTerm, posts, isLoggedIn }) {
+  const navigate = useNavigate();
+
   const columns = [
     { id: 'number', label: '글번호', minWidth: 25 },
     { id: 'title', label: '제목', minWidth: 200 },
@@ -164,120 +167,15 @@ function TableContents({ sort, searchTerm, isLoggedIn }) {
     { id: 'recommend', label: '추천수', minWidth: 35 },
   ];
 
-  const createData = (number, title, avatar, author, date, view, recommend) => {
-    return { number, title, avatar, author, date, view, recommend };
-  };
-
-  const rows = [
-    createData(
-      1,
-      '강아지 귀여워',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      10,
-      10,
-    ),
-    createData(
-      2,
-      '고양이도 귀여움',
-      null,
-      '피카츄',
-      new Date().toISOString().split('T')[0],
-      9,
-      9,
-    ),
-    createData(
-      3,
-      '강아지 귀여워',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      8,
-      8,
-    ),
-    createData(
-      4,
-      '고양이도 귀여움',
-      null,
-      '피카츄',
-      new Date().toISOString().split('T')[0],
-      6,
-      6,
-    ),
-    createData(
-      5,
-      '강아지 귀여워',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      7,
-      7,
-    ),
-    createData(
-      6,
-      '고양이도 귀여움',
-      null,
-      '피카츄',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-    createData(
-      7,
-      '강아지 귀여워',
-      null,
-      '피카츄',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-    createData(
-      8,
-      '고양이도 귀여움',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-    createData(
-      9,
-      '강아지 귀여워',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-    createData(
-      10,
-      '고양이도 귀여움',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-    createData(
-      11,
-      '강아지 귀여워',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-    createData(
-      12,
-      '고양이도 귀여움',
-      null,
-      '핫도그',
-      new Date().toISOString().split('T')[0],
-      15,
-      100,
-    ),
-  ];
+  const rows = posts.map((post) => ({
+    number: post.id,
+    title: post.title,
+    avatar: post.avatar || null,
+    author: post.author,
+    date: post.date,
+    view: post.view,
+    recommend: post.recommend,
+  }));
 
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(10);
@@ -355,7 +253,9 @@ function TableContents({ sort, searchTerm, isLoggedIn }) {
                               padding: '7px',
                               cursor: 'pointer',
                             }}
-                            onClick={() => alert(row.title)}
+                            onClick={() =>
+                              navigate(`/community/postDetail/${row.number}`)
+                            }
                           >
                             {value}
                           </TableCell>
