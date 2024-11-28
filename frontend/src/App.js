@@ -9,6 +9,7 @@ import PostWrite from './pages/PostWrite';
 import { CssBaseline } from '@mui/material';
 import AppTheme from './theme/AppTheme';
 import posts from './data/posts'; // 외부 데이터 파일 import
+import Home from './pages/Home';
 
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -26,6 +27,7 @@ function App(props) {
       <CssBaseline enableColorScheme />
       <TopNavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
+        <Route path="/home" element={<Home />} />
         <Route
           path="/community/freeboard"
           element={<FreeBoard posts={posts} isLoggedIn={isLoggedIn} />}

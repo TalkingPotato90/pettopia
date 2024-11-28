@@ -45,7 +45,7 @@ function TopNavBar({ isLoggedIn, onLogout }) {
     <AppBar position="static" sx={{ backgroundColor: '#808080' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/home/login">
+          <Link to="/home">
             <SitemarkIcon style={{ width: '24px', height: '24px' }} />
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
