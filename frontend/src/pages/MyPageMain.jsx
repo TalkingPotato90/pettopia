@@ -19,7 +19,7 @@ import { styled } from '@mui/material/styles';
 import defaultAvatar from '../assets/defaultAvatar.png';
 import MuiCard from '@mui/material/Card';
 
-function MyPageMain() {
+function MyPageMain(props) {
   const [hasPet, setHasPet] = useState(false);
 
   const handlePetCheckboxChange = (event) => {
