@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Stack, Typography, Box, TextField, Button } from '@mui/material';
 import ReactQuillEditor from '../components/ReactQuillEditor';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
@@ -68,6 +69,20 @@ function PostWrite() {
 
 function Buttons() {
   const buttons = ['등록', '취소'];
+  const navigate = useNavigate();
+
+  const handleRegister = () => {
+    alert('등록');
+  };
+
+  const handleCancel = () => {
+    const confirmCancel = window.confirm(
+      '작성한 내용이 모두 사라집니다. 취소하시겠습니까?',
+    );
+    if (confirmCancel) {
+      navigate('/community/freeboard');
+    }
+  };
 
   return (
     <>
@@ -81,7 +96,7 @@ function Buttons() {
             }}
             variant="contained"
             color={buttonText === '등록' ? 'primary' : 'error'}
-            onClick={() => alert(`${buttonText} 클릭`)}
+            onClick={buttonText === '등록' ? handleRegister : handleCancel}
           >
             {buttonText}
           </Button>
