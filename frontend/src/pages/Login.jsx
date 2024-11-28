@@ -1,7 +1,6 @@
 import { Box, Button, Divider, Stack, styled } from '@mui/material';
 import MuiCard from '@mui/material/Card';
 import { FullLogoIcon, GoogleIcon, KakaoIcon, NaverIcon } from './CustomIcons';
-import ColorModeSelect from '../theme/ColorModeSelect';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -48,7 +47,6 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 export default function Login() {
   return (
     <SignInContainer direction="column" justifyContent="space-between">
-      <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <Card variant="outlined">
         <FullLogoIcon />
         <Divider />
