@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Checkbox,
-  CssBaseline,
   Divider,
   FormControl,
   FormControlLabel,
@@ -18,11 +17,9 @@ import {
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import defaultAvatar from '../assets/defaultAvatar.png';
-import AppTheme from '../theme/AppTheme';
-import ColorModeSelect from '../theme/ColorModeSelect';
 import MuiCard from '@mui/material/Card';
 
-function MyPageMain(props) {
+function MyPageMain() {
   const [hasPet, setHasPet] = useState(false);
 
   const handlePetCheckboxChange = (event) => {
@@ -30,42 +27,35 @@ function MyPageMain(props) {
   };
 
   return (
-    <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <InformationContainer direction="column" justifyContent="space-between">
-        <ColorModeSelect
-          sx={{ position: 'fixed', top: '1rem', right: '1rem' }}
+    <InformationContainer direction="column" justifyContent="space-between">
+      <Card variant="outlined">
+        <Box sx={{ mb: 4 }}>{header()}</Box>
+        {editCategory(defaultAvatar, '회원정보', '회원 정보 수정')}
+        <Box sx={{ mb: 4 }}>
+          {inputDefaultInformation('닉네임', '이명화', '1998-06-03', false)}
+        </Box>
+
+        <Divider />
+
+        <FormControlLabel
+          control={
+            <Checkbox checked={hasPet} onChange={handlePetCheckboxChange} />
+          }
+          label="반려동물 여부"
+          sx={{ mb: 4 }}
         />
 
-        <Card variant="outlined">
-          <Box sx={{ mb: 4 }}>{header()}</Box>
-          {editCategory(defaultAvatar, '회원정보', '회원 정보 수정')}
+        {hasPet && (
           <Box sx={{ mb: 4 }}>
-            {inputDefaultInformation('닉네임', '이명화', '1998-06-03', false)}
+            {editCategory(defaultAvatar, '반려동물', '반려동물 프로필 등록')}
+            {inputDefaultInformation('이름', '돌멩이', '1998-05-13', true)}
           </Box>
+        )}
 
-          <Divider />
-
-          <FormControlLabel
-            control={
-              <Checkbox checked={hasPet} onChange={handlePetCheckboxChange} />
-            }
-            label="반려동물 여부"
-            sx={{ mb: 4 }}
-          />
-
-          {hasPet && (
-            <Box sx={{ mb: 4 }}>
-              {editCategory(defaultAvatar, '반려동물', '반려동물 프로필 등록')}
-              {inputDefaultInformation('이름', '돌멩이', '1998-05-13', true)}
-            </Box>
-          )}
-
-          <Box sx={{ mb: 4 }}>{introduce()}</Box>
-          <Button variant="contained">수정</Button>
-        </Card>
-      </InformationContainer>
-    </AppTheme>
+        <Box sx={{ mb: 4 }}>{introduce()}</Box>
+        <Button variant="contained">수정</Button>
+      </Card>
+    </InformationContainer>
   );
 }
 
