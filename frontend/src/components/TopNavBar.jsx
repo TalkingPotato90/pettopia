@@ -96,7 +96,7 @@ function TopNavBar({ isLoggedIn, onLogout }) {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 component={Link}
-                to={`/${page === '홈' ? '' : 'community/freeboard'}`}
+                to={`/${page === '홈' ? 'home' : 'community/freeboard'}`}
               >
                 {page}
               </Button>

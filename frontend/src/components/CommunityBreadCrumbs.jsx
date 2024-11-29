@@ -15,7 +15,7 @@ function CommunityBreadCrumbs() {
       underline="hover"
       key="1"
       color="inherit"
-      href="/"
+      href="/home"
       onClick={(e) => handleClick(e, '/')}
     >
       홈
