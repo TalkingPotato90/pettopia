@@ -17,32 +17,38 @@ import {
 import ReactionButtons from '../components/ReactionButtons';
 import CommentSection from '../components/CommentSection';
 
-const PostDetail = ({ posts }) => {
+const PostDetail = ({ posts, updatePostRecommend }) => {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const theme = useTheme(); // 현재 테마 가져오기 (라이트/다크 모드)
+  const theme = useTheme();
 
   const POSTS_PER_PAGE = 10; // 페이지당 게시글 수
-  const initialPage = Math.ceil(parseInt(postId) / POSTS_PER_PAGE); // 초기 페이지 계산
+  const initialPage = Math.ceil(parseInt(postId, 10) / POSTS_PER_PAGE);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE); // 전체 페이지 수 계산
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const paginatedPosts = posts.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE,
   );
 
-  const currentPostIndex = posts.findIndex(
-    (post) => post.id === parseInt(postId),
-  );
+  const currentPost = posts.find((post) => post.id === parseInt(postId, 10));
 
   const handlePageChange = (event, pageNumber) => {
-    setCurrentPage(pageNumber); // 페이지 변경
+    setCurrentPage(pageNumber);
   };
 
   useEffect(() => {
-    setCurrentPage(initialPage); // URL 이동 시 페이지 초기화
+    setCurrentPage(initialPage);
   }, [postId]);
+
+  if (!currentPost) {
+    return <Typography>게시글을 찾을 수 없습니다.</Typography>;
+  }
+
+  const handleRecommendChange = (newRecommend) => {
+    updatePostRecommend(currentPost.id, newRecommend); // 추천수 업데이트
+  };
 
   return (
     <Stack spacing={4} sx={{ padding: '16px' }}>
@@ -54,16 +60,19 @@ const PostDetail = ({ posts }) => {
         }}
       >
         <Typography variant="h4" gutterBottom>
-          {posts[currentPostIndex]?.title || '제목 없음'}
+          {currentPost.title || '제목 없음'}
         </Typography>
         <Typography variant="subtitle1" color="textSecondary">
-          작성자: {posts[currentPostIndex]?.author || '익명'} | 작성일:{' '}
-          {posts[currentPostIndex]?.date || '날짜 없음'}
+          작성자: {currentPost.author || '익명'} | 작성일:{' '}
+          {currentPost.date || '날짜 없음'} | 조회수: {currentPost.view}
         </Typography>
         <Typography variant="body1" sx={{ marginTop: '16px' }}>
-          {posts[currentPostIndex]?.content || '내용 없음'}
+          {currentPost.content || '내용 없음'}
         </Typography>
-        <ReactionButtons />
+        <ReactionButtons
+          recommend={currentPost.recommend}
+          onRecommendChange={handleRecommendChange}
+        />
         <CommentSection
           comments={[]}
           newComment=""
@@ -104,9 +113,7 @@ const PostDetail = ({ posts }) => {
                   </TableCell>
                   <TableCell align="center">{post.author}</TableCell>
                   <TableCell align="center">{post.date}</TableCell>
-                  <TableCell align="center">
-                    {Math.floor(Math.random() * 1000) + 1}
-                  </TableCell>
+                  <TableCell align="center">{post.view}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -114,9 +121,9 @@ const PostDetail = ({ posts }) => {
         </TableContainer>
         <Stack spacing={2} sx={{ marginTop: '16px', alignItems: 'center' }}>
           <Pagination
-            count={totalPages} // 총 페이지 수
-            page={currentPage} // 현재 페이지
-            onChange={handlePageChange} // 페이지 변경 핸들러
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
             color="primary"
           />
         </Stack>

@@ -8,7 +8,7 @@ import TopNavBar from './components/TopNavBar';
 import PostWrite from './pages/PostWrite';
 import { CssBaseline } from '@mui/material';
 import AppTheme from './theme/AppTheme';
-import posts from './data/posts'; // 외부 데이터 파일 import
+import postsData from './data/posts'; // posts 데이터
 import Home from './pages/Home';
 import MyPageActivity from './pages/MyPageActivity';
 import myPosts from './data/myPosts';
@@ -16,6 +16,7 @@ import Footer from './components/Footer';
 
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [posts, setPosts] = useState(postsData); // posts 상태 관리
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -23,6 +24,15 @@ function App(props) {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+  };
+
+  // 추천수 업데이트 함수
+  const updatePostRecommend = (postId, newRecommend) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, recommend: newRecommend } : post,
+      ),
+    );
   };
 
   return (
@@ -38,7 +48,12 @@ function App(props) {
         <Route path="/mypage/main" element={<MyPageMain />} />
         <Route
           path="/community/postdetail/:postId"
-          element={<PostDetail posts={posts} />}
+          element={
+            <PostDetail
+              posts={posts}
+              updatePostRecommend={updatePostRecommend} // 추천수 업데이트 함수 전달
+            />
+          }
         />
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/community/postwrite" element={<PostWrite />} />
