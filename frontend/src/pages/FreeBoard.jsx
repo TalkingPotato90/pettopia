@@ -45,7 +45,7 @@ function FreeBoard({ posts, isLoggedIn }) {
   };
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={2}>
       <CommunityBreadCrumbs />
       <CommunityTitle />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
@@ -310,7 +310,7 @@ function TableContents({ sort, searchTerm, posts, isLoggedIn }) {
       </TableContainer>
       <Stack
         spacing={2}
-        sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}
+        sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 3 }}
         direction="row"
       >
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
