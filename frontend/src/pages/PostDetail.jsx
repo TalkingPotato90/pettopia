@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactionButtons from '../components/ReactionButtons';
 import CommentSection from '../components/CommentSection';
-import Footer from '../components/Footer'; // Footer 컴포넌트 임포트
 
 const PostDetail = ({ posts }) => {
   const { postId } = useParams();
@@ -150,7 +149,6 @@ const PostDetail = ({ posts }) => {
           </button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
