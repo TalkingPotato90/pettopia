@@ -48,7 +48,31 @@ const LoginCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-export default function Home() {
+export default function Home({ posts }) {
+  const columns = [
+    { id: 'id', label: '글번호', minWidth: 25 },
+    { id: 'title', label: '제목', minWidth: 200 },
+    { id: 'author', label: '작성자', minWidth: 80 },
+    {
+      id: 'date',
+      label: '작성일',
+      minWidth: 80,
+      format: (value) => value.toISOString(),
+    },
+    { id: 'view', label: '조회수', minWidth: 35 },
+    { id: 'recommend', label: '추천수', minWidth: 35 },
+  ];
+
+  const rows = posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    avatar: post.avatar || null,
+    author: post.author,
+    date: post.date,
+    view: post.view,
+    recommend: post.recommend,
+  }));
+
   return (
     <HomeContainer
       direction="column"
@@ -79,7 +103,12 @@ export default function Home() {
             minWidth: 0,
           }}
         >
-          <CommunityTable />
+          <CommunityTable
+            page={1}
+            rowsPerPage={10}
+            rows={rows}
+            columns={columns}
+          />
         </Card>
         <LoginCard
           variant="outlined"
