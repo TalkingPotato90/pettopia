@@ -16,13 +16,13 @@ import RecommendIcon from '@mui/icons-material/Recommend';
 function CommunityTable({ page, rowsPerPage, sortedRows, columns, sx }) {
   const navigate = useNavigate();
 
+  const commonCellProps = {
+    align: 'center',
+    sx: { height: '10px', padding: '7px' },
+  };
+
   // 공통 TableCell 렌더링 함수
   const renderTableCell = (value, column, row) => {
-    const commonCellProps = {
-      align: 'center',
-      sx: { height: '10px', padding: '7px' },
-    };
-
     // title 컬럼 클릭 시 상세 페이지로 이동
     if (column.id === 'title') {
       return (
@@ -32,33 +32,6 @@ function CommunityTable({ page, rowsPerPage, sortedRows, columns, sx }) {
           onClick={() => navigate(`/community/postDetail/${row.id}`)}
         >
           {value}
-        </TableCell>
-      );
-    }
-
-    // author 컬럼에 이미지와 이름을 함께 표시
-    if (column.id === 'author') {
-      return (
-        <TableCell {...commonCellProps}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <img
-              src={row.avatar || defaultAvatar}
-              alt="avatar"
-              style={{
-                width: '24px',
-                height: '24px',
-                borderRadius: '50%',
-                marginRight: '8px',
-              }}
-            />
-            {value}
-          </Box>
         </TableCell>
       );
     }
@@ -130,6 +103,31 @@ function CommunityTable({ page, rowsPerPage, sortedRows, columns, sx }) {
                 {columns.length > 0
                   ? columns.map((column) => {
                       const value = row[column.id];
+                      if (column.id === 'author') {
+                        return (
+                          <TableCell {...commonCellProps}>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <img
+                                src={row.avatar || defaultAvatar}
+                                alt="avatar"
+                                style={{
+                                  width: '24px',
+                                  height: '24px',
+                                  borderRadius: '50%',
+                                  marginRight: '8px',
+                                }}
+                              />
+                              {value}
+                            </Box>
+                          </TableCell>
+                        );
+                      }
                       return renderTableCell(value, column, row);
                     })
                   : Object.keys(row).map((key) => {
