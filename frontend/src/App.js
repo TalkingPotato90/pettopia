@@ -12,6 +12,7 @@ import posts from './data/posts'; // 외부 데이터 파일 import
 import Home from './pages/Home';
 import MyPageActivity from './pages/MyPageActivity';
 import myPosts from './data/myPosts';
+import Footer from './components/Footer';
 
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -46,6 +47,7 @@ function App(props) {
           element={<MyPageActivity myPosts={myPosts} />}
         />
       </Routes>
+      <Footer />
     </AppTheme>
   );
 }
