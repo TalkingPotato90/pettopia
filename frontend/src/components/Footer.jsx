@@ -1,4 +1,5 @@
-import logoWhite from '../assets/logoWhite.png'; // 이미지 경로를 수정하세요
+import { Link } from 'react-router-dom';
+import { SitemarkIcon } from '../pages/CustomIcons';
 
 const Footer = () => {
   return (
@@ -6,10 +7,9 @@ const Footer = () => {
       <div style={styles.container}>
         {/* 왼쪽 섹션 */}
         <div style={styles.left}>
-          <h3 style={styles.logo}>Pettopia</h3>
-          <div style={styles.icon}>
-            <img src={logoWhite} alt="Pettopia Logo" style={styles.logoImage} />
-          </div>
+          <Link to="/home">
+            <SitemarkIcon style={{ width: '24px', height: '24px' }} />
+          </Link>
         </div>
 
         {/* 중앙 섹션 */}
