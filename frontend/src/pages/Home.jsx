@@ -1,4 +1,4 @@
-import { Stack, styled, TextField, Button } from '@mui/material';
+import { Stack, styled, TextField, Button, Typography } from '@mui/material';
 import CommunityTable from '../components/CommunityTable';
 import MuiCard from '@mui/material/Card';
 
@@ -88,6 +88,9 @@ export default function Home({ posts }) {
             minWidth: 0,
           }}
         >
+          <Typography variant="h6" sx={{ ml: 1, fontWeight: 'bold' }}>
+            커뮤니티
+          </Typography>
           <CommunityTable
             page={1}
             rowsPerPage={5}
