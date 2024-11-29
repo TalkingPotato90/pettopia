@@ -49,24 +49,9 @@ const LoginCard = styled(Card)(({ theme }) => ({
 }));
 
 export default function Home({ posts }) {
-  const columns = [
-    { id: 'id', label: '글번호', minWidth: 25 },
-    { id: 'title', label: '제목', minWidth: 200 },
-    { id: 'author', label: '작성자', minWidth: 80 },
-    {
-      id: 'date',
-      label: '작성일',
-      minWidth: 80,
-      format: (value) => value.toISOString(),
-    },
-    { id: 'view', label: '조회수', minWidth: 35 },
-    { id: 'recommend', label: '추천수', minWidth: 35 },
-  ];
-
   const rows = posts.map((post) => ({
     id: post.id,
     title: post.title,
-    avatar: post.avatar || null,
     author: post.author,
     date: post.date,
     view: post.view,
@@ -105,9 +90,10 @@ export default function Home({ posts }) {
         >
           <CommunityTable
             page={1}
-            rowsPerPage={10}
-            rows={rows}
-            columns={columns}
+            rowsPerPage={5}
+            sortedRows={rows}
+            columns={[]}
+            sx={{ border: 'none' }}
           />
         </Card>
         <LoginCard

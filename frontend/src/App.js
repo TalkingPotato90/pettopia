@@ -40,7 +40,7 @@ function App(props) {
       <CssBaseline enableColorScheme />
       <TopNavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home posts={posts} />} />
         <Route
           path="/community/freeboard"
           element={<FreeBoard posts={posts} isLoggedIn={isLoggedIn} />}
