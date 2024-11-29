@@ -10,24 +10,65 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Pagination,
 } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
-import defaultAvatar from '../assets/defaultAvatar.png';
 import CommunityTitle from '../components/CommunityTitle';
+import CommunityTable from '../components/CommunityTable';
 
 function FreeBoard({ posts, isLoggedIn }) {
+  const columns = [
+    { id: 'id', label: '글번호', minWidth: 25 },
+    { id: 'title', label: '제목', minWidth: 200 },
+    { id: 'author', label: '작성자', minWidth: 80 },
+    {
+      id: 'date',
+      label: '작성일',
+      minWidth: 80,
+      format: (value) => value.toISOString(),
+    },
+    { id: 'view', label: '조회수', minWidth: 35 },
+    { id: 'recommend', label: '추천수', minWidth: 35 },
+  ];
+
+  const rows = posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    avatar: post.avatar || null,
+    author: post.author,
+    date: post.date,
+    view: post.view,
+    recommend: post.recommend,
+  }));
+
   const [sort, setSort] = useState(''); // 정렬 상태 관리
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
   const [inputTerm, setInputTerm] = useState(''); // 입력된 검색어 상태 관리
+  const [page, setPage] = useState(1);
+  const [rowsPerPage] = useState(10);
+
+  const filteredRows = rows.filter((row) => {
+    return row.title.includes(searchTerm) || row.author.includes(searchTerm); // 제목이나 작성자가 검색어를 포함하는 경우만 필터링
+  });
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // sort 기준에 따라 정렬
+  const sortedRows = [...filteredRows].sort((a, b) => {
+    switch (sort) {
+      case 'byDate':
+        return new Date(b.date) - new Date(a.date); // 작성일 기준 내림차순
+      case 'byView':
+        return b.view - a.view; // 조회수 기준 내림차순
+      case 'byRecommend':
+        return b.recommend - a.recommend; // 추천수 기준 내림차순
+      default:
+        return 0;
+    }
+  });
 
   // 정렬 기준 변경 시 상태 업데이트
   const handleSortChange = (newSort) => {
@@ -57,12 +98,24 @@ function FreeBoard({ posts, isLoggedIn }) {
         />
         <SearchButton onSearch={handleSearch} />
       </Box>
-      <TableContents
-        sort={sort}
-        searchTerm={searchTerm}
-        posts={posts}
-        isLoggedIn={isLoggedIn}
-      />
+
+      <Box sx={{ pl: 10, pr: 10 }}>
+        <CommunityTable
+          page={page}
+          rowsPerPage={rowsPerPage}
+          sortedRows={sortedRows}
+          columns={columns}
+        />
+      </Box>
+
+      <Box sx={{ pr: 10, pb: 3, flexDirection: 'column' }}>
+        <PaginationAndButton
+          page={page}
+          count={Math.ceil(filteredRows.length / rowsPerPage)}
+          onChange={handleChangePage}
+          isLoggedIn={isLoggedIn}
+        />
+      </Box>
     </Stack>
   );
 }
@@ -150,181 +203,30 @@ function SearchButton({ onSearch }) {
   );
 }
 
-function TableContents({ sort, searchTerm, posts, isLoggedIn }) {
-  const navigate = useNavigate();
-
-  const columns = [
-    { id: 'id', label: '글번호', minWidth: 25 },
-    { id: 'title', label: '제목', minWidth: 200 },
-    { id: 'author', label: '작성자', minWidth: 80 },
-    {
-      id: 'date',
-      label: '작성일',
-      minWidth: 80,
-      format: (value) => value.toISOString(),
-    },
-    { id: 'view', label: '조회수', minWidth: 35 },
-    { id: 'recommend', label: '추천수', minWidth: 35 },
-  ];
-
-  const rows = posts.map((post) => ({
-    id: post.id,
-    title: post.title,
-    avatar: post.avatar || null,
-    author: post.author,
-    date: post.date,
-    view: post.view,
-    recommend: post.recommend,
-  }));
-
-  const [page, setPage] = useState(1);
-  const [rowsPerPage] = useState(10);
-
-  const filteredRows = rows.filter((row) => {
-    return row.title.includes(searchTerm) || row.author.includes(searchTerm); // 제목이나 작성자가 검색어를 포함하는 경우만 필터링
-  });
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  // sort 기준에 따라 정렬
-  const sortedRows = [...filteredRows].sort((a, b) => {
-    switch (sort) {
-      case 'byDate':
-        return new Date(b.date) - new Date(a.date); // 작성일 기준 내림차순
-      case 'byView':
-        return b.view - a.view; // 조회수 기준 내림차순
-      case 'byRecommend':
-        return b.recommend - a.recommend; // 추천수 기준 내림차순
-      default:
-        return 0;
-    }
-  });
-
+function PaginationAndButton({ page, count, onChange, isLoggedIn }) {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        pl: 10,
-        pr: 10,
-        flexDirection: 'column',
-      }}
+    <Stack
+      spacing={2}
+      sx={{ display: 'flex', justifyContent: 'center' }}
+      direction="row"
     >
-      <TableContainer
-        component={Paper}
-        sx={{ maxHeight: 440, border: '1px solid gray' }}
-      >
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align="center"
-                  style={{
-                    minWidth: column.minWidth,
-                    fontWeight: 'bold',
-                    borderBottom: '1px solid gray',
-                  }}
-                  sx={{ height: '10px', padding: '7px' }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortedRows
-              .slice((page - 1) * rowsPerPage, page * rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      if (column.id === 'title') {
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align="center"
-                            sx={{
-                              height: '10px',
-                              padding: '7px',
-                              cursor: 'pointer',
-                            }}
-                            onClick={() =>
-                              navigate(`/community/postDetail/${row.id}`)
-                            }
-                          >
-                            {value}
-                          </TableCell>
-                        );
-                      }
-                      if (column.id === 'author') {
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align="center"
-                            sx={{ height: '10px', padding: '7px' }}
-                          >
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <img
-                                src={row.avatar || defaultAvatar}
-                                alt="avatar"
-                                style={{
-                                  width: '24px',
-                                  height: '24px',
-                                  borderRadius: '50%',
-                                  marginRight: '8px',
-                                }}
-                              />
-                              {value}
-                            </Box>
-                          </TableCell>
-                        );
-                      }
-                      return (
-                        <TableCell
-                          key={column.id}
-                          align="center"
-                          sx={{ height: '10px', padding: '7px' }}
-                        >
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Stack
-        spacing={2}
-        sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 3 }}
-        direction="row"
-      >
-        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-          <Pagination
-            count={Math.ceil(filteredRows.length / rowsPerPage)} // 페이지 개수를 계산
-            page={page} // 현재 페이지
-            onChange={handleChangePage} // 페이지 변경 함수
-            color="primary"
-            sx={{ display: 'flex', justifyContent: 'center' }}
-          />
-        </Box>
+      <TablePagination page={page} count={count} onChange={onChange} />
 
-        {isLoggedIn && <WriteButton />}
-      </Stack>
+      {isLoggedIn && <WriteButton />}
+    </Stack>
+  );
+}
+
+function TablePagination({ page, count, onChange }) {
+  return (
+    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+      <Pagination
+        count={count}
+        page={page} // 현재 페이지
+        onChange={onChange} // 페이지 변경 함수
+        color="primary"
+        sx={{ display: 'flex', justifyContent: 'center' }}
+      />
     </Box>
   );
 }
