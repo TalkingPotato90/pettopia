@@ -2,16 +2,19 @@ import { useState } from 'react';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
-const ReactionButtons = () => {
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
+const ReactionButtons = ({ recommend, onRecommendChange }) => {
+  const [likes, setLikes] = useState(recommend || 0);
 
   const handleLike = () => {
-    setLikes(likes + 1);
+    const newLikes = likes + 1;
+    setLikes(newLikes);
+    onRecommendChange(newLikes); // 추천수 업데이트
   };
 
   const handleDislike = () => {
-    setDislikes(dislikes + 1);
+    const newLikes = likes > 0 ? likes - 1 : 0;
+    setLikes(newLikes);
+    onRecommendChange(newLikes); // 추천수 업데이트
   };
 
   return (
@@ -24,7 +27,7 @@ const ReactionButtons = () => {
       <button style={styles.dislikeButton} onClick={handleDislike}>
         <ThumbDownAltIcon style={styles.icon} />
         비추천
-        <span style={styles.counter}>{dislikes}</span>
+        <span style={styles.counter}>{likes}</span>
       </button>
     </div>
   );
