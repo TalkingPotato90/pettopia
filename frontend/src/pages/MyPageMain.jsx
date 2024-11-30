@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import MuiCard from '@mui/material/Card';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PetsIcon from '@mui/icons-material/Pets';
+import ContainerTheme from '../theme/ContainerTheme';
 
 function MyPageMain() {
   const [hasPet, setHasPet] = useState(false);
@@ -27,7 +28,7 @@ function MyPageMain() {
   };
 
   return (
-    <InformationContainer direction="column" justifyContent="space-between">
+    <ContainerTheme direction="column" justifyContent="space-between">
       <Card variant="outlined">
         <Box sx={{ mb: 4 }}>{header()}</Box>
         {editCategory('human', '회원정보', '회원 정보 수정')}
@@ -55,7 +56,7 @@ function MyPageMain() {
         <Box sx={{ mb: 4 }}>{introduce()}</Box>
         <Button variant="contained">수정</Button>
       </Card>
-    </InformationContainer>
+    </ContainerTheme>
   );
 }
 
@@ -76,29 +77,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
     boxShadow:
       'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
   }),
-}));
-
-const InformationContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
 }));
 
 function header() {

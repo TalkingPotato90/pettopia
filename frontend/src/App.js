@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import FreeBoard from './pages/FreeBoard';
 import MyPageMain from './pages/MyPageMain';
 import PostDetail from './pages/PostDetail';
@@ -40,6 +40,7 @@ function App(props) {
       <CssBaseline enableColorScheme />
       <TopNavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home posts={posts} />} />
         <Route
           path="/community/freeboard"
