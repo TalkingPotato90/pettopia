@@ -1,29 +1,8 @@
-import { Stack, styled, TextField, Button, Typography } from '@mui/material';
+import { Button, Stack, styled, TextField, Typography } from '@mui/material';
 import CommunityTable from '../components/CommunityTable';
 import MuiCard from '@mui/material/Card';
-
-const HomeContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
+import ContainerTheme from '../theme/ContainerTheme';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -58,8 +37,10 @@ export default function Home({ posts }) {
     recommend: post.recommend,
   }));
 
+  const link = useNavigate();
+
   return (
-    <HomeContainer
+    <ContainerTheme
       direction="column"
       justifyContent="center"
       alignItems="center"
@@ -109,10 +90,12 @@ export default function Home({ posts }) {
         >
           <Stack direction="column" alignItems="center" spacing={2}>
             <div>로그인하고 편리하게 이용하세요</div>
-            <Button variant="contained">로그인</Button>
+            <Button variant="contained" onClick={() => link('/home/login')}>
+              로그인
+            </Button>
           </Stack>
         </LoginCard>
       </Stack>
-    </HomeContainer>
+    </ContainerTheme>
   );
 }
