@@ -22,9 +22,13 @@ const PostDetail = ({ posts, updatePostRecommend }) => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const POSTS_PER_PAGE = 10; // 페이지당 게시글 수
-  const initialPage = Math.ceil(parseInt(postId, 10) / POSTS_PER_PAGE);
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const POSTS_PER_PAGE = 10;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+
+  const currentPost = posts.find((post) => post.id === parseInt(postId, 10));
 
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const paginatedPosts = posts.slice(
@@ -32,27 +36,60 @@ const PostDetail = ({ posts, updatePostRecommend }) => {
     currentPage * POSTS_PER_PAGE,
   );
 
-  const currentPost = posts.find((post) => post.id === parseInt(postId, 10));
+  useEffect(() => {
+    // 게시물을 변경할 때 댓글 초기화
+    setComments([]);
+    // 또는 서버에서 댓글 데이터를 가져옴
+    fetch(`/api/posts/${postId}/comments`)
+      .then((response) => response.json())
+      .then((data) => setComments(data))
+      .catch((error) =>
+        console.error('댓글 데이터를 가져오는 중 오류 발생:', error),
+      );
+  }, [postId]);
+
+  useEffect(() => {
+    const initialPage = Math.ceil(parseInt(postId, 10) / POSTS_PER_PAGE);
+    setCurrentPage(initialPage);
+  }, [postId]);
+
+  const handleCommentChange = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleAddComment = (parentId, content) => {
+    if (!content.trim()) return;
+    const newCommentObj = {
+      id: Date.now(),
+      parentId,
+      content,
+      author: '익명',
+      date: new Date().toLocaleString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+    setComments((prevComments) => [...prevComments, newCommentObj]);
+    setNewComment('');
+  };
 
   const handlePageChange = (event, pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  useEffect(() => {
-    setCurrentPage(initialPage);
-  }, [postId]);
 
   if (!currentPost) {
     return <Typography>게시글을 찾을 수 없습니다.</Typography>;
   }
 
   const handleRecommendChange = (newRecommend) => {
-    updatePostRecommend(currentPost.id, newRecommend); // 추천수 업데이트
+    updatePostRecommend(currentPost.id, newRecommend);
   };
 
   return (
     <Stack spacing={4} sx={{ padding: '16px' }}>
-      {/* 상세 글 내용 */}
       <Paper
         sx={{
           padding: '16px',
@@ -74,14 +111,12 @@ const PostDetail = ({ posts, updatePostRecommend }) => {
           onRecommendChange={handleRecommendChange}
         />
         <CommentSection
-          comments={[]}
-          newComment=""
-          onCommentChange={() => {}}
-          onAddComment={() => {}}
+          comments={comments}
+          newComment={newComment}
+          onCommentChange={handleCommentChange}
+          onAddComment={handleAddComment}
         />
       </Paper>
-
-      {/* 게시글 목록 및 페이지네이션 */}
       <Box>
         <TableContainer
           component={Paper}
