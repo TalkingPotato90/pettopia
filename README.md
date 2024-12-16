@@ -43,16 +43,19 @@
     </tr>
   </table>
 
-## 🌈 주차별 목표
-- 1주차
-  - [x] 프로젝트 주제 선정
-  - [x] 프로젝트 계획서
-  - [x] ui 설계
-  - [x] React 공부하기
-  - [x] 환경설정하기
-- 2주차
-  - [] 화면 구현하기
-  - [x] React 공부하기
+## 🌈 시스템 아키텍처
+```mermaid
+graph TD
+    subgraph AWS 클라우드
+        A[React 프론트엔드] -->|REST API 요청| B[Spring Boot 백엔드]
+        B -->|데이터 저장/조회| C[(MySQL DB)]
+        B -->|OAuth2 인증| D>소셜 로그인 API들]
+    end
+
+    subgraph 사용자
+        U[사용자 브라우저] -->|HTTP 요청| A
+    end
+```
 
 ## 기술스택
 ![Java](https://img.shields.io/badge/jdk21-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
