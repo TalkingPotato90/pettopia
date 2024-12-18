@@ -1,0 +1,65 @@
+CREATE TABLE "USER" (
+                      ID VARCHAR NOT NULL COMMENT 'PROVIDER와 PROVIDER_ID 조합으로 자동 생성',
+                      ROLE_ID VARCHAR NOT NULL,
+                      PROVIDER VARCHAR NULL,
+                      PROVIDER_ID VARCHAR NULL COMMENT '카카오, 네이버, 구글에서 제공받는 아이디',
+                      EMAIL VARCHAR NULL,
+                      NICKNAME VARCHAR NULL,
+                      BIRTHDAY DATE NULL,
+                      GENDER CHAR NULL,
+                      PRIMARY KEY (ID)
+);
+
+CREATE TABLE ROLE (
+                      ROLE_ID VARCHAR NOT NULL,
+                      NAME VARCHAR NULL,
+                      PRIMARY KEY (ROLE_ID)
+);
+
+CREATE TABLE POST (
+                      POST_ID INT NOT NULL AUTO_INCREMENT COMMENT 'AUTO INCREMENT',
+                      CATEGORY_ID INT NOT NULL,
+                      TITLE VARCHAR NULL,
+                      CONTENT TEXT NULL,
+                      AUTHOR VARCHAR NULL,
+                      CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+                      UPDATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+                      PRIMARY KEY (POST_ID)
+);
+
+CREATE TABLE CATEGORY (
+                          CATEGORY_ID INT NOT NULL AUTO_INCREMENT COMMENT 'AUTO INCREMENT',
+                          NAME VARCHAR NULL,
+                          PRIMARY KEY (CATEGORY_ID)
+);
+
+CREATE TABLE COMMENT (
+                         COMMENT_ID INT NOT NULL AUTO_INCREMENT COMMENT 'AUTO INCREMENT',
+                         POST_ID INT NOT NULL,
+                         CONTENT TEXT NULL,
+                         AUTHOR VARCHAR NULL,
+                         CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+                         UPDATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+                         PRIMARY KEY (COMMENT_ID)
+);
+
+CREATE TABLE PERMISSION (
+                            ROLE_ID VARCHAR NOT NULL,
+                            EDIT_OWN_POST TINYINT NULL,
+                            EDIT_ALL_POST TINYINT NULL,
+                            EDIT_OWN_COMMENT TINYINT NULL,
+                            EDIT_ALL_COMMENT TINYINT NULL,
+                            PRIMARY KEY (ROLE_ID)
+);
+
+ALTER TABLE "USER" ADD CONSTRAINT FK_ROLE_TO_USER FOREIGN KEY (ROLE_ID)
+    REFERENCES ROLE (ROLE_ID);
+
+ALTER TABLE POST ADD CONSTRAINT FK_CATEGORY_TO_POST FOREIGN KEY (CATEGORY_ID)
+    REFERENCES CATEGORY (CATEGORY_ID);
+
+ALTER TABLE COMMENT ADD CONSTRAINT FK_POST_TO_COMMENT FOREIGN KEY (POST_ID)
+    REFERENCES POST (POST_ID);
+
+ALTER TABLE PERMISSION ADD CONSTRAINT FK_ROLE_TO_PERMISSION FOREIGN KEY (ROLE_ID)
+    REFERENCES ROLE (ROLE_ID);
