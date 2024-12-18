@@ -1,4 +1,4 @@
-package kr.co.pettopia.backend;
+package kr.co.pettopia;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
