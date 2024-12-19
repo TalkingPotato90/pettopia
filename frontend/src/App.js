@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import FreeBoard from './pages/FreeBoard';
 import MyPageMain from './pages/MyPageMain';
@@ -15,6 +15,20 @@ import myPosts from './data/myPosts';
 import Footer from './components/Footer';
 
 function App(props) {
+  // API 요청 TEST
+  const [message, setMessage] = useState('');
+  useEffect(() => {
+    fetch('http://localhost:8080/api/test', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application-json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setMessage(data.message))
+      .catch((error) => console.error('Error: ', error));
+  }, []);
+
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [posts, setPosts] = useState(postsData); // posts 상태 관리
 
@@ -39,6 +53,9 @@ function App(props) {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <TopNavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <div>
+        <h1>{message}</h1>
+      </div>
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home posts={posts} />} />
