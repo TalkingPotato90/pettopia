@@ -13,7 +13,7 @@ import lombok.Setter;
 @Table(name = "CATEGORY")
 public class Category {
     @Id
-    @Column(name = "CATEGORY_ID")
+    @Column(name = "CATEGORY_ID", nullable = false)
     private String categoryId;
 
     @Column(name = "NAME")
