@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import kr.co.pettopia.model.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,10 +31,9 @@ public class Comment {
     @JoinColumn(name = "POST_ID", referencedColumnName = "POST_ID", foreignKey = @ForeignKey(name = "FK_POST_TO_COMMENT"))
     private Post post;
 
-// TODO : User 엔티티 생성되면 할 일
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_POST"))
-//    private User user;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_COMMENT"))
+    private User user;
 
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;

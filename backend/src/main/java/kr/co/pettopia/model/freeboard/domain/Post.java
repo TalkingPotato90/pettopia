@@ -1,6 +1,5 @@
 package kr.co.pettopia.model.freeboard.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -9,8 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kr.co.pettopia.model.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,10 +27,9 @@ public class Post {
     @Column(name = "POST_ID")
     private Integer postId;
 
-// TODO : User 엔티티 생성되면 할 일
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_POST"))
-//    private User user;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_POST"))
+    private User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", foreignKey = @ForeignKey(name = "FK_CATEGORY_TO_POST"))
