@@ -3,6 +3,8 @@ import CommunityTable from '../components/CommunityTable';
 import MuiCard from '@mui/material/Card';
 import ContainerTheme from '../theme/ContainerTheme';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { fetchPost } from '../api/fetchPost';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -27,17 +29,49 @@ const LoginCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-export default function Home({ posts }) {
-  const rows = posts.map((post) => ({
-    id: post.id,
-    title: post.title,
-    author: post.author,
-    date: post.date,
-    view: post.view,
-    recommend: post.recommend,
-  }));
+export default function Home() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const link = useNavigate();
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const data = await fetchPost();
+        const formattedPosts = data.map((post) => ({
+          id: post.postId,
+          title: post.title,
+          author: post.user.userId,
+          date: new Date(post.createdAt),
+          view: post.view || 0,
+          recommend: post.recommend || 0,
+        }));
+        setPosts(formattedPosts);
+      } catch (e) {
+        alert(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadPosts();
+  }, []);
+
+  if (loading) return <div>데이터 불러오기</div>;
+
+  const columns = [
+    { id: 'id', label: '글번호', minWidth: 25 },
+    { id: 'title', label: '제목', minWidth: 200 },
+    { id: 'author', label: '작성자', minWidth: 80 },
+    {
+      id: 'date',
+      label: '작성일',
+      minWidth: 80,
+      format: (value) => value.toLocaleDateString(),
+    },
+    { id: 'view', label: '조회수', minWidth: 35 },
+    { id: 'recommend', label: '추천수', minWidth: 35 },
+  ];
 
   return (
     <ContainerTheme
@@ -75,8 +109,8 @@ export default function Home({ posts }) {
           <CommunityTable
             page={1}
             rowsPerPage={5}
-            sortedRows={rows}
-            columns={[]}
+            sortedRows={posts}
+            columns={columns}
             sx={{ border: 'none' }}
           />
         </Card>
