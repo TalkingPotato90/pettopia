@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS POST (
                                     CONTENT TEXT NULL,
                                     CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                     UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                    VIEW INT NULL,
+                                    RECOMMAND INT NULL,
                                     PRIMARY KEY (POST_ID)
 );
 
