@@ -48,4 +48,10 @@ public class Post {
     @UpdateTimestamp
     @Column(name="UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    @Column(name = "VIEW")
+    private Integer view;
+
+    @Column(name = "RECOMMAND")
+    private Integer recommand;
 }
