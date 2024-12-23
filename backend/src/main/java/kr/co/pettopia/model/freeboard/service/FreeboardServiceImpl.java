@@ -1,10 +1,11 @@
 package kr.co.pettopia.model.freeboard.service;
 
-import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.freeboard.dto.PostDTO;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FreeboardServiceImpl implements FreeboardService{
@@ -15,7 +16,9 @@ public class FreeboardServiceImpl implements FreeboardService{
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return freeboardRepository.findAll();
+    public List<PostDTO> getAllPosts() {
+        return freeboardRepository.findAll().stream()
+                .map(PostDTO::new)
+                .collect(Collectors.toList());
     }
 }
