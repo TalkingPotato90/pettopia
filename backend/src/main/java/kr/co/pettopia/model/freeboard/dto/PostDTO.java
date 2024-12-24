@@ -19,7 +19,7 @@ public class PostDTO {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getUser().getNickname();
+        this.author = post.getUsers().getNickname();
         this.createdAt = post.getCreatedAt();
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-    @GetMapping("/oauth2/authorization/google")
+    @GetMapping("/oauth2/google/login")
     public @ResponseBody String OAuth2GoogleLogin() {
         return "구글로그인 테스트";
     }

@@ -18,7 +18,6 @@ public class SecurityConfig {
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -29,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth/**").permitAll()
                         .anyRequest().authenticated()) // 나머지는 인증 필요
                 .oauth2Login(oauth -> oauth
-                        .loginProcessingUrl("/loginForm")
+                        .loginProcessingUrl("/login/oauth2/code/google")
                         .userInfoEndpoint(userinfo -> userinfo
                                 .userService(principalOauth2UserService))
                 )

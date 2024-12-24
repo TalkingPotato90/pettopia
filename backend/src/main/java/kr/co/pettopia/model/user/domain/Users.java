@@ -3,31 +3,31 @@ package kr.co.pettopia.model.user.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
-
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
 @EntityListeners(UserEntityListener.class)
-@Table(name = "USER")
-public class User {
+@Table(name = "USERS")
+@NoArgsConstructor
+@AllArgsConstructor
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USER_ID", nullable = false)
     private String userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID", foreignKey = @ForeignKey(name = "FK_ROLE_TO_USER"))
-    private Role role;
+    @Column(name = "ROLE", nullable = false)
+    private String role;
 
     @Column(name = "PROVIDER_ID", nullable = false)
     private String providerId;
