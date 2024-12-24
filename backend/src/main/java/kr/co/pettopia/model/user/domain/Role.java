@@ -1,19 +1,16 @@
 package kr.co.pettopia.model.user.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
 
-@Entity
-@Data
-@Table(name = "ROLE")
-public class Role {
-    @Id
-    @Column(name = "ROLE_ID", nullable = false)
-    private String roleId;
+@Getter
+public enum Role {
+    USER("ROLE_USER"),
+    ADMIN("ROLE_ADMIN");
 
-    @Column(name = "NAME")
-    private String name;
+    private final String role;
+
+    Role(String role) {
+        this.role = role;
+    }
+
 }

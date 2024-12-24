@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import kr.co.pettopia.model.user.domain.User;
+import kr.co.pettopia.model.user.domain.Users;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,7 +33,7 @@ public class Comment {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_COMMENT"))
-    private User user;
+    private Users users;
 
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;

@@ -5,9 +5,9 @@ import jakarta.persistence.PrePersist;
 public class UserEntityListener {
 
     @PrePersist
-    public void beforePersist(User user) {
-        if (user.getUserId() == null) {
-            user.setUserId(generateUserId(user.getProvider(), user.getProviderId()));
+    public void beforePersist(Users users) {
+        if (users.getUserId() == null) {
+            users.setUserId(generateUserId(users.getProvider(), users.getProviderId()));
         }
     }
 
