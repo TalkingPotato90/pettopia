@@ -42,8 +42,8 @@ export default function Home() {
         const formattedPosts = data.map((post) => ({
           id: post.postId,
           title: post.title,
-          author: post.user.userId,
-          date: new Date(post.createdAt),
+          author: post.author,
+          date: new Date(post.createdAt).toLocaleDateString(),
           view: post.view || 0,
           recommend: post.recommend || 0,
         }));
