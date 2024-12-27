@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface FreeboardRepository extends JpaRepository<Post, Integer> {
-    @EntityGraph(attributePaths = {"users","category"})
+    @EntityGraph(attributePaths = {"users"})
     List<Post> findAll();
 }

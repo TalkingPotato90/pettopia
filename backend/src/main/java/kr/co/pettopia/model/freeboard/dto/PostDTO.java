@@ -14,6 +14,8 @@ public class PostDTO {
     private String content;
     private String author;
     private LocalDateTime createdAt;
+    private Integer view;
+    private Integer recommend;
 
     public PostDTO(Post post) {
         this.postId = post.getPostId();
@@ -21,5 +23,7 @@ public class PostDTO {
         this.content = post.getContent();
         this.author = post.getUsers().getNickname();
         this.createdAt = post.getCreatedAt();
+        this.view = post.getView();
+        this.recommend = post.getRecommend();
     }
 }

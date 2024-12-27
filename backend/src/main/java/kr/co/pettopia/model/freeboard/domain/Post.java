@@ -2,7 +2,6 @@ package kr.co.pettopia.model.freeboard.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,8 +27,7 @@ public class Post {
     @Column(name = "POST_ID")
     private Integer postId;
 
-    // TODO: fetchType 확인
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_POST"))
     private Users users;
 
@@ -54,6 +52,6 @@ public class Post {
     @Column(name = "VIEW")
     private Integer view;
 
-    @Column(name = "RECOMMAND")
-    private Integer recommand;
+    @Column(name = "RECOMMEND")
+    private Integer recommend;
 }
