@@ -36,12 +36,13 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-processResources.dependsOn('copyPrivate')
+processResources.dependsOn('copySecret')
 
-tasks.register('copyPrivate', Copy) {
-	copy {
-		from 'backend/src/main/resources/pettopia-submodule'
-		include "*.yml"
-		into 'src/main/resources'
+tasks.register('copySecret', Copy) {
+	description = 'Copy submodules to project'
+
+	from('../backend/src/main/resources/pettopia-submodule') {
+		include('*.yml')
 	}
+	into('../backend/src/main/resources')
 }
