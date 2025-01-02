@@ -22,7 +22,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Users extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USER_ID", nullable = false)
     private String userId;
 
