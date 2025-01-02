@@ -36,7 +36,9 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-task copyPrivate(type: Copy) {
+processResources.dependsOn('copyPrivate')
+
+tasks.register('copyPrivate', Copy) {
 	copy {
 		from './pettopia-submodule'
 		include "*.yml"
