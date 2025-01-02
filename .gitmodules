@@ -1,4 +1,4 @@
 [submodule "pettopia-submodule"]
-	path = pettopia-submodule
+	path = backend/src/main/resources/pettopia-submodule
 	url = https://github.com/ljhee92/pettopia-submodule.git
 	branch = main
