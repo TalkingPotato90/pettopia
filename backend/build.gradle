@@ -40,7 +40,7 @@ processResources.dependsOn('copyPrivate')
 
 tasks.register('copyPrivate', Copy) {
 	copy {
-		from './pettopia-submodule'
+		from 'backend/src/main/resources/pettopia-submodule'
 		include "*.yml"
 		into 'src/main/resources'
 	}
