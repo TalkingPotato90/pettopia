@@ -32,7 +32,10 @@ export default function Login() {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() => alert('카카오 로그인')}
+            onClick={() =>
+              (window.location.href =
+                'http://localhost:8080/oauth2/authorization/kakao')
+            }
             startIcon={<KakaoIcon />}
           >
             카카오 계정으로 로그인 하기
@@ -40,7 +43,10 @@ export default function Login() {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() => alert('네이버 로그인')}
+            onClick={() =>
+              (window.location.href =
+                'http://localhost:8080/oauth2/authorization/naver')
+            }
             startIcon={<NaverIcon />}
           >
             네이버 계정으로 로그인하기
@@ -48,7 +54,10 @@ export default function Login() {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() => alert('구글 로그인')}
+            onClick={() =>
+              (window.location.href =
+                'http://localhost:8080/oauth2/authorization/google')
+            }
             startIcon={<GoogleIcon />}
           >
             구글 계정으로 로그인하기

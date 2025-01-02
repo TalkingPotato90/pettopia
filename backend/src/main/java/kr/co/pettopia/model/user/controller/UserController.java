@@ -23,4 +23,6 @@ public class UserController {
 
         return ResponseEntity.ok(userService.getUserInfo(String.valueOf(principalDetails.getAttributes().get("sub"))));
     }
+
+
 }
