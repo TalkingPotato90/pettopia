@@ -1,0 +1,4 @@
+[submodule "pettopia-submodule"]
+	path = pettopia-submodule
+	url = https://github.com/ljhee92/pettopia-submodule.git
+	branch = main

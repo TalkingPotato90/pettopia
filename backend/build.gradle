@@ -35,3 +35,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task copyPrivate(type: Copy) {
+	copy {
+		from './pettopia-submodule'
+		include "*.yml"
+		into 'src/main/resources'
+	}
+}
