@@ -21,7 +21,7 @@ public class PostDTO {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getUsers().getNickname();
+        this.author = post.getUser().getNickname();
         this.createdAt = post.getCreatedAt();
         this.view = post.getView();
         this.recommend = post.getRecommend();

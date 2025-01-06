@@ -9,19 +9,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import kr.co.pettopia.model.user.domain.Users;
+import kr.co.pettopia.model.BaseEntity;
+import kr.co.pettopia.model.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Setter
 @Getter
 @Table(name = "COMMENT")
-public class Comment {
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_ID")
@@ -33,16 +30,8 @@ public class Comment {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_COMMENT"))
-    private Users users;
+    private User user;
 
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
-
-    @CreationTimestamp
-    @Column(name= "CREATED_AT", updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name="UPDATED_AT")
-    private LocalDateTime updatedAt;
 }

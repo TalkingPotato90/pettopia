@@ -7,7 +7,7 @@ import kr.co.pettopia.model.oauth.provider.KakaoUserInfo;
 import kr.co.pettopia.model.oauth.provider.NaverUserInfo;
 import kr.co.pettopia.model.oauth.provider.OAuth2UserInfo;
 import kr.co.pettopia.model.user.domain.Role;
-import kr.co.pettopia.model.user.domain.Users;
+import kr.co.pettopia.model.user.domain.User;
 import kr.co.pettopia.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -43,9 +43,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             role = "ROLE_ADMIN";
         }
 
-        Users users = createUser(provider,providerId,userId,email,nickname,role);
+        User user = createUser(provider,providerId,userId,email,nickname,role);
 
-        return new PrincipalDetails(users, oAuth2User.getAttributes());
+        return new PrincipalDetails(user, oAuth2User.getAttributes());
     }
 
     private OAuth2UserInfo checkOauth2Provider(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
@@ -61,11 +61,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         return null;
     }
 
-    private Users createUser(String provider, String providerId, String userId, String email, String nickname,
-                             String role) {
-        Users users = userRepository.findByUserId(userId);
-        if (users == null) {
-            users = Users.builder()
+    private User createUser(String provider, String providerId, String userId, String email, String nickname,
+                            String role) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            user = User.builder()
                     .userId(userId)
                     .provider(provider)
                     .providerId(providerId)
@@ -73,9 +73,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .nickname(nickname)
                     .role(role)
                     .build();
-            userRepository.save(users);
+            userRepository.save(user);
         }
-        return users;
+        return user;
     }
 
 }

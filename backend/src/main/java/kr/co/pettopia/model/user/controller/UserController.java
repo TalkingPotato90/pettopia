@@ -19,9 +19,9 @@ public class UserController {
     @GetMapping("/mypage/main")
     public ResponseEntity<MyPageDTO> getUserById(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         System.out.println("==================================");
-        System.out.println(principalDetails.getAttributes().get("sub")); // 나중에 id 빼오는거 확인
+        System.out.println(principalDetails.getId()); // 로그인 구현 후 확인 필요
 
-        return ResponseEntity.ok(userService.getUserInfo(String.valueOf(principalDetails.getAttributes().get("sub"))));
+        return ResponseEntity.ok(userService.getUserInfo(principalDetails.getId()));
     }
 
 

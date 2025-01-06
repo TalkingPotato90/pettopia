@@ -3,18 +3,18 @@ package kr.co.pettopia.model.auth;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import kr.co.pettopia.model.user.domain.Users;
+import kr.co.pettopia.model.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public class PrincipalDetails implements OAuth2User {
 
-    private Users users;
+    private User user;
     private Map<String,Object> attributes;
 
-    public PrincipalDetails(Users users, Map<String,Object> attributes) {
-        this.users = users;
+    public PrincipalDetails(User user, Map<String,Object> attributes) {
+        this.user = user;
         this.attributes = attributes;
     }
 
@@ -22,7 +22,7 @@ public class PrincipalDetails implements OAuth2User {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collect = new ArrayList<>();
 
-        collect.add(new SimpleGrantedAuthority(users.getRole()));
+        collect.add(new SimpleGrantedAuthority(user.getRole()));
 
         return collect;
     }
@@ -35,5 +35,9 @@ public class PrincipalDetails implements OAuth2User {
     @Override
     public String getName() {
         return null;
+    }
+
+    public String getId() {
+        return user.getUserId();
     }
 }

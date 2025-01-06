@@ -2,8 +2,6 @@ package kr.co.pettopia.model.user.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
@@ -20,7 +18,7 @@ import java.time.LocalDate;
 @Table(name = "USERS")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
     @Id
     @Column(name = "USER_ID", nullable = false)
     private String userId;
