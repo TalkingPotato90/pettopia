@@ -29,7 +29,7 @@ public class Comment extends BaseEntity {
     private Post post;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_COMMENT"))
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USERS_TO_COMMENT"))
     private User user;
 
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
