@@ -18,11 +18,8 @@ public class UserController {
 
     @GetMapping("/mypage/main")
     public ResponseEntity<MyPageDTO> getUserById(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("==================================");
-        System.out.println(principalDetails.getId()); // 로그인 구현 후 확인 필요
+//        System.out.println(principalDetails.getId()); // 로그인 구현 후 확인 필요
 
-        return ResponseEntity.ok(userService.getUserInfo(principalDetails.getId()));
+        return ResponseEntity.ok(userService.getUserInfo("KAKAO_12345"));
     }
-
-
 }

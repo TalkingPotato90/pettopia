@@ -3,6 +3,7 @@ package kr.co.pettopia.model.user.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -45,11 +46,14 @@ public class User extends BaseEntity {
     private char gender;
 
     @Column(name = "PET_OWN")
-    private char patOwn;
+    private char petOwn;
 
     @Column(name = "PROFILE_IMG_URL")
     private String profileImgUrl;
 
     @Column(name = "INTRODUCTION")
     private String introduction;
+
+    @OneToOne(mappedBy = "user", optional = true)
+    private Pet pet;
 }
