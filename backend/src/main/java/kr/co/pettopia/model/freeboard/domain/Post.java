@@ -25,7 +25,7 @@ public class Post extends BaseEntity {
     private Integer postId;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_POST"))
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USERS_TO_POST"))
     private User user;
 
     @ManyToOne(optional = false)
