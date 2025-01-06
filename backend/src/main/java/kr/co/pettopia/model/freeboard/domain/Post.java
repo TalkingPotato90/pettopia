@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
-import kr.co.pettopia.model.user.domain.Users;
+import kr.co.pettopia.model.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +26,7 @@ public class Post extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_POST"))
-    private Users users;
+    private User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", foreignKey = @ForeignKey(name = "FK_CATEGORY_TO_POST"))

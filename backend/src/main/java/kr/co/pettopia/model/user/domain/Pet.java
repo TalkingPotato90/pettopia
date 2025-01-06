@@ -23,7 +23,7 @@ public class Pet {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_PET"))
-    private Users users;
+    private User user;
 
     @Column(name = "NAME")
     private String name;
