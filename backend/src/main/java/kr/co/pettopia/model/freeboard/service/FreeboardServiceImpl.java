@@ -1,6 +1,7 @@
 package kr.co.pettopia.model.freeboard.service;
 
 import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,10 @@ public class FreeboardServiceImpl implements FreeboardService{
     @Override
     public List<Post> getAllPosts() {
         return freeboardRepository.findAll();
+    }
+
+    @Override
+    public Post createPost(CreatePostRequest request) {
+        return freeboardRepository.save(request.toEntity());
     }
 }
