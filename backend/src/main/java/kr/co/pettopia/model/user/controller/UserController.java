@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/mypage/main")
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/mypage/main")
+    @GetMapping
     public ResponseEntity<MyPageDTO> getUserById(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 //        System.out.println(principalDetails.getId()); // 로그인 구현 후 확인 필요
 
