@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class PostDTO {
+public class ReadPostResponse {
     private Integer postId;
     private String title;
     private String content;
@@ -17,7 +17,7 @@ public class PostDTO {
     private Integer view;
     private Integer recommend;
 
-    public PostDTO(Post post) {
+    public ReadPostResponse(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
