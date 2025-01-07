@@ -24,10 +24,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("로드유저실해애애앵*********************************");
-        System.out.println("로드유저실해애애앵*********************************");
-        System.out.println("로드유저실해애애앵*********************************");
-        System.out.println("로드유저실해애애앵*********************************");
+
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         OAuth2UserInfo oAuth2UserInfo = checkOauth2Provider(userRequest,oAuth2User);
