@@ -6,12 +6,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
+import kr.co.pettopia.model.user.dto.MyPageRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -56,4 +58,16 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", optional = true)
     private Pet pet;
+
+    public User update(MyPageRequest myPageRequest) {
+        myPageRequest.nickname().ifPresent(nickname -> this.nickname = nickname);
+        myPageRequest.birthday().ifPresent(birthDay -> this.birthDay = birthDay);
+        myPageRequest.gender().ifPresent(gender -> this.gender = gender);
+        myPageRequest.petOwn().ifPresent(petOwn -> this.petOwn = petOwn);
+        myPageRequest.profileImgUrl().ifPresent(profileImgUrl -> this.profileImgUrl = profileImgUrl);
+        myPageRequest.introduction().ifPresent(introduction -> this.introduction = introduction);
+        this.pet = pet.update(myPageRequest);
+
+        return this;
+    }
 }
