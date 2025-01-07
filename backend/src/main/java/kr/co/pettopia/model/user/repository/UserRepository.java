@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, String> {
     @EntityGraph(attributePaths = {"pet"})
     User findByUserId(String userId);
-
-    User findByEmail(String email);
 }

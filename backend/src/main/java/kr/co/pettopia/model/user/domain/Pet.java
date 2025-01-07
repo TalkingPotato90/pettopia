@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import kr.co.pettopia.model.user.dto.MyPageRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -36,4 +37,13 @@ public class Pet {
 
     @Column(name = "NEUTERING")
     private char neutering;
+
+    public Pet update(MyPageRequest myPageRequest) {
+        myPageRequest.petName().ifPresent(name -> this.name = name);
+        myPageRequest.petBirthday().ifPresent(birthday -> this.birthday = birthday);
+        myPageRequest.petGender().ifPresent(gender -> this.gender = gender);
+        myPageRequest.petNeutering().ifPresent(neutering -> this.neutering = neutering);
+
+        return this;
+    }
 }
