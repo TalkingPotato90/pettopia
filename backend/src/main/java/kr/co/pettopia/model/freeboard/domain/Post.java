@@ -21,7 +21,7 @@ import lombok.Setter;
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "POST_ID")
+    @Column(name = "POST_ID", updatable = false)
     private Integer postId;
 
     @ManyToOne(optional = false)
