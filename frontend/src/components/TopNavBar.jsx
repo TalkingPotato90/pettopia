@@ -16,9 +16,8 @@ import ColorModeSelect from '../theme/ColorModeSelect';
 import { SitemarkIcon } from '../pages/CustomIcons';
 
 const pages = ['홈', '커뮤니티'];
-const userName = '핫도그';
 
-function TopNavBar({ isLoggedIn, onLogout }) {
+function TopNavBar({ isLoggedIn, userName, onLogout }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
