@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -19,13 +19,28 @@ import MuiCard from '@mui/material/Card';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PetsIcon from '@mui/icons-material/Pets';
 import ContainerTheme from '../theme/ContainerTheme';
+import { fetchUser } from '../api/user';
 
 function MyPageMain() {
   const [hasPet, setHasPet] = useState(false);
+  const [info, setInfo] = useState({});
 
   const handlePetCheckboxChange = (event) => {
     setHasPet(event.target.checked);
   };
+
+  useEffect(() => {
+    const loadInfo = async () => {
+      try {
+        const data = await fetchUser();
+        setHasPet(data.hasPet);
+        setInfo(data);
+      } catch (e) {
+        alert(e);
+      }
+    };
+    loadInfo();
+  }, []);
 
   return (
     <ContainerTheme direction="column" justifyContent="space-between">
@@ -33,7 +48,7 @@ function MyPageMain() {
         <Box sx={{ mb: 4 }}>{header()}</Box>
         {editCategory('human', '회원정보', '회원 정보 수정')}
         <Box sx={{ mb: 4 }}>
-          {inputDefaultInformation('닉네임', '이명화', '1998-06-03', false)}
+          {inputDefaultInformation('닉네임', info.nickname, false)}
         </Box>
 
         <Divider />
@@ -49,11 +64,18 @@ function MyPageMain() {
         {hasPet && (
           <Box sx={{ mb: 4 }}>
             {editCategory('pet', '반려동물', '반려동물 프로필 등록')}
-            {inputDefaultInformation('이름', '돌멩이', '1998-05-13', true)}
+            {inputDefaultInformation(
+              '이름',
+              info.petName,
+              info.petBirthday,
+              true,
+              info.petGender,
+              info.petNeutering,
+            )}
           </Box>
         )}
 
-        <Box sx={{ mb: 4 }}>{introduce()}</Box>
+        <Box sx={{ mb: 4 }}>{introduce(info.introduction)}</Box>
         <Button variant="contained">수정</Button>
       </Card>
     </ContainerTheme>
@@ -100,7 +122,14 @@ function editCategory(image, alt, title) {
   );
 }
 
-function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
+function inputDefaultInformation(
+  nameLabel,
+  name,
+  birthday,
+  isAnimal,
+  gender,
+  neutering,
+) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
       <Box sx={{ flex: 1 }}>
@@ -108,8 +137,9 @@ function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
           required
           id="outlined-required"
           label={nameLabel}
-          defaultValue={name}
+          value={name ?? ''}
           fullWidth
+          InputLabelProps={{ shrink: true }}
         />
       </Box>
       {isAnimal && (
@@ -119,21 +149,24 @@ function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
             label="생년월일"
             defaultValue={birthday}
             fullWidth
+            InputLabelProps={{ shrink: true }}
           />
         </Box>
       )}
       {isAnimal && (
         <Box sx={{ flex: 1 }}>
-          <GenderRadioGroupComponent />
-          {isAnimal && <NeutralizationRadioGroupComponent />}
+          <GenderRadioGroupComponent gender={gender} />
+          {isAnimal && (
+            <NeutralizationRadioGroupComponent neutering={neutering} />
+          )}
         </Box>
       )}
     </Box>
   );
 }
 
-function GenderRadioGroupComponent() {
-  const [value, setValue] = useState('female');
+function GenderRadioGroupComponent(gender) {
+  const [value, setValue] = useState(gender);
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -156,8 +189,8 @@ function GenderRadioGroupComponent() {
   );
 }
 
-function NeutralizationRadioGroupComponent() {
-  const [value, setValue] = useState('yes');
+function NeutralizationRadioGroupComponent(neutering) {
+  const [value, setValue] = useState(neutering);
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -180,7 +213,7 @@ function NeutralizationRadioGroupComponent() {
   );
 }
 
-function introduce() {
+function introduce(introduction) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
       <Box sx={{ flex: 2 }}>
@@ -188,7 +221,8 @@ function introduce() {
           id="outlined-multiline-static"
           label="한줄소개"
           fullWidth
-          defaultValue="돌멩이는 가만히 있는 것을 좋아합니다."
+          value={introduction ?? ''}
+          InputLabelProps={{ shrink: true }}
         />
       </Box>
       <Box sx={{ flex: 1 }}>{InputFileUpload()}</Box>
