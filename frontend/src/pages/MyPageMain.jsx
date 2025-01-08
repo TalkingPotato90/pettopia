@@ -112,19 +112,22 @@ function inputDefaultInformation(nameLabel, name, birthday, isAnimal) {
           fullWidth
         />
       </Box>
-      <Box sx={{ flex: 1 }}>
-        <TextField
-          disabled={!isAnimal}
-          id={isAnimal ? 'outlined-helperText' : 'outlined-disabled'}
-          label="생년월일"
-          defaultValue={birthday}
-          fullWidth
-        />
-      </Box>
-      <Box sx={{ flex: 1 }}>
-        <GenderRadioGroupComponent />
-        {isAnimal && <NeutralizationRadioGroupComponent />}
-      </Box>
+      {isAnimal && (
+        <Box sx={{ flex: 1 }}>
+          <TextField
+            id={isAnimal ? 'outlined-helperText' : 'outlined-disabled'}
+            label="생년월일"
+            defaultValue={birthday}
+            fullWidth
+          />
+        </Box>
+      )}
+      {isAnimal && (
+        <Box sx={{ flex: 1 }}>
+          <GenderRadioGroupComponent />
+          {isAnimal && <NeutralizationRadioGroupComponent />}
+        </Box>
+      )}
     </Box>
   );
 }
