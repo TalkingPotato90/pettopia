@@ -14,8 +14,8 @@ public class CreatePostRequest {
 
     private String title;
     private String content;
-    private String userName;
-    private String categoryName;
+    private String userId;
+    private String categoryId;
 
     public Post toEntity(User user, Category category){
         return Post.builder()
