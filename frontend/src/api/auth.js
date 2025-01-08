@@ -1,24 +1,31 @@
-// src/api/auth.js
-
 // 로그인 상태 확인 API 호출
 export const checkSocialLoginStatus = async () => {
   try {
-    const response = await fetch('/api/check-login', {
+    const response = await fetch('/auth/me', {
       method: 'GET',
       credentials: 'include', // 세션 기반 인증을 위해 쿠키를 포함한 요청
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch login status');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    return {
-      isLoggedIn: data.isLoggedIn, // 로그인 상태 반환
-      userName: data.userName, // 사용자 이름 반환
-    };
+
+    // 데이터 검증
+    if (
+      data &&
+      typeof data.isLoggedIn === 'boolean' &&
+      typeof data.userName === 'string'
+    ) {
+      return {
+        isLoggedIn: data.isLoggedIn,
+        userName: data.userName,
+      };
+    } else {
+      throw new Error('Invalid response format');
+    }
   } catch (error) {
-    console.error('Error fetching login status:', error);
     return {
       isLoggedIn: false,
       userName: '',
@@ -35,12 +42,12 @@ export const logoutSocialLogin = async () => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to logout');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return true;
+    return true; // 로그아웃 성공
   } catch (error) {
-    console.error('Error during logout:', error);
-    return false;
+    console.error('Error during logout:', error.message);
+    return false; // 로그아웃 실패
   }
 };

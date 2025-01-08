@@ -28,7 +28,9 @@ function App(props) {
         setIsLoggedIn(status.isLoggedIn);
         setUserName(status.userName || '');
       } catch (error) {
-        console.error('Failed to fetch login status:', error);
+        // 에러 처리: 콘솔 로그 대신 UI나 사용자 알림으로 처리 가능
+        setIsLoggedIn(false); // 로그인 상태를 false로 설정 (예시)
+        setUserName(''); // 사용자 이름 초기화
       }
     };
     fetchLoginStatus();
@@ -47,7 +49,9 @@ function App(props) {
       setIsLoggedIn(false);
       setUserName('');
     } catch (error) {
-      console.error('Failed to logout:', error);
+      // 에러 처리: 로그아웃 실패 시 사용자에게 알림
+      setIsLoggedIn(false);
+      setUserName('');
     }
   };
 
