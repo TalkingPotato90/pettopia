@@ -41,12 +41,6 @@ public class User extends BaseEntity {
     @Column(name = "NICKNAME", length = 100, nullable = false)
     private String nickname;
 
-    @Column(name = "BIRTHDAY")
-    private LocalDate birthDay;
-
-    @Column(name = "GENDER")
-    private char gender;
-
     @Column(name = "HAS_PET")
     private boolean hasPet;
 
@@ -65,8 +59,6 @@ public class User extends BaseEntity {
         validateNickname(nickname);
 
         this.nickname = nickname;
-        this.birthDay = userInfoRequest.birthday();
-        this.gender = userInfoRequest.gender();
         this.profileImgUrl = userInfoRequest.profileImgUrl();
         this.introduction = userInfoRequest.introduction();
         this.hasPet = userInfoRequest.hasPet();

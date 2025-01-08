@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import kr.co.pettopia.model.user.domain.User;
-import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
