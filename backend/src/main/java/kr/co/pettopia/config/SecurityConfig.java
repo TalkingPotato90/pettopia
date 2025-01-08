@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                 request -> request
                         .requestMatchers(PathRequest.toH2Console()).permitAll() // H2 Console 허용
-                        .requestMatchers("/mypage/**").permitAll()
+                        .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/freeboard/**").permitAll()
                         .requestMatchers("/oauth/**").permitAll()
                         .anyRequest().authenticated()) // 나머지는 인증 필요

@@ -6,7 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
-import kr.co.pettopia.model.user.dto.MyPageRequest;
+import kr.co.pettopia.model.pet.domain.Pet;
+import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class User extends BaseEntity {
     @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "NICKNAME", length = 100)
+    @Column(name = "NICKNAME", length = 100, nullable = false)
     private String nickname;
 
     @Column(name = "BIRTHDAY")
@@ -46,8 +47,8 @@ public class User extends BaseEntity {
     @Column(name = "GENDER")
     private char gender;
 
-    @Column(name = "PET_OWN")
-    private char petOwn;
+    @Column(name = "HAS_PET")
+    private boolean hasPet;
 
     @Column(name = "PROFILE_IMG_URL")
     private String profileImgUrl;
@@ -55,18 +56,31 @@ public class User extends BaseEntity {
     @Column(name = "INTRODUCTION")
     private String introduction;
 
-    @OneToOne(mappedBy = "user", optional = true)
+    @OneToOne(mappedBy = "owner", optional = true)
     private Pet pet;
 
-    public User update(MyPageRequest myPageRequest) {
-        myPageRequest.nickname().ifPresent(nickname -> this.nickname = nickname);
-        myPageRequest.birthday().ifPresent(birthDay -> this.birthDay = birthDay);
-        myPageRequest.gender().ifPresent(gender -> this.gender = gender);
-        myPageRequest.petOwn().ifPresent(petOwn -> this.petOwn = petOwn);
-        myPageRequest.profileImgUrl().ifPresent(profileImgUrl -> this.profileImgUrl = profileImgUrl);
-        myPageRequest.introduction().ifPresent(introduction -> this.introduction = introduction);
-        this.pet = pet.update(myPageRequest);
+    public User update(UserInfoRequest userInfoRequest) {
+        String nickname = userInfoRequest.nickname();
+
+        validateNickname(nickname);
+
+        this.nickname = nickname;
+        this.birthDay = userInfoRequest.birthday();
+        this.gender = userInfoRequest.gender();
+        this.profileImgUrl = userInfoRequest.profileImgUrl();
+        this.introduction = userInfoRequest.introduction();
+        this.hasPet = userInfoRequest.hasPet();
+
+        if (hasPet) {
+//            this.pet = pet.update();
+        }
 
         return this;
+    }
+
+    private void validateNickname(String nickname) {
+        if (nickname == null || nickname.isBlank()) {
+            throw new IllegalArgumentException("닉네임은 필수 입력 값입니다.");
+        }
     }
 }

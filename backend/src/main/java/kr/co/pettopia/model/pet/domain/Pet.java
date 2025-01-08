@@ -1,4 +1,4 @@
-package kr.co.pettopia.model.user.domain;
+package kr.co.pettopia.model.pet.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import kr.co.pettopia.model.user.dto.MyPageRequest;
+import kr.co.pettopia.model.user.domain.User;
+import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -24,26 +25,33 @@ public class Pet {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_TO_PET"))
-    private User user;
+    private User owner;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "BIRTHDAY")
+    @Column(name = "BIRTHDAY", nullable = false)
     private LocalDate birthday;
 
     @Column(name = "GENDER")
     private char gender;
 
     @Column(name = "NEUTERING")
-    private char neutering;
+    private boolean neutering;
 
-    public Pet update(MyPageRequest myPageRequest) {
-        myPageRequest.petName().ifPresent(name -> this.name = name);
-        myPageRequest.petBirthday().ifPresent(birthday -> this.birthday = birthday);
-        myPageRequest.petGender().ifPresent(gender -> this.gender = gender);
-        myPageRequest.petNeutering().ifPresent(neutering -> this.neutering = neutering);
-
+    public Pet update() {
         return this;
+    }
+
+    private void validateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("반려동물 이름은 필수 입력 값입니다.");
+        }
+    }
+
+    private void validateBirthday(LocalDate birthday) {
+        if (birthday == null) {
+            throw new IllegalArgumentException("반려동물 생일은 필수 입력 값입니다.");
+        }
     }
 }
