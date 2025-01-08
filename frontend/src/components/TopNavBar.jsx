@@ -37,7 +37,13 @@ function TopNavBar({ isLoggedIn, userName, onLogout }) {
 
   const handleLogout = () => {
     onLogout();
-    navigate(location.pathname);
+    navigate(location.pathname); // 로그아웃 후 현재 페이지로 리디렉션
+  };
+
+  const handleLoginClick = () => {
+    // 로그인 버튼 클릭 시 현재 페이지 경로를 'login' 페이지로 전달
+    const currentPath = location.pathname || '/home'; // 경로가 없다면 기본적으로 홈 페이지
+    navigate(`/home/login?redirect_uri=${encodeURIComponent(currentPath)}`);
   };
 
   return (
@@ -121,7 +127,7 @@ function TopNavBar({ isLoggedIn, userName, onLogout }) {
               </>
             ) : (
               <Button
-                onClick={() => navigate('/home/login')}
+                onClick={handleLoginClick} // 로그인 버튼 클릭 시 currentPath 전달
                 variant="contained"
                 color="primary"
                 sx={{ ml: 2, mr: 2 }}

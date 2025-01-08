@@ -36,7 +36,17 @@ public class SecurityConfig {
                         // 각 소셜 로그인 경로에 대해 공통으로 처리
                         .loginProcessingUrl("/login/oauth2/code/{registrationId}")  // Spring Security가 자동으로 {registrationId}에 해당하는 로그인 URL 처리
                         .defaultSuccessUrl("/home", true)  // 로그인 후 리디렉션되는 페이지
-
+                        .successHandler((request, response, authentication) -> {
+                            String redirectUri = request.getParameter("redirect_uri");
+                            System.out.println("===============");
+                            System.out.println(redirectUri);
+                            if (redirectUri != null) {
+                                // redirect_uri가 존재하면 해당 URI로 리디렉션
+                                response.sendRedirect(redirectUri);
+                            } else {
+                                // 기본 리디렉션 페이지로 이동
+                                response.sendRedirect("http://localhost:3000/home");                            }
+                        })
                 )
 
                 .csrf(csrf -> csrf

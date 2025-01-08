@@ -23,6 +23,15 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function Login() {
+  // 현재 경로를 'redirect_uri'로 전달
+  const redirectUri =
+    new URLSearchParams(window.location.search).get('redirect_uri') || '/home';
+
+  const handleLoginRedirect = (provider) => {
+    // OAuth URL로 리디렉션하면서 redirect_uri도 함께 전달
+    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+  };
+
   return (
     <ContainerTheme direction="column" justifyContent="space-between">
       <Card variant="outlined">
@@ -32,10 +41,7 @@ export default function Login() {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/kakao')
-            }
+            onClick={() => handleLoginRedirect('kakao')}
             startIcon={<KakaoIcon />}
           >
             카카오 계정으로 로그인 하기
@@ -43,10 +49,7 @@ export default function Login() {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/naver')
-            }
+            onClick={() => handleLoginRedirect('naver')}
             startIcon={<NaverIcon />}
           >
             네이버 계정으로 로그인하기
@@ -54,10 +57,7 @@ export default function Login() {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() =>
-              (window.location.href =
-                'http://localhost:8080/oauth2/authorization/google')
-            }
+            onClick={() => handleLoginRedirect('google')}
             startIcon={<GoogleIcon />}
           >
             구글 계정으로 로그인하기
