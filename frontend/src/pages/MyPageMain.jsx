@@ -127,8 +127,8 @@ function inputDefaultInformation(
   name,
   birthday,
   isAnimal,
-  petGender,
-  petNeutering,
+  gender,
+  neutering,
 ) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
@@ -155,9 +155,9 @@ function inputDefaultInformation(
       )}
       {isAnimal && (
         <Box sx={{ flex: 1 }}>
-          <GenderRadioGroupComponent gender={petGender} />
+          <GenderRadioGroupComponent gender={gender} />
           {isAnimal && (
-            <NeutralizationRadioGroupComponent neutering={petNeutering} />
+            <NeutralizationRadioGroupComponent neutering={neutering} />
           )}
         </Box>
       )}
