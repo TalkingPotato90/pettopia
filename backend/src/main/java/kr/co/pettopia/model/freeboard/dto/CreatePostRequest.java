@@ -23,6 +23,8 @@ public class CreatePostRequest {
                 .content(content)
                 .user(user)
                 .category(category)
+                .view(1)
+                .recommend(0)
                 .build();
     }
 }
