@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class ReadPostResponse {
     private Integer postId;
     private String title;
-    private String content;
     private String author;
     private LocalDateTime createdAt;
     private Integer view;
@@ -20,7 +19,6 @@ public class ReadPostResponse {
     public ReadPostResponse(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
-        this.content = post.getContent();
         this.author = post.getUser().getNickname();
         this.createdAt = post.getCreatedAt();
         this.view = post.getView();

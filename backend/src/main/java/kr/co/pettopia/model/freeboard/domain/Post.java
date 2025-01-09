@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
 import kr.co.pettopia.model.user.domain.User;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,10 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
+@Builder
 @Table(name = "POST")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,11 +51,4 @@ public class Post extends BaseEntity {
     @Column(name = "RECOMMEND")
     private Integer recommend;
 
-    @Builder
-    public Post(String title, String content, User user, Category category) {
-        this.title = title;
-        this.content = content;
-        this.user = user;
-        this.category = category;
-    }
 }

@@ -31,10 +31,10 @@ public class FreeboardController {
     }
 
     @PostMapping("/freeboard/posts")
-    public ResponseEntity<Post> createPost(@RequestBody CreatePostRequest request) {
-        Post createdPost = freeboardService.createPost(request);
+    public ResponseEntity<CreatePostRequest> createPost(@RequestBody CreatePostRequest request) {
+        freeboardService.createPost(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(createdPost);
+                .body(request);
     }
 }
