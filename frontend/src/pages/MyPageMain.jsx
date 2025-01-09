@@ -23,10 +23,30 @@ import { fetchUser } from '../api/user';
 
 function MyPageMain() {
   const [hasPet, setHasPet] = useState(false);
+  const [name, setName] = useState('');
+  const [petName, setPetName] = useState('');
+  const [petBirthday, setPetBirthday] = useState('');
+  const [introduction, setIntroduction] = useState('');
   const [info, setInfo] = useState({});
 
   const handlePetCheckboxChange = (event) => {
     setHasPet(event.target.checked);
+  };
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handlePetNameChange = (event) => {
+    setPetName(event.target.value);
+  };
+
+  const handlePetBirthdayChange = (event) => {
+    setPetBirthday(event.target.value);
+  };
+
+  const handleIntroductionChange = (event) => {
+    setIntroduction(event.target.value);
   };
 
   useEffect(() => {
@@ -34,6 +54,10 @@ function MyPageMain() {
       try {
         const data = await fetchUser();
         setHasPet(data.hasPet);
+        setName(data.nickname);
+        setPetBirthday(data.petBirthday);
+        setPetName(data.petName);
+        setIntroduction(data.introduction);
         setInfo(data);
       } catch (e) {
         alert(e);
@@ -48,7 +72,15 @@ function MyPageMain() {
         <Box sx={{ mb: 4 }}>{header()}</Box>
         {editCategory('human', '회원정보', '회원 정보 수정')}
         <Box sx={{ mb: 4 }}>
-          {inputDefaultInformation('닉네임', info.nickname, false)}
+          {inputDefaultInformation(
+            '닉네임',
+            name,
+            false,
+            null,
+            null,
+            null,
+            handleNameChange,
+          )}
         </Box>
 
         <Divider />
@@ -66,16 +98,20 @@ function MyPageMain() {
             {editCategory('pet', '반려동물', '반려동물 프로필 등록')}
             {inputDefaultInformation(
               '이름',
-              info.petName,
-              info.petBirthday,
+              petName,
+              petBirthday,
               true,
               info.petGender,
               info.neutering,
+              handlePetNameChange,
+              handlePetBirthdayChange,
             )}
           </Box>
         )}
 
-        <Box sx={{ mb: 4 }}>{introduce(info.introduction)}</Box>
+        <Box sx={{ mb: 4 }}>
+          {introduce(introduction, handleIntroductionChange)}
+        </Box>
         <Button variant="contained">수정</Button>
       </Card>
     </ContainerTheme>
@@ -129,6 +165,8 @@ function inputDefaultInformation(
   isAnimal,
   gender,
   neutering,
+  onNameChange,
+  onBirthdayChange,
 ) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
@@ -137,7 +175,8 @@ function inputDefaultInformation(
           required
           id="outlined-required"
           label={nameLabel}
-          value={name ?? ''}
+          value={name}
+          onChange={onNameChange}
           fullWidth
           InputLabelProps={{ shrink: true }}
         />
@@ -147,7 +186,8 @@ function inputDefaultInformation(
           <TextField
             id={isAnimal ? 'outlined-helperText' : 'outlined-disabled'}
             label="생년월일"
-            defaultValue={birthday}
+            value={birthday}
+            onChange={onBirthdayChange}
             fullWidth
             InputLabelProps={{ shrink: true }}
           />
@@ -213,7 +253,7 @@ function NeutralizationRadioGroupComponent({ neutering }) {
   );
 }
 
-function introduce(introduction) {
+function introduce(introduction, onIntroductionChange) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
       <Box sx={{ flex: 2 }}>
@@ -221,7 +261,8 @@ function introduce(introduction) {
           id="outlined-multiline-static"
           label="한줄소개"
           fullWidth
-          value={introduction ?? ''}
+          value={introduction}
+          onChange={onIntroductionChange}
           InputLabelProps={{ shrink: true }}
         />
       </Box>
