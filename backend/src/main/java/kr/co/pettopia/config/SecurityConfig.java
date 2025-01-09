@@ -1,5 +1,6 @@
 package kr.co.pettopia.config;
 
+import kr.co.pettopia.model.oauth.handler.CustomAuthenticationSuccessHandler;
 import kr.co.pettopia.model.oauth.service.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -31,35 +32,19 @@ public class SecurityConfig {
 //                        .requestMatchers("/user/**").permitAll()
                                 .requestMatchers("/freeboard/**").permitAll()
                                 .requestMatchers("/oauth/**").permitAll()
+                                .requestMatchers("/home/login/**").permitAll()
                                 .anyRequest().authenticated()) // 나머지는 인증 필요
-
                 .oauth2Login(oauth -> oauth
                         .userInfoEndpoint(userinfo -> userinfo
                                 .userService(principalOauth2UserService))  // PrincipalOauth2UserService 사용
-
-                        // 각 소셜 로그인 경로에 대해 공통으로 처리
                         .loginProcessingUrl("/login/oauth2/code/{registrationId}")  // Spring Security가 자동으로 {registrationId}에 해당하는 로그인 URL 처리
-                        .defaultSuccessUrl("/home", true)  // 로그인 후 리디렉션되는 페이지
-                        .successHandler((request, response, authentication) -> {
-                            String redirectUri = request.getParameter("redirect_uri");
-                            System.out.println("===============");
-                            System.out.println(redirectUri);
-                            if (redirectUri != null) {
-                                // redirect_uri가 존재하면 해당 URI로 리디렉션
-                                response.sendRedirect(redirectUri);
-                            } else {
-                                // 기본 리디렉션 페이지로 이동
-                                response.sendRedirect("http://localhost:3000/home");                            }
-                        })
-                )
-
+                        .successHandler(new CustomAuthenticationSuccessHandler()))  // 로그인 성공 후 처리 핸들러
                 .logout(logout -> logout
                         .logoutUrl("/logout")  // 로그아웃 경로 설정
-                        .logoutSuccessUrl("/home")  // 로그아웃 후 이동할 URL
+                        .logoutSuccessUrl("http://localhost:3000/home")  // 로그아웃 후 이동할 URL
                         .invalidateHttpSession(true)  // 세션 무효화
                         .clearAuthentication(true)  // 인증 정보 삭제
-                        .permitAll()) // 로그아웃은 모두 허용
-
+                        .permitAll()) // 로그아웃은 모두 용
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(PathRequest.toH2Console())// H2 Console CSRF 비활성화
                         .ignoringRequestMatchers("/oauth/**")// OAuth CSRF 비활성화
