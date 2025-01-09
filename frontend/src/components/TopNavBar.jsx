@@ -41,9 +41,9 @@ function TopNavBar({ isLoggedIn, userName, onLogout }) {
   };
 
   const handleLoginClick = () => {
-    // 로그인 버튼 클릭 시 현재 페이지 경로를 'login' 페이지로 전달
-    const currentPath = location.pathname || '/home'; // 경로가 없다면 기본적으로 홈 페이지
-    navigate(`/home/login?redirect_uri=${encodeURIComponent(currentPath)}`);
+    // 이전 페이지 URL을 쿼리 파라미터로 첨부
+    const currentUrl = window.location.href;
+    window.location.href = `http://localhost:8080/home/login?prevPage=${encodeURIComponent(currentUrl)}`;
   };
 
   return (
@@ -127,7 +127,7 @@ function TopNavBar({ isLoggedIn, userName, onLogout }) {
               </>
             ) : (
               <Button
-                onClick={handleLoginClick} // 로그인 버튼 클릭 시 currentPath 전달
+                onClick={handleLoginClick} // 로그인 버튼 클릭 시 로그인 페이지로 이동
                 variant="contained"
                 color="primary"
                 sx={{ ml: 2, mr: 2 }}

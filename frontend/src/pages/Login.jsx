@@ -23,13 +23,9 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function Login() {
-  // 현재 경로를 'redirect_uri'로 전달
-  const redirectUri =
-    new URLSearchParams(window.location.search).get('redirect_uri') || '/home';
-
   const handleLoginRedirect = (provider) => {
-    // OAuth URL로 리디렉션하면서 redirect_uri도 함께 전달
-    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+    // 단순히 OAuth 로그인 URL로 리디렉션
+    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
   };
 
   return (
