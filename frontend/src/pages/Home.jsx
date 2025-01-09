@@ -29,7 +29,7 @@ const LoginCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-export default function Home() {
+export default function Home({ isLoggedIn, userName }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -123,10 +123,36 @@ export default function Home() {
           }}
         >
           <Stack direction="column" alignItems="center" spacing={2}>
-            <div>로그인하고 편리하게 이용하세요</div>
-            <Button variant="contained" onClick={() => link('/home/login')}>
-              로그인
-            </Button>
+            {/* 로그인 여부에 따라 메시지와 버튼 변경 */}
+            {isLoggedIn ? (
+              <>
+                <Typography variant="body1">
+                  안녕하세요, <strong>{userName}</strong>님!
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => link('/mypage/main')}
+                  sx={{
+                    fontSize: '12px',
+                  }}
+                >
+                  마이 페이지
+                </Button>
+              </>
+            ) : (
+              <>
+                <div>로그인하고 편리하게 이용하세요</div>
+                <Button
+                  variant="contained"
+                  onClick={() => link('/home/login')}
+                  sx={{
+                    fontSize: '12px',
+                  }}
+                >
+                  로그인
+                </Button>
+              </>
+            )}
           </Stack>
         </LoginCard>
       </Stack>
