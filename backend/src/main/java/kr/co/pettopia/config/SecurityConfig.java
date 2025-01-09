@@ -49,6 +49,13 @@ public class SecurityConfig {
                         })
                 )
 
+                .logout(logout -> logout
+                        .logoutUrl("/logout")  // 로그아웃 경로 설정
+                        .logoutSuccessUrl("/home")  // 로그아웃 후 이동할 URL
+                        .invalidateHttpSession(true)  // 세션 무효화
+                        .clearAuthentication(true)  // 인증 정보 삭제
+                        .permitAll()) // 로그아웃은 모두 허용
+
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(PathRequest.toH2Console())// H2 Console CSRF 비활성화
                         .ignoringRequestMatchers("/oauth/**")// OAuth CSRF 비활성화

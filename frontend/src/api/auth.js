@@ -36,7 +36,7 @@ export const checkSocialLoginStatus = async () => {
 // 로그아웃 API 호출
 export const logoutSocialLogin = async () => {
   try {
-    const response = await fetch('/api/logout', {
+    const response = await fetch('/logout', {
       method: 'POST',
       credentials: 'include', // 세션 기반 인증을 위해 쿠키를 포함한 요청
     });
@@ -44,7 +44,6 @@ export const logoutSocialLogin = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
     return true; // 로그아웃 성공
   } catch (error) {
     console.error('Error during logout:', error.message);
