@@ -19,7 +19,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
-    , Authentication authentication)throws IOException {
+            , Authentication authentication)throws IOException {
         // 세션에서 이전 페이지 URL 가져오기
         String prevPage = (String) request.getSession().getAttribute("prevPage");
         if (prevPage == null) {

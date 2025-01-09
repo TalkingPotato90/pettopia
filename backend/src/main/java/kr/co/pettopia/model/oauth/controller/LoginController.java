@@ -12,13 +12,8 @@ public class LoginController {
 
     @GetMapping("/home/login")
     public void loginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 현재 요청 URL을 세션에 저장
-        String currentPage = request.getRequestURL().toString();
-        System.out.println("현재 페이지 URL: " + currentPage);
-
         // 쿼리 파라미터로 전달된 prevPage 값 읽기
         String prevPage = request.getParameter("prevPage");
-        System.out.println("이전 페이지 URL (prevPage 파라미터): " + prevPage);
 
         if (prevPage != null) {
             request.getSession().setAttribute("prevPage", prevPage); // 세션에 저장
