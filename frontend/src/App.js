@@ -14,6 +14,7 @@ import MyPageActivity from './pages/MyPageActivity';
 import myPosts from './data/myPosts';
 import Footer from './components/Footer';
 import { checkSocialLoginStatus, logoutSocialLogin } from './api/auth'; // API 호출 추가
+import PrivateRoute from './components/PrivateRoute';
 
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
@@ -84,7 +85,6 @@ function App(props) {
           path="/community/freeboard"
           element={<FreeBoard posts={posts} isLoggedIn={isLoggedIn} />}
         />
-        <Route path="/mypage/main" element={<MyPageMain />} />
         <Route
           path="/community/postdetail/:postId"
           element={
@@ -96,10 +96,14 @@ function App(props) {
         />
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/community/postwrite" element={<PostWrite />} />
-        <Route
-          path="/mypage/activity"
-          element={<MyPageActivity myPosts={myPosts} />}
-        />
+
+        <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
+          <Route path="/mypage/main" element={<MyPageMain />} />
+          <Route
+            path="/mypage/activity"
+            element={<MyPageActivity myPosts={myPosts} />}
+          />
+        </Route>
       </Routes>
       <Footer />
     </AppTheme>
