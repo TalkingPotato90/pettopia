@@ -70,7 +70,7 @@ function MyPageMain() {
               info.petBirthday,
               true,
               info.petGender,
-              info.petNeutering,
+              info.neutering,
             )}
           </Box>
         )}
@@ -127,8 +127,8 @@ function inputDefaultInformation(
   name,
   birthday,
   isAnimal,
-  gender,
-  neutering,
+  petGender,
+  petNeutering,
 ) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
@@ -155,9 +155,9 @@ function inputDefaultInformation(
       )}
       {isAnimal && (
         <Box sx={{ flex: 1 }}>
-          <GenderRadioGroupComponent gender={gender} />
+          <GenderRadioGroupComponent gender={petGender} />
           {isAnimal && (
-            <NeutralizationRadioGroupComponent neutering={neutering} />
+            <NeutralizationRadioGroupComponent neutering={petNeutering} />
           )}
         </Box>
       )}
@@ -165,7 +165,7 @@ function inputDefaultInformation(
   );
 }
 
-function GenderRadioGroupComponent(gender) {
+function GenderRadioGroupComponent({ gender }) {
   const [value, setValue] = useState(gender);
 
   const handleChange = (event) => {
@@ -182,15 +182,15 @@ function GenderRadioGroupComponent(gender) {
         onChange={handleChange}
         sx={{ gap: 2 }}
       >
-        <FormControlLabel value="male" control={<Radio />} label="남" />
-        <FormControlLabel value="female" control={<Radio />} label="여" />
+        <FormControlLabel value="M" control={<Radio />} label="남" />
+        <FormControlLabel value="F" control={<Radio />} label="여" />
       </RadioGroup>
     </FormControl>
   );
 }
 
-function NeutralizationRadioGroupComponent(neutering) {
-  const [value, setValue] = useState(neutering);
+function NeutralizationRadioGroupComponent({ neutering }) {
+  const [value, setValue] = useState(neutering ? neutering.toString() : '');
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -206,8 +206,8 @@ function NeutralizationRadioGroupComponent(neutering) {
         onChange={handleChange}
         sx={{ gap: 2 }}
       >
-        <FormControlLabel value="yes" control={<Radio />} label="예" />
-        <FormControlLabel value="no" control={<Radio />} label="아니오" />
+        <FormControlLabel value="true" control={<Radio />} label="예" />
+        <FormControlLabel value="false" control={<Radio />} label="아니오" />
       </RadioGroup>
     </FormControl>
   );
