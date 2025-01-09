@@ -74,7 +74,12 @@ function App(props) {
       />
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Home posts={posts} />} />
+        <Route
+          path="/home"
+          element={
+            <Home posts={posts} isLoggedIn={isLoggedIn} userName={userName} />
+          }
+        />
         <Route
           path="/community/freeboard"
           element={<FreeBoard posts={posts} isLoggedIn={isLoggedIn} />}
