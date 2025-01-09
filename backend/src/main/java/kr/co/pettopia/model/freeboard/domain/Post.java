@@ -1,5 +1,6 @@
 package kr.co.pettopia.model.freeboard.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
 import kr.co.pettopia.model.user.domain.User;
@@ -17,6 +19,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Setter
@@ -51,4 +55,6 @@ public class Post extends BaseEntity {
     @Column(name = "RECOMMEND")
     private Integer recommend;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments;
 }
