@@ -154,7 +154,8 @@ class FreeboardControllerTest {
 
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(title))
-                .andExpect(jsonPath("$.content").value(content));
+                .andExpect(jsonPath("$.content").value(content))
+                .andExpect(jsonPath("$.view").value("1"));
     }
 
 }
