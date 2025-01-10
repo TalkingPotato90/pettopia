@@ -43,7 +43,12 @@ public class FreeboardServiceImpl implements FreeboardService{
 
     @Override
     public Post findPostById(Integer id) {
-        return freeboardRepository.findById(id)
+        Post readPost = freeboardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("글 ID 오류"));
+
+        readPost.updateViewCount();
+        freeboardRepository.save(readPost);
+
+        return readPost;
     }
 }

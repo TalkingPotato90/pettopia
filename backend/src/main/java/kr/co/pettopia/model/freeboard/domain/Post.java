@@ -49,12 +49,19 @@ public class Post extends BaseEntity {
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name = "VIEW")
+    @Column(name = "VIEW", columnDefinition = "INTEGER DEFAULT 0")
     private Integer view;
 
-    @Column(name = "RECOMMEND")
+    @Column(name = "RECOMMEND", columnDefinition = "INTEGER DEFAULT 0")
     private Integer recommend;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments;
+
+    public void updateViewCount(){
+        if(this.view == null){
+            this.view = 0;
+        }
+        this.view++;
+    }
 }
