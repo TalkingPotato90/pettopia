@@ -56,7 +56,7 @@ class FreeboardControllerTest {
     private Category category;
 
     @BeforeEach
-    public void setMockMvc(){
+    public void setMockMvc() {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(this.context)
                 .build();
@@ -134,5 +134,27 @@ class FreeboardControllerTest {
                 .andExpect(jsonPath("$[1].title").value("2번 제목"));
     }
 
-//    @DisplayName("[READ] ")
+    @DisplayName("[READ] 단일 게시글 조회")
+    @Test
+    public void findPostById() throws Exception {
+        final String url = "/freeboard/posts/{id}";
+        final String title = "게시글 한 개";
+        final String content = "조회하기";
+
+        Post savedPost = freeboardRepository.save(
+                Post.builder()
+                        .title(title)
+                        .content(content)
+                        .user(user)
+                        .category(category)
+                        .build()
+        );
+
+        final ResultActions resultActions = mockMvc.perform(get(url, savedPost.getPostId()));
+
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(title))
+                .andExpect(jsonPath("$.content").value(content));
+    }
+
 }
