@@ -133,4 +133,6 @@ class FreeboardControllerTest {
                 .andExpect(jsonPath("$[0].title").value("1번 제목"))
                 .andExpect(jsonPath("$[1].title").value("2번 제목"));
     }
+
+//    @DisplayName("[READ] ")
 }

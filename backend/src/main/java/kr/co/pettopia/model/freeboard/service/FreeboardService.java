@@ -8,4 +8,5 @@ import java.util.List;
 public interface FreeboardService {
     List<Post> getAllPosts();
     Post createPost(CreatePostRequest request);
+    Post findPostById(Integer id);
 }
