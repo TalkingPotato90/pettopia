@@ -2,7 +2,8 @@ package kr.co.pettopia.model.freeboard.controller;
 
 import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
-import kr.co.pettopia.model.freeboard.dto.ReadPostResponse;
+import kr.co.pettopia.model.freeboard.dto.ReadPostListResponse;
+import kr.co.pettopia.model.freeboard.dto.ReadSinglePostResponse;
 import kr.co.pettopia.model.freeboard.service.FreeboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,10 @@ public class FreeboardController {
     private final FreeboardService freeboardService;
 
     @GetMapping("/freeboard/posts")
-    public ResponseEntity<List<ReadPostResponse>> getAllPosts() {
-        List<ReadPostResponse> posts = freeboardService.getAllPosts()
+    public ResponseEntity<List<ReadPostListResponse>> getAllPosts() {
+        List<ReadPostListResponse> posts = freeboardService.getAllPosts()
                 .stream()
-                .map(ReadPostResponse::new)
+                .map(ReadPostListResponse::new)
                 .toList();
 
         return ResponseEntity.ok()
@@ -40,10 +41,10 @@ public class FreeboardController {
     }
 
     @GetMapping("/freeboard/posts/{id}")
-    public ResponseEntity<ReadPostResponse> findPost(@PathVariable Integer id) {
+    public ResponseEntity<ReadSinglePostResponse> findPost(@PathVariable Integer id) {
         Post post = freeboardService.findPostById(id);
 
         return ResponseEntity.ok()
-                .body(new ReadPostResponse(post));
+                .body(new ReadSinglePostResponse(post));
     }
 }
