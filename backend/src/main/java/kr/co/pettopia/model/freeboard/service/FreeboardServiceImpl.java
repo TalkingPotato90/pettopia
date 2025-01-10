@@ -40,4 +40,10 @@ public class FreeboardServiceImpl implements FreeboardService{
 
         return freeboardRepository.save(request.toEntity(user,category));
     }
+
+    @Override
+    public Post findPostById(Integer id) {
+        return freeboardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("글 ID 오류"));
+    }
 }
