@@ -20,12 +20,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PetsIcon from '@mui/icons-material/Pets';
 import ContainerTheme from '../theme/ContainerTheme';
 import { fetchUser } from '../api/user';
+import DatePickerValue from '../components/DatePickerValue';
 
 function MyPageMain() {
   const [hasPet, setHasPet] = useState(false);
   const [name, setName] = useState('');
   const [petName, setPetName] = useState('');
-  const [petBirthday, setPetBirthday] = useState('');
   const [introduction, setIntroduction] = useState('');
   const [info, setInfo] = useState({});
 
@@ -41,10 +41,6 @@ function MyPageMain() {
     setPetName(event.target.value);
   };
 
-  const handlePetBirthdayChange = (event) => {
-    setPetBirthday(event.target.value);
-  };
-
   const handleIntroductionChange = (event) => {
     setIntroduction(event.target.value);
   };
@@ -55,7 +51,6 @@ function MyPageMain() {
         const data = await fetchUser();
         setHasPet(data.hasPet);
         setName(data.nickname);
-        setPetBirthday(data.petBirthday);
         setPetName(data.petName);
         setIntroduction(data.introduction);
         setInfo(data);
@@ -99,12 +94,11 @@ function MyPageMain() {
             {inputDefaultInformation(
               '이름',
               petName,
-              petBirthday,
+              info.petBirthday,
               true,
               info.petGender,
               info.neutering,
               handlePetNameChange,
-              handlePetBirthdayChange,
             )}
           </Box>
         )}
@@ -166,11 +160,10 @@ function inputDefaultInformation(
   gender,
   neutering,
   onNameChange,
-  onBirthdayChange,
 ) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, pt: 1 }}>
         <TextField
           required
           id="outlined-required"
@@ -178,19 +171,11 @@ function inputDefaultInformation(
           value={name}
           onChange={onNameChange}
           fullWidth
-          InputLabelProps={{ shrink: true }}
         />
       </Box>
       {isAnimal && (
         <Box sx={{ flex: 1 }}>
-          <TextField
-            id={isAnimal ? 'outlined-helperText' : 'outlined-disabled'}
-            label="생년월일"
-            value={birthday}
-            onChange={onBirthdayChange}
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-          />
+          <DatePickerValue birthday={birthday} label="생년월일" />
         </Box>
       )}
       {isAnimal && (
@@ -263,7 +248,6 @@ function introduce(introduction, onIntroductionChange) {
           fullWidth
           value={introduction}
           onChange={onIntroductionChange}
-          InputLabelProps={{ shrink: true }}
         />
       </Box>
       <Box sx={{ flex: 1 }}>{InputFileUpload()}</Box>
