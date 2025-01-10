@@ -24,7 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("자유게시판 테스트")
@@ -50,13 +52,16 @@ class FreeboardControllerTest {
     @Autowired
     CategoryRepository categoryRepository;
 
+    private User user;
+    private Category category;
+
     @BeforeEach
     public void setMockMvc(){
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(this.context)
                 .build();
 
-        User user = User.builder()
+        user = User.builder()
                 .userId("GOOGLE_12345")
                 .nickname("테스트 유저")
                 .provider("GOOGLE")
@@ -65,7 +70,7 @@ class FreeboardControllerTest {
                 .build();
         userRepository.save(user);
 
-        Category category = new Category();
+        category = new Category();
         category.setCategoryId("1");
         category.setName("테스트 카테고리");
         categoryRepository.save(category);
@@ -79,9 +84,7 @@ class FreeboardControllerTest {
         final String url = "/freeboard/posts";
         final String title = "제목";
         final String content = "내용";
-        final String userId = "GOOGLE_12345";
-        final String categoryId = "1";
-        final CreatePostRequest writtenPost = new CreatePostRequest(title, content, userId, categoryId);
+        final CreatePostRequest writtenPost = new CreatePostRequest(title, content, user.getUserId(), category.getCategoryId());
 
         final String requestBody = objectMapper.writeValueAsString(writtenPost);
 
@@ -96,7 +99,38 @@ class FreeboardControllerTest {
         assertThat(posts).hasSize(1);
         assertThat(posts.getFirst().getTitle()).isEqualTo(title);
         assertThat(posts.getFirst().getContent()).isEqualTo(content);
-        assertThat(posts.getFirst().getUser().getUserId()).isEqualTo(userId);
-        assertThat(posts.getFirst().getCategory().getCategoryId()).isEqualTo(categoryId);
+        assertThat(posts.getFirst().getUser().getUserId()).isEqualTo(user.getUserId());
+        assertThat(posts.getFirst().getCategory().getCategoryId()).isEqualTo(category.getCategoryId());
+    }
+
+    @DisplayName("[READ] 게시글 목록 조회")
+    @Test
+    public void readAllPosts() throws Exception {
+        final String url = "/freeboard/posts";
+
+        freeboardRepository.save(
+                Post.builder()
+                        .title("1번 제목")
+                        .content("1번 내용")
+                        .user(user)
+                        .category(category)
+                        .build());
+
+        freeboardRepository.save(
+                Post.builder()
+                        .title("2번 제목")
+                        .content("2번 내용")
+                        .user(user)
+                        .category(category)
+                        .build());
+
+        final ResultActions resultActions = mockMvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("1번 제목"))
+                .andExpect(jsonPath("$[1].title").value("2번 제목"));
     }
 }
