@@ -56,10 +56,6 @@ public class User extends BaseEntity {
         this.introduction = userInfoRequest.introduction();
         this.hasPet = userInfoRequest.hasPet();
 
-        if (hasPet) {
-//            this.pet = pet.update();
-        }
-
         return this;
     }
 

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,9 +28,9 @@ public class UserController {
 //        return ResponseEntity.ok(userService.getUserInfo("GOOGLE_12345"));
     }
 
-    @PatchMapping
+    @PutMapping
     public ResponseEntity<UserInfoResponse> updateUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                            @RequestBody UserInfoRequest userInfoRequest) {
-        return ResponseEntity.ok(userService.updateUserInfo("KAKAO_12345", userInfoRequest));
+        return ResponseEntity.ok(userService.updateUserInfo(principalDetails.getId(), userInfoRequest));
     }
 }

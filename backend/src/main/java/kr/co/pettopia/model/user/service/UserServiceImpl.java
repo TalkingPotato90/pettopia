@@ -33,6 +33,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponse updateUserInfo(String userId, UserInfoRequest userInfoRequest) {
         User user = userRepository.findByUserId(userId);
-        return UserInfoResponse.from(user.update(userInfoRequest));
+
+        if (user.isHasPet() && userInfoRequest.hasPet()) {
+            Pet pet = petRepository.findByOwnerUserId(user.getUserId())
+                    .orElse(null);
+
+            return UserInfoResponse.from(user.update(userInfoRequest), pet.update(userInfoRequest));
+        }
+
+        if (user.isHasPet() && !userInfoRequest.hasPet()) {
+            Pet pet = petRepository.findByOwnerUserId(user.getUserId())
+                    .orElse(null);
+
+            petRepository.delete(pet);
+            return UserInfoResponse.from(user.update(userInfoRequest));
+        }
+
+        return UserInfoResponse.from(user.update(userInfoRequest), createPet(user, userInfoRequest));
+    }
+
+    private Pet createPet(User user, UserInfoRequest userInfoRequest) {
+        Pet pet = Pet.builder()
+                .owner(user)
+                .name(userInfoRequest.petName())
+                .birthday(userInfoRequest.petBirthday())
+                .gender(userInfoRequest.petGender())
+                .neutering(userInfoRequest.neutering())
+                .build();
+
+        petRepository.save(pet);
+        return pet;
     }
 }
