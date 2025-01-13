@@ -10,12 +10,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import kr.co.pettopia.model.user.domain.User;
+import kr.co.pettopia.model.user.dto.UserInfoRequest;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +45,18 @@ public class Pet {
     @Column(name = "NEUTERING")
     private boolean neutering;
 
-    public Pet update() {
+    public Pet update(UserInfoRequest userInfoRequest) {
+        String name = userInfoRequest.petName();
+        LocalDate birthday = userInfoRequest.petBirthday();
+
+        validateName(name);
+        validateBirthday(birthday);
+
+        this.name = name;
+        this.birthday = birthday;
+        this.gender = userInfoRequest.petGender();
+        this.neutering = userInfoRequest.neutering();
+
         return this;
     }
 
