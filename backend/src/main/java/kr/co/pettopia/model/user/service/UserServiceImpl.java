@@ -19,7 +19,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponse getUserInfo(String userId) {
         User user = userRepository.findByUserId(userId);
-        Pet pet = user.getPet();
+        Pet pet = petRepository.findByOwnerUserId(user.getUserId())
+                .orElse(null);
 
         if (pet != null) {
             return UserInfoResponse.from(user, pet);
