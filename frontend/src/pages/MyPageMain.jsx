@@ -94,6 +94,23 @@ function MyPageMain() {
   }, []);
 
   const handleSubmit = () => {
+    if (!formData.nickname) {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+
+    if (formData.hasPet) {
+      if (
+        !formData.petName ||
+        !formData.petBirthday ||
+        !formData.petGender ||
+        !formData.neutering
+      ) {
+        alert('반려동물 이름, 생년월일, 성별, 중성화 여부를 입력해주세요.');
+        return;
+      }
+    }
+
     updateUserAndPetInfo(formData);
   };
 
