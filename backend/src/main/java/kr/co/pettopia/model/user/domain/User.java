@@ -3,17 +3,13 @@ package kr.co.pettopia.model.user.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
-import kr.co.pettopia.model.pet.domain.Pet;
 import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @Data
@@ -49,9 +45,6 @@ public class User extends BaseEntity {
 
     @Column(name = "INTRODUCTION")
     private String introduction;
-
-    @OneToOne(mappedBy = "owner", optional = true)
-    private Pet pet;
 
     public User update(UserInfoRequest userInfoRequest) {
         String nickname = userInfoRequest.nickname();
