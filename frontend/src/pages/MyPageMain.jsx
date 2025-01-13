@@ -19,47 +19,83 @@ import MuiCard from '@mui/material/Card';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PetsIcon from '@mui/icons-material/Pets';
 import ContainerTheme from '../theme/ContainerTheme';
-import { fetchUser } from '../api/user';
+import { getUserAndPetInfo, updateUserAndPetInfo } from '../api/user';
 import DatePickerValue from '../components/DatePickerValue';
 
 function MyPageMain() {
-  const [hasPet, setHasPet] = useState(false);
-  const [name, setName] = useState('');
-  const [petName, setPetName] = useState('');
-  const [introduction, setIntroduction] = useState('');
-  const [info, setInfo] = useState({});
+  const [formData, setFormData] = useState({
+    hasPet: false,
+    nickname: '',
+    petName: '',
+    introduction: '',
+    petBirthday: '',
+    petGender: '',
+    neutering: '',
+  });
 
-  const handlePetCheckboxChange = (event) => {
-    setHasPet(event.target.checked);
+  const handleCheckboxChange = (event) => {
+    const { checked } = event.target;
+    setFormData((prevData) => {
+      if (checked) {
+        return {
+          ...prevData,
+          hasPet: true,
+          petName: prevData.petName || '',
+          petGender: prevData.petGender || '',
+          petBirthday: prevData.petBirthday || '',
+          neutering: prevData.neutering || '',
+        };
+      } else {
+        return {
+          ...prevData,
+          hasPet: false,
+          petName: '',
+          petGender: '',
+          petBirthday: '',
+          neutering: '',
+        };
+      }
+    });
   };
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handlePetNameChange = (event) => {
-    setPetName(event.target.value);
-  };
-
-  const handleIntroductionChange = (event) => {
-    setIntroduction(event.target.value);
+  const handlePetBirthdayChange = (newDate) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      petBirthday: newDate,
+    }));
   };
 
   useEffect(() => {
     const loadInfo = async () => {
       try {
-        const data = await fetchUser();
-        setHasPet(data.hasPet);
-        setName(data.nickname);
-        setPetName(data.petName);
-        setIntroduction(data.introduction);
-        setInfo(data);
+        const data = await getUserAndPetInfo();
+        setFormData({
+          hasPet: data.hasPet ?? '',
+          nickname: data.nickname ?? '',
+          petName: data.hasPet ? data.petName : '',
+          introduction: data.introduction ?? '',
+          petBirthday: data.hasPet ? data.petBirthday : '',
+          petGender: data.hasPet ? data.petGender : '',
+          neutering: data.hasPet ? data.neutering : '',
+        });
       } catch (e) {
         alert(e);
       }
     };
     loadInfo();
   }, []);
+
+  const handleSubmit = () => {
+    updateUserAndPetInfo(formData);
+  };
 
   return (
     <ContainerTheme direction="column" justifyContent="space-between">
@@ -69,12 +105,12 @@ function MyPageMain() {
         <Box sx={{ mb: 4 }}>
           {inputDefaultInformation(
             '닉네임',
-            name,
+            formData.nickname,
             false,
             null,
             null,
             null,
-            handleNameChange,
+            handleInputChange,
           )}
         </Box>
 
@@ -82,31 +118,37 @@ function MyPageMain() {
 
         <FormControlLabel
           control={
-            <Checkbox checked={hasPet} onChange={handlePetCheckboxChange} />
+            <Checkbox
+              checked={formData.hasPet}
+              onChange={handleCheckboxChange}
+            />
           }
           label="반려동물 여부"
           sx={{ mb: 4 }}
         />
 
-        {hasPet && (
+        {formData.hasPet && (
           <Box sx={{ mb: 4 }}>
             {editCategory('pet', '반려동물', '반려동물 프로필 등록')}
             {inputDefaultInformation(
               '이름',
-              petName,
-              info.petBirthday,
+              formData.petName,
+              formData.petBirthday,
               true,
-              info.petGender,
-              info.neutering,
-              handlePetNameChange,
+              formData.petGender,
+              formData.neutering,
+              handleInputChange,
+              handlePetBirthdayChange,
             )}
           </Box>
         )}
 
         <Box sx={{ mb: 4 }}>
-          {introduce(introduction, handleIntroductionChange)}
+          {introduce(formData.introduction, handleInputChange)}
         </Box>
-        <Button variant="contained">수정</Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          수정
+        </Button>
       </Card>
     </ContainerTheme>
   );
@@ -159,7 +201,8 @@ function inputDefaultInformation(
   isAnimal,
   gender,
   neutering,
-  onNameChange,
+  handleInputChange,
+  handlePetBirthdayChange,
 ) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
@@ -168,21 +211,33 @@ function inputDefaultInformation(
           required
           id="outlined-required"
           label={nameLabel}
+          name={isAnimal ? 'petName' : 'nickname'}
           value={name}
-          onChange={onNameChange}
+          onChange={handleInputChange}
           fullWidth
         />
       </Box>
       {isAnimal && (
         <Box sx={{ flex: 1 }}>
-          <DatePickerValue birthday={birthday} label="생년월일" />
+          <DatePickerValue
+            name="petBirthday"
+            birthday={birthday}
+            label="생년월일"
+            onChange={handlePetBirthdayChange}
+          />
         </Box>
       )}
       {isAnimal && (
         <Box sx={{ flex: 1 }}>
-          <GenderRadioGroupComponent gender={gender} />
+          <GenderRadioGroupComponent
+            gender={gender}
+            handleChange={handleInputChange}
+          />
           {isAnimal && (
-            <NeutralizationRadioGroupComponent neutering={neutering} />
+            <NeutralizationRadioGroupComponent
+              neutering={neutering}
+              handleChange={handleInputChange}
+            />
           )}
         </Box>
       )}
@@ -190,20 +245,14 @@ function inputDefaultInformation(
   );
 }
 
-function GenderRadioGroupComponent({ gender }) {
-  const [value, setValue] = useState(gender);
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
+function GenderRadioGroupComponent({ gender, handleChange }) {
   return (
     <FormControl component="fieldset">
       <FormLabel>성별</FormLabel>
       <RadioGroup
         row
-        name="gender"
-        value={value}
+        name="petGender"
+        value={gender}
         onChange={handleChange}
         sx={{ gap: 2 }}
       >
@@ -214,20 +263,14 @@ function GenderRadioGroupComponent({ gender }) {
   );
 }
 
-function NeutralizationRadioGroupComponent({ neutering }) {
-  const [value, setValue] = useState(neutering ? neutering.toString() : '');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
+function NeutralizationRadioGroupComponent({ neutering, handleChange }) {
   return (
     <FormControl component="fieldset">
       <FormLabel>중성화 여부</FormLabel>
       <RadioGroup
         row
-        name="neutralization"
-        value={value}
+        name="neutering"
+        value={neutering}
         onChange={handleChange}
         sx={{ gap: 2 }}
       >
@@ -245,6 +288,7 @@ function introduce(introduction, onIntroductionChange) {
         <TextField
           id="outlined-multiline-static"
           label="한줄소개"
+          name="introduction"
           fullWidth
           value={introduction}
           onChange={onIntroductionChange}

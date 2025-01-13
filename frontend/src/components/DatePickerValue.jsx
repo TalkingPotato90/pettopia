@@ -5,8 +5,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-export default function DatePickerValue({ birthday, label }) {
+export default function DatePickerValue({ birthday, label, onChange }) {
   const [value, setValue] = useState(dayjs(birthday));
+
+  const handleDateChange = (newValue) => {
+    const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
+    setValue(newValue);
+    onChange(formattedDate);
+  };
 
   return (
     <LocalizationProvider
@@ -18,7 +24,7 @@ export default function DatePickerValue({ birthday, label }) {
           required
           label={label}
           value={value}
-          onChange={(newValue) => setValue(newValue)}
+          onChange={handleDateChange}
           showDaysOutsideCurrentMonth
           format="YYYY-MM-DD"
           maxDate={dayjs()}
