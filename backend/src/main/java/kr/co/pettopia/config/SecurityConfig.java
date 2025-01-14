@@ -30,6 +30,7 @@ public class SecurityConfig {
                         request -> request
                                 .requestMatchers(PathRequest.toH2Console()).permitAll() // H2 Console 허용
 //                        .requestMatchers("/user/**").permitAll()
+                                .requestMatchers("/profileImages/**").permitAll()
                                 .requestMatchers("/freeboard/**").permitAll()
                                 .requestMatchers("/oauth/**").permitAll()
                                 .requestMatchers("/home/login/**").permitAll()
