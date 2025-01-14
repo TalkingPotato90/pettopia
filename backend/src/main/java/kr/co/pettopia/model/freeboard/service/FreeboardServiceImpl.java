@@ -3,6 +3,7 @@ package kr.co.pettopia.model.freeboard.service;
 import kr.co.pettopia.model.freeboard.domain.Category;
 import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
+import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 import kr.co.pettopia.model.freeboard.repository.CategoryRepository;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import kr.co.pettopia.model.user.domain.User;
@@ -50,5 +51,15 @@ public class FreeboardServiceImpl implements FreeboardService{
         freeboardRepository.save(readPost);
 
         return readPost;
+    }
+
+    @Override
+    public Post update(Integer id, UpdatePostRequest request) {
+        Post post = freeboardRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("글 ID 오류"));
+
+        post.updatePost(request.getTitle(), request.getContent());
+
+        return freeboardRepository.save(post);
     }
 }
