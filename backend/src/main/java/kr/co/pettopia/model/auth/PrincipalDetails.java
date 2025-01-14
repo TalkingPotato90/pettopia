@@ -40,4 +40,8 @@ public class PrincipalDetails implements OAuth2User {
     public String getId() {
         return user.getUserId();
     }
+
+    public String getProfileImgUrl() {
+        return user.getProfileImgUrl();
+    }
 }

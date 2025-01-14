@@ -49,6 +49,10 @@ public class UserServiceImpl implements UserService {
             return UserInfoResponse.from(user.update(userInfoRequest));
         }
 
+        if (!userInfoRequest.hasPet()) {
+            return UserInfoResponse.from(user.update(userInfoRequest));
+        }
+
         return UserInfoResponse.from(user.update(userInfoRequest), createPet(user, userInfoRequest));
     }
 

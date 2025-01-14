@@ -21,6 +21,7 @@ public class authController {
             response.put("userName", principalDetails.getName()); // 사용자 이름
             response.put("userId", principalDetails.getId()); // 사용자 ID
             response.put("nickname", principalDetails.getName()); // 사용자 닉네임
+            response.put("profileImgUrl", principalDetails.getProfileImgUrl()); // 사용자 프로필 사진
             response.put("email", principalDetails.getAttributes().get("email")); // OAuth2 사용자 정보에서 이메일
             response.put("attributes", principalDetails.getAttributes()); // 모든 OAuth2 속성 포함 (필요한 경우)
         } else {
