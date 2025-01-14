@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.pettopia.model.freeboard.domain.Category;
 import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
+import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 import kr.co.pettopia.model.freeboard.repository.CategoryRepository;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import kr.co.pettopia.model.user.domain.User;
@@ -26,6 +27,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -158,4 +160,39 @@ class FreeboardControllerTest {
                 .andExpect(jsonPath("$.view").value("1"));
     }
 
+    @DisplayName("[UPDATE] 게시글 수정")
+    @Test
+    public void updatePost() throws Exception {
+        final String url = "/freeboard/posts/{id}";
+        final String title = "원래 제목";
+        final String content = "원래 내용";
+
+        Post savedPost = freeboardRepository.save(
+                Post.builder()
+                        .title(title)
+                        .content(content)
+                        .user(user)
+                        .category(category)
+                        .build()
+        );
+
+        final String newTitle = "바뀐 제목";
+        final String newContent = "바뀐 내용";
+
+        savedPost.setTitle(newTitle);
+        savedPost.setContent(newContent);
+
+        UpdatePostRequest writtenPost = new UpdatePostRequest(savedPost);
+
+        ResultActions resultActions = mockMvc.perform(put(url, savedPost.getPostId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(writtenPost)));
+
+        resultActions.andExpect(status().isOk());
+
+        Post post = freeboardRepository.findById(savedPost.getPostId()).get();
+
+        assertThat(post.getTitle()).isEqualTo(newTitle);
+        assertThat(post.getContent()).isEqualTo(newContent);
+    }
 }
