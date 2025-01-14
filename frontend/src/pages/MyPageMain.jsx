@@ -28,6 +28,8 @@ function MyPageMain() {
     nickname: '',
     petName: '',
     introduction: '',
+    profileImgUrl: '',
+    profileImgBase64: '',
     petBirthday: '',
     petGender: '',
     neutering: '',
@@ -73,6 +75,31 @@ function MyPageMain() {
     }));
   };
 
+  const handleProfileImgChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // 파일 이름을 UUID로 변경 (예: file.name 대신 UUID 사용)
+    const fileName = `${Date.now()}_${file.name}`;
+
+    // 파일 경로 생성
+    const filePath = `profileImages/${fileName}`;
+
+    // 파일을 Base64로 변환
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const fileBase64 = reader.result.split(',')[1]; // Base64 문자열만 추출
+
+      // formData 업데이트
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        profileImgUrl: filePath,
+        profileImgBase64: fileBase64,
+      }));
+    };
+    reader.readAsDataURL(file); // 파일을 Base64로 변환
+  };
+
   useEffect(() => {
     const loadInfo = async () => {
       try {
@@ -82,6 +109,7 @@ function MyPageMain() {
           nickname: data.nickname ?? '',
           petName: data.hasPet ? data.petName : '',
           introduction: data.introduction ?? '',
+          profileImgUrl: data.profileImgUrl ?? '',
           petBirthday: data.hasPet ? data.petBirthday : '',
           petGender: data.hasPet ? data.petGender : '',
           neutering: data.hasPet ? data.neutering : '',
@@ -111,7 +139,11 @@ function MyPageMain() {
       }
     }
 
-    updateUserAndPetInfo(formData);
+    try {
+      updateUserAndPetInfo(formData);
+    } catch (error) {
+      console.error('사용자, 반려동물 정보 업데이트 에러 : ' + error);
+    }
   };
 
   return (
@@ -161,7 +193,12 @@ function MyPageMain() {
         )}
 
         <Box sx={{ mb: 4 }}>
-          {introduce(formData.introduction, handleInputChange)}
+          {introduce(
+            formData.introduction,
+            handleInputChange,
+            formData.profileImgUrl,
+            handleProfileImgChange,
+          )}
         </Box>
         <Button variant="contained" onClick={handleSubmit}>
           수정
@@ -298,7 +335,12 @@ function NeutralizationRadioGroupComponent({ neutering, handleChange }) {
   );
 }
 
-function introduce(introduction, onIntroductionChange) {
+function introduce(
+  introduction,
+  onIntroductionChange,
+  profileImgUrl,
+  handleProfileImgChange,
+) {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
       <Box sx={{ flex: 2 }}>
@@ -311,12 +353,16 @@ function introduce(introduction, onIntroductionChange) {
           onChange={onIntroductionChange}
         />
       </Box>
-      <Box sx={{ flex: 1 }}>{InputFileUpload()}</Box>
+      <Box sx={{ flex: 1 }}>
+        {inputFileUpload(profileImgUrl, handleProfileImgChange)}
+      </Box>
     </Box>
   );
 }
 
-function InputFileUpload() {
+function inputFileUpload(profileImgUrl, handleProfileImgChange) {
+  const fileName = profileImgUrl.replace('/profileImages/', '');
+
   return (
     <Box
       component="form"
@@ -329,7 +375,7 @@ function InputFileUpload() {
       <TextField
         id="outlined-read-only-input"
         label="프로필 사진 등록"
-        defaultValue="사진을 업로드하세요."
+        value={profileImgUrl ? `파일명: ${fileName}` : '사진을 업로드하세요.'}
         disabled
       />
       <Button
@@ -338,12 +384,7 @@ function InputFileUpload() {
         startIcon={<CloudUploadIcon />}
       >
         Upload
-        <input
-          type="file"
-          hidden
-          onChange={(event) => event.target.files}
-          multiple
-        />
+        <input type="file" hidden onChange={handleProfileImgChange} multiple />
       </Button>
     </Box>
   );

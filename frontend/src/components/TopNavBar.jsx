@@ -17,7 +17,7 @@ import { SitemarkIcon } from '../pages/CustomIcons';
 
 const pages = ['홈', '커뮤니티'];
 
-function TopNavBar({ isLoggedIn, userName, onLogout }) {
+function TopNavBar({ isLoggedIn, userName, profileImgUrl, onLogout }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -86,7 +86,20 @@ function TopNavBar({ isLoggedIn, userName, onLogout }) {
                     ml: 2,
                   }}
                 >
-                  <AccountCircle sx={{ fontSize: 35 }} />
+                  {profileImgUrl ? (
+                    <img
+                      src={`http://localhost:8080/${profileImgUrl}`}
+                      alt="profileImg"
+                      style={{
+                        width: 35,
+                        height: 35,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  ) : (
+                    <AccountCircle sx={{ fontSize: 35 }} />
+                  )}
                 </IconButton>
                 <Menu
                   id="menu-appbar"

@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute';
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
   const [userName, setUserName] = useState(''); // 사용자 이름
+  const [profileImgUrl, setProfileImgUrl] = useState(''); // 프로필 이미지 경로
   const [posts, setPosts] = useState(postsData); // posts 상태 관리
 
   // 로그인 상태 확인
@@ -28,19 +29,22 @@ function App(props) {
         const status = await checkSocialLoginStatus(); // 로그인 상태 확인
         setIsLoggedIn(status.isLoggedIn);
         setUserName(status.userName || '');
+        setProfileImgUrl(status.profileImgUrl || '');
       } catch (error) {
         // 에러 처리: 콘솔 로그 대신 UI나 사용자 알림으로 처리 가능
         setIsLoggedIn(false); // 로그인 상태를 false로 설정 (예시)
         setUserName(''); // 사용자 이름 초기화
+        setProfileImgUrl('');
       }
     };
     fetchLoginStatus();
   }, []);
 
   // 로그인 핸들러
-  const handleLogin = (name) => {
+  const handleLogin = (name, profileImgUrl) => {
     setIsLoggedIn(true);
     setUserName(name);
+    setProfileImgUrl(profileImgUrl);
   };
 
   // 로그아웃 핸들러
@@ -49,10 +53,12 @@ function App(props) {
       await logoutSocialLogin(); // 로그아웃 API 호출
       setIsLoggedIn(false);
       setUserName('');
+      setProfileImgUrl('');
     } catch (error) {
       // 에러 처리: 로그아웃 실패 시 사용자에게 알림
       setIsLoggedIn(false);
       setUserName('');
+      setProfileImgUrl('');
     }
   };
 
@@ -71,6 +77,7 @@ function App(props) {
       <TopNavBar
         isLoggedIn={isLoggedIn}
         userName={userName}
+        profileImgUrl={profileImgUrl}
         onLogout={handleLogout}
       />
       <Routes>

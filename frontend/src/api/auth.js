@@ -14,13 +14,16 @@ export const checkSocialLoginStatus = async () => {
 
     // 데이터 검증
     if (
-      data &&
-      typeof data.isLoggedIn === 'boolean' &&
-      typeof data.userName === 'string'
+      (data &&
+        typeof data.isLoggedIn === 'boolean' &&
+        typeof data.userName === 'string' &&
+        typeof data.profileImgUrl === 'string') ||
+      data.profileImgUrl === null
     ) {
       return {
         isLoggedIn: data.isLoggedIn,
         userName: data.userName,
+        profileImgUrl: data.profileImgUrl || '',
       };
     } else {
       throw new Error('Invalid response format');
@@ -29,6 +32,7 @@ export const checkSocialLoginStatus = async () => {
     return {
       isLoggedIn: false,
       userName: '',
+      profileImgUrl: '',
     };
   }
 };
