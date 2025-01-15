@@ -33,27 +33,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponse updateUserInfo(String userId, UserInfoRequest userInfoRequest) {
         User user = userRepository.findByUserId(userId);
+        Pet pet = petRepository.findByOwnerUserId(user.getUserId())
+                .orElse(null);
 
-        if (user.isHasPet() && userInfoRequest.hasPet()) {
-            Pet pet = petRepository.findByOwnerUserId(user.getUserId())
-                    .orElse(null);
-
-            return UserInfoResponse.from(user.update(userInfoRequest), pet.update(userInfoRequest));
+        if (pet == null) {
+            if (!userInfoRequest.hasPet()) { // 변경 전: 반려동물 없음, 변경 후: 반려동물 없음
+                return UserInfoResponse.from(user.update(userInfoRequest));
+            }
+            // 변경 전: 반려동물 없음, 변경 후: 반려동물 있음
+            return UserInfoResponse.from(user.update(userInfoRequest), createPet(user, userInfoRequest));
         }
 
-        if (user.isHasPet() && !userInfoRequest.hasPet()) {
-            Pet pet = petRepository.findByOwnerUserId(user.getUserId())
-                    .orElse(null);
-
+        if (!userInfoRequest.hasPet()) { // 변경 전: 반려동물 있음, 변경 후: 반려동물 없음
             petRepository.delete(pet);
             return UserInfoResponse.from(user.update(userInfoRequest));
         }
 
-        if (!userInfoRequest.hasPet()) {
-            return UserInfoResponse.from(user.update(userInfoRequest));
-        }
-
-        return UserInfoResponse.from(user.update(userInfoRequest), createPet(user, userInfoRequest));
+        // 변경 전: 반려동물 있음, 변경 후: 반려동물 있음
+        return UserInfoResponse.from(user.update(userInfoRequest), pet.update(userInfoRequest));
     }
 
     private Pet createPet(User user, UserInfoRequest userInfoRequest) {
