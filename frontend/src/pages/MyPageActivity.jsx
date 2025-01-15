@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -18,17 +18,20 @@ import {
 import { styled } from '@mui/material/styles';
 import MuiCard from '@mui/material/Card';
 import PropTypes from 'prop-types';
-import { getUserPosts } from '../api/user';
+import { getUserPosts, getUserComments } from '../api/user';
 
 function MyPageActivity() {
   const [myPosts, setMyPosts] = useState([]);
+  const [myComments, setMyComments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadPosts() {
       try {
-        const data = await getUserPosts();
-        setMyPosts(data);
+        const dataOfPosts = await getUserPosts();
+        const dataOfComments = await getUserComments();
+        setMyPosts(dataOfPosts);
+        setMyComments(dataOfComments);
       } catch (e) {
         alert(e);
       } finally {
@@ -50,7 +53,7 @@ function MyPageActivity() {
           <Header />
         </Box>
         <Box sx={{ mb: 4 }}>
-          <NavTabs myPosts={myPosts} />
+          <NavTabs myPosts={myPosts} myComments={myComments} />
         </Box>
       </Card>
     </InformationContainer>
@@ -138,14 +141,17 @@ function a11yProps(index) {
   };
 }
 
-function NavTabs({ myPosts }) {
+function NavTabs({ myPosts, myComments }) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const totalItems = value === 0 ? myPosts.length : 0;
+  const totalItems = useMemo(
+    () => (value === 0 ? myPosts.length : myComments.length),
+    [value, myPosts, myComments],
+  );
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -165,16 +171,16 @@ function NavTabs({ myPosts }) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <MyPostsTable myPosts={myPosts} />
+        <ContentsTable myPosts={myPosts} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        작성한 댓글 있는 게시물 목록
+        <ContentsTable myPosts={myComments} />
       </CustomTabPanel>
     </Box>
   );
 }
 
-function MyPostsTable({ myPosts }) {
+function ContentsTable({ myPosts }) {
   const navigate = useNavigate();
 
   const columns = [
