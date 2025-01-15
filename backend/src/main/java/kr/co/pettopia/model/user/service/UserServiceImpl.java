@@ -1,6 +1,8 @@
 package kr.co.pettopia.model.user.service;
 
+import kr.co.pettopia.model.freeboard.domain.Comment;
 import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.freeboard.repository.CommentRepository;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import kr.co.pettopia.model.pet.domain.Pet;
 import kr.co.pettopia.model.pet.repository.PetRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
     private final FreeboardRepository freeboardRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public Profile getUserInfo(String userId) {
@@ -54,5 +58,16 @@ public class UserServiceImpl implements UserService {
     public List<Post> getPosts(String userId) {
         User user = userRepository.findByUserId(userId);
         return freeboardRepository.findByUser(user);
+    }
+
+    @Override
+    public List<Post> getPostsOfComments(String userId) {
+        User user = userRepository.findByUserId(userId);
+        List<Comment> comments = commentRepository.findByUser(user);
+
+        return comments.stream()
+                .map(Comment::getPost)
+                .distinct()
+                .toList();
     }
 }

@@ -48,4 +48,14 @@ public class UserController {
 
         return ResponseEntity.ok(userPosts);
     }
+
+    @GetMapping("/comments")
+    public ResponseEntity<List<UserPostsResponse>> getCommentsByUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<UserPostsResponse> userPostsOfComments = userService.getPostsOfComments(principalDetails.getId())
+                .stream()
+                .map(UserPostsResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(userPostsOfComments);
+    }
 }
