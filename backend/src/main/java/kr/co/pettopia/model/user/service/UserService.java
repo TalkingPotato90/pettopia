@@ -1,13 +1,15 @@
 package kr.co.pettopia.model.user.service;
 
 import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.user.domain.Profile;
+import kr.co.pettopia.model.user.dto.ProfileDTO;
 import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import kr.co.pettopia.model.user.dto.UserInfoResponse;
 
 import java.util.List;
 
 public interface UserService {
-    UserInfoResponse getUserInfo(String userId);
-    UserInfoResponse updateUserInfo(String userId, UserInfoRequest userInfoRequest);
+    Profile getUserInfo(String userId);
+    Profile updateUserInfo(String userId, ProfileDTO profileDTO);
     List<Post> getPosts(String userId);
 }

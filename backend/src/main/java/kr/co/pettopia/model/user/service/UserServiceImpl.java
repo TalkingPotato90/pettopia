@@ -4,9 +4,9 @@ import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import kr.co.pettopia.model.pet.domain.Pet;
 import kr.co.pettopia.model.pet.repository.PetRepository;
+import kr.co.pettopia.model.user.domain.Profile;
 import kr.co.pettopia.model.user.domain.User;
-import kr.co.pettopia.model.user.dto.UserInfoRequest;
-import kr.co.pettopia.model.user.dto.UserInfoResponse;
+import kr.co.pettopia.model.user.dto.ProfileDTO;
 import kr.co.pettopia.model.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,53 +22,32 @@ public class UserServiceImpl implements UserService {
     private final FreeboardRepository freeboardRepository;
 
     @Override
-    public UserInfoResponse getUserInfo(String userId) {
+    public Profile getUserInfo(String userId) {
         User user = userRepository.findByUserId(userId);
         Pet pet = petRepository.findByOwnerUserId(user.getUserId())
                 .orElse(null);
 
-        if (pet != null) {
-            return UserInfoResponse.from(user, pet);
-        }
-
-        return UserInfoResponse.from(user);
+        return Profile.of(user, pet);
     }
 
     @Transactional
     @Override
-    public UserInfoResponse updateUserInfo(String userId, UserInfoRequest userInfoRequest) {
+    public Profile updateUserInfo(String userId, ProfileDTO profileDTO) {
         User user = userRepository.findByUserId(userId);
-        Pet pet = petRepository.findByOwnerUserId(user.getUserId())
-                .orElse(null);
+        Pet pet = petRepository.findByOwnerUserId(userId).orElse(null);
 
-        if (pet == null) {
-            if (!userInfoRequest.hasPet()) { // 변경 전: 반려동물 없음, 변경 후: 반려동물 없음
-                return UserInfoResponse.from(user.update(userInfoRequest));
-            }
-            // 변경 전: 반려동물 없음, 변경 후: 반려동물 있음
-            return UserInfoResponse.from(user.update(userInfoRequest), createPet(user, userInfoRequest));
-        }
+        Profile profile = Profile.of(user, pet);
+        Profile updatedProfile = profile.update(profileDTO);
 
-        if (!userInfoRequest.hasPet()) { // 변경 전: 반려동물 있음, 변경 후: 반려동물 없음
+        if (pet != null && !profileDTO.hasPet()) {
             petRepository.delete(pet);
-            return UserInfoResponse.from(user.update(userInfoRequest));
         }
 
-        // 변경 전: 반려동물 있음, 변경 후: 반려동물 있음
-        return UserInfoResponse.from(user.update(userInfoRequest), pet.update(userInfoRequest));
-    }
+        if (pet == null && profileDTO.hasPet()) {
+            petRepository.save(updatedProfile.getPet());
+        }
 
-    private Pet createPet(User user, UserInfoRequest userInfoRequest) {
-        Pet pet = Pet.builder()
-                .owner(user)
-                .name(userInfoRequest.petName())
-                .birthday(userInfoRequest.petBirthday())
-                .gender(userInfoRequest.petGender())
-                .neutering(userInfoRequest.neutering())
-                .build();
-
-        petRepository.save(pet);
-        return pet;
+        return updatedProfile;
     }
 
     @Override

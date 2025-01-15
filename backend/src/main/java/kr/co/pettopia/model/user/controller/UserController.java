@@ -1,6 +1,8 @@
 package kr.co.pettopia.model.user.controller;
 
 import kr.co.pettopia.model.auth.PrincipalDetails;
+import kr.co.pettopia.model.user.domain.Profile;
+import kr.co.pettopia.model.user.dto.ProfileDTO;
 import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import kr.co.pettopia.model.user.dto.UserInfoResponse;
 import kr.co.pettopia.model.user.dto.UserPostsResponse;
@@ -24,17 +26,17 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserInfoResponse> getUserById(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Profile profile = userService.getUserInfo(principalDetails.getId());
 
-        return ResponseEntity.ok(userService.getUserInfo(principalDetails.getId()));
-//        return ResponseEntity.ok(userService.getUserInfo("NAVER_12345"));
-//        return ResponseEntity.ok(userService.getUserInfo("KAKAO_12345"));
-//        return ResponseEntity.ok(userService.getUserInfo("GOOGLE_12345"));
+        return ResponseEntity.ok(UserInfoResponse.from(profile));
     }
 
     @PutMapping
     public ResponseEntity<UserInfoResponse> updateUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                            @RequestBody UserInfoRequest userInfoRequest) {
-        return ResponseEntity.ok(userService.updateUserInfo(principalDetails.getId(), userInfoRequest));
+        Profile profile = userService.updateUserInfo(principalDetails.getId(), ProfileDTO.of(userInfoRequest));
+
+        return ResponseEntity.ok(UserInfoResponse.from(profile));
     }
 
     @GetMapping("/posts")
