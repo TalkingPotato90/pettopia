@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import kr.co.pettopia.model.user.domain.User;
+import kr.co.pettopia.model.user.dto.ProfileDTO;
 import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,17 +46,17 @@ public class Pet {
     @Column(name = "NEUTERING")
     private boolean neutering;
 
-    public Pet update(UserInfoRequest userInfoRequest) {
-        String name = userInfoRequest.petName();
-        LocalDate birthday = userInfoRequest.petBirthday();
+    public Pet update(ProfileDTO profileDTO) {
+        String name = profileDTO.petName();
+        LocalDate birthday = profileDTO.petBirthday();
 
         validateName(name);
         validateBirthday(birthday);
 
         this.name = name;
         this.birthday = birthday;
-        this.gender = userInfoRequest.petGender();
-        this.neutering = userInfoRequest.neutering();
+        this.gender = profileDTO.petGender();
+        this.neutering = profileDTO.neutering();
 
         return this;
     }

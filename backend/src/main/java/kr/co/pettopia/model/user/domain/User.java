@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
+import kr.co.pettopia.model.user.dto.ProfileDTO;
 import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,16 +57,16 @@ public class User extends BaseEntity {
     @Column(name = "INTRODUCTION")
     private String introduction;
 
-    public User update(UserInfoRequest userInfoRequest) {
-        String nickname = userInfoRequest.nickname();
+    public User update(ProfileDTO profileDTO) {
+        String nickname = profileDTO.nickname();
 
         validateNickname(nickname);
 
         this.nickname = nickname;
-        this.profileImgUrl = userInfoRequest.profileImgUrl();
-        uploadFile(userInfoRequest.profileImgBase64());
-        this.introduction = userInfoRequest.introduction();
-        this.hasPet = userInfoRequest.hasPet();
+        this.profileImgUrl = profileDTO.profileImgUrl();
+        uploadFile(profileDTO.profileImgBase64());
+        this.introduction = profileDTO.introduction();
+        this.hasPet = profileDTO.hasPet();
 
         return this;
     }
