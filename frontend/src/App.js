@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import FreeBoard from './pages/FreeBoard';
 import MyPageMain from './pages/MyPageMain';
 import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
@@ -15,6 +14,7 @@ import myPosts from './data/myPosts';
 import Footer from './components/Footer';
 import { checkSocialLoginStatus, logoutSocialLogin } from './api/auth'; // API 호출 추가
 import PrivateRoute from './components/PrivateRoute';
+import FreeBoardPage from './pages/FreeBoardPage';
 
 function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
@@ -88,10 +88,7 @@ function App(props) {
             <Home posts={posts} isLoggedIn={isLoggedIn} userName={userName} />
           }
         />
-        <Route
-          path="/community/freeboard"
-          element={<FreeBoard posts={posts} isLoggedIn={isLoggedIn} />}
-        />
+        <Route path="/community/freeboard" element={<FreeBoardPage />} />
         <Route
           path="/community/postdetail/:postId"
           element={
