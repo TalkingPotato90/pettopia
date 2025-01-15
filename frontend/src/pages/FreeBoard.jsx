@@ -16,6 +16,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import CommunityTitle from '../components/CommunityTitle';
 import CommunityTable from '../components/CommunityTable';
+import ContainerTheme from '../theme/ContainerTheme';
 
 function FreeBoard({ posts, isLoggedIn }) {
   const columns = [
@@ -33,11 +34,11 @@ function FreeBoard({ posts, isLoggedIn }) {
   ];
 
   const rows = posts.map((post) => ({
-    id: post.id,
+    id: post.postId,
     title: post.title,
     avatar: post.avatar || null,
     author: post.author,
-    date: post.date,
+    date: new Date(post.createdAt).toLocaleDateString(),
     view: post.view,
     recommend: post.recommend,
   }));
@@ -86,37 +87,41 @@ function FreeBoard({ posts, isLoggedIn }) {
   };
 
   return (
-    <Stack spacing={2}>
-      <CommunityBreadCrumbs />
-      <CommunityTitle />
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}>
-        <SortTable onSortChange={handleSortChange} />
-        <SearchForm
-          value={inputTerm}
-          onSearchChange={handleSearchChange}
-          onSearch={handleSearch}
-        />
-        <SearchButton onSearch={handleSearch} />
-      </Box>
+    <ContainerTheme direction="column" justifyContent="space-between">
+      <Stack spacing={2}>
+        <CommunityBreadCrumbs />
+        <CommunityTitle />
+        <Box
+          sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pr: 10 }}
+        >
+          <SortTable onSortChange={handleSortChange} />
+          <SearchForm
+            value={inputTerm}
+            onSearchChange={handleSearchChange}
+            onSearch={handleSearch}
+          />
+          <SearchButton onSearch={handleSearch} />
+        </Box>
 
-      <Box sx={{ pl: 10, pr: 10 }}>
-        <CommunityTable
-          page={page}
-          rowsPerPage={rowsPerPage}
-          sortedRows={sortedRows}
-          columns={columns}
-        />
-      </Box>
+        <Box sx={{ pl: 10, pr: 10 }}>
+          <CommunityTable
+            page={page}
+            rowsPerPage={rowsPerPage}
+            sortedRows={sortedRows}
+            columns={columns}
+          />
+        </Box>
 
-      <Box sx={{ pr: 10, pb: 3, flexDirection: 'column' }}>
-        <PaginationAndButton
-          page={page}
-          count={Math.ceil(filteredRows.length / rowsPerPage)}
-          onChange={handleChangePage}
-          isLoggedIn={isLoggedIn}
-        />
-      </Box>
-    </Stack>
+        <Box sx={{ pr: 10, pb: 3, flexDirection: 'column' }}>
+          <PaginationAndButton
+            page={page}
+            count={Math.ceil(filteredRows.length / rowsPerPage)}
+            onChange={handleChangePage}
+            isLoggedIn={isLoggedIn}
+          />
+        </Box>
+      </Stack>
+    </ContainerTheme>
   );
 }
 
