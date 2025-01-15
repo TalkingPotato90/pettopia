@@ -1,5 +1,7 @@
 package kr.co.pettopia.model.user.service;
 
+import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import kr.co.pettopia.model.pet.domain.Pet;
 import kr.co.pettopia.model.pet.repository.PetRepository;
 import kr.co.pettopia.model.user.domain.User;
@@ -10,11 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
+    private final FreeboardRepository freeboardRepository;
 
     @Override
     public UserInfoResponse getUserInfo(String userId) {
@@ -64,5 +69,11 @@ public class UserServiceImpl implements UserService {
 
         petRepository.save(pet);
         return pet;
+    }
+
+    @Override
+    public List<Post> getPosts(String userId) {
+        User user = userRepository.findByUserId(userId);
+        return freeboardRepository.findByUser(user);
     }
 }
