@@ -43,3 +43,22 @@ export const updateUserAndPetInfo = async (updatedInfo) => {
     console.error('ERROR : ', error);
   }
 };
+
+export const getUserPosts = async () => {
+  try {
+    const response = await fetch('/user/info/posts', {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error, status: ${response.status}, statusText: ${response.statusText}`,
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('ERROR : ', error);
+  }
+};
