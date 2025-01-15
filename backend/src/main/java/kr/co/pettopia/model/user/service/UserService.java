@@ -12,4 +12,5 @@ public interface UserService {
     Profile getUserInfo(String userId);
     Profile updateUserInfo(String userId, ProfileDTO profileDTO);
     List<Post> getPosts(String userId);
+    List<Post> getPostsOfComments(String userId);
 }
