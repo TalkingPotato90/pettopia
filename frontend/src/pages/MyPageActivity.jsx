@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -18,8 +18,31 @@ import {
 import { styled } from '@mui/material/styles';
 import MuiCard from '@mui/material/Card';
 import PropTypes from 'prop-types';
+import { getUserPosts } from '../api/user';
 
-function MyPageActivity({ myPosts }) {
+function MyPageActivity() {
+  const [myPosts, setMyPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPosts() {
+      try {
+        const data = await getUserPosts();
+        setMyPosts(data);
+      } catch (e) {
+        alert(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPosts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <InformationContainer direction="column" justifyContent="space-between">
       <Card variant="outlined">
@@ -158,16 +181,27 @@ function MyPostsTable({ myPosts }) {
     { id: 'no', label: 'NO' },
     { id: 'board', label: '게시판' },
     { id: 'title', label: '제목' },
-    { id: 'date', label: '작성일', format: (value) => value.toISOString() },
+    { id: 'date', label: '작성일' },
   ];
 
-  const rows = myPosts.map((myPost, index) => ({
-    no: index + 1,
-    id: myPost.id,
-    board: myPost.board,
-    title: myPost.title,
-    date: myPost.date,
-  }));
+  const rows = myPosts.map((myPost, index) => {
+    const formattedDate = new Date(myPost.createdAt).toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    return {
+      no: index + 1,
+      id: myPost.id,
+      board: myPost.categoryName,
+      title: myPost.title,
+      date: formattedDate,
+    };
+  });
 
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(10);
