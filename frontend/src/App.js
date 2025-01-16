@@ -7,12 +7,12 @@ import TopNavBar from './components/TopNavBar';
 import PostWrite from './pages/PostWrite';
 import { CssBaseline } from '@mui/material';
 import AppTheme from './theme/AppTheme';
-import postsData from './data/posts'; // posts 데이터
 import Home from './pages/Home';
 import MyPageActivity from './pages/MyPageActivity';
 import myPosts from './data/myPosts';
 import Footer from './components/Footer';
 import { checkSocialLoginStatus, logoutSocialLogin } from './api/auth'; // API 호출 추가
+import { fetchPost } from './api/fetchPost'; // 게시글 데이터 API
 import PrivateRoute from './components/PrivateRoute';
 import FreeBoardPage from './pages/FreeBoardPage';
 
@@ -20,7 +20,21 @@ function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
   const [userName, setUserName] = useState(''); // 사용자 이름
   const [profileImgUrl, setProfileImgUrl] = useState(''); // 프로필 이미지 경로
-  const [posts, setPosts] = useState(postsData); // posts 상태 관리
+  const [posts, setPosts] = useState([]); // posts 상태 관리
+
+  // 게시글 데이터 로드
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const data = await fetchPost(); // API 호출
+        setPosts(data); // 상태 업데이트
+      } catch (error) {
+        console.error('게시글 데이터를 가져오는 중 오류 발생:', error);
+      }
+    };
+
+    loadPosts();
+  }, []);
 
   // 로그인 상태 확인
   useEffect(() => {
@@ -31,9 +45,8 @@ function App(props) {
         setUserName(status.userName || '');
         setProfileImgUrl(status.profileImgUrl || '');
       } catch (error) {
-        // 에러 처리: 콘솔 로그 대신 UI나 사용자 알림으로 처리 가능
-        setIsLoggedIn(false); // 로그인 상태를 false로 설정 (예시)
-        setUserName(''); // 사용자 이름 초기화
+        setIsLoggedIn(false); // 로그인 상태를 false로 설정
+        setUserName('');
         setProfileImgUrl('');
       }
     };
@@ -55,7 +68,6 @@ function App(props) {
       setUserName('');
       setProfileImgUrl('');
     } catch (error) {
-      // 에러 처리: 로그아웃 실패 시 사용자에게 알림
       setIsLoggedIn(false);
       setUserName('');
       setProfileImgUrl('');

@@ -1,57 +1,112 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Pagination,
+  Paper,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
 import ReactionButtons from '../components/ReactionButtons';
 import CommentSection from '../components/CommentSection';
+import { fetchPost, fetchPostById } from '../api/fetchPost';
+import CommunityTable from '../components/CommunityTable';
+import ContainerTheme from '../theme/ContainerTheme';
 
-const PostDetail = ({ posts, updatePostRecommend }) => {
-  const { postId } = useParams();
+const PostDetail = ({ updatePostRecommend }) => {
+  const { postId: routePostId } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
+  const [post, setPost] = useState(null); // 현재 게시글 상태
+  const [posts, setPosts] = useState([]); // 전체 게시글 상태
+  const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const POSTS_PER_PAGE = 10;
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const columns = [
+    { id: 'id', label: '글번호', minWidth: 25 },
+    { id: 'title', label: '제목', minWidth: 200 },
+    { id: 'author', label: '작성자', minWidth: 80 },
+    { id: 'date', label: '작성일', minWidth: 80 },
+    { id: 'view', label: '조회수', minWidth: 35 },
+    { id: 'recommend', label: '추천수', minWidth: 35 },
+  ];
 
-  const currentPost = posts.find((post) => post.id === parseInt(postId, 10));
+  const rows = posts.map((post) => ({
+    id: post.postId,
+    title: post.title,
+    author: post.author,
+    date: new Date(post.createdAt).toLocaleDateString(),
+    view: post.view,
+    recommend: post.recommend,
+  }));
 
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
-  const paginatedPosts = posts.slice(
+  const paginatedRows = rows.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE,
   );
 
-  useEffect(() => {
-    // 게시물을 변경할 때 댓글 초기화
-    setComments([]);
-    // 또는 서버에서 댓글 데이터를 가져옴
-    fetch(`/api/posts/${postId}/comments`)
-      .then((response) => response.json())
-      .then((data) => setComments(data))
-      .catch((error) =>
-        console.error('댓글 데이터를 가져오는 중 오류 발생:', error),
-      );
-  }, [postId]);
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
+  // 현재 게시글 데이터 로드
   useEffect(() => {
-    const initialPage = Math.ceil(parseInt(postId, 10) / POSTS_PER_PAGE);
-    setCurrentPage(initialPage);
-  }, [postId]);
+    const loadPost = async () => {
+      try {
+        const data = await fetchPostById(routePostId);
+        setPost(data);
+      } catch (error) {
+        console.error('게시글 로드 중 오류 발생:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPost();
+  }, [routePostId]);
+
+  // 전체 게시글 리스트 로드
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const data = await fetchPost();
+        setPosts(data);
+      } catch (error) {
+        console.error('게시글 리스트 로드 중 오류 발생:', error);
+      }
+    };
+
+    loadPosts();
+  }, []);
+
+  // 댓글 데이터 로드
+  useEffect(() => {
+    const loadComments = async () => {
+      try {
+        const response = await fetch(`/api/posts/${routePostId}/comments`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error('댓글 데이터를 가져오는 중 오류 발생:', error);
+      }
+    };
+
+    loadComments();
+  }, [routePostId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!post) {
+    return <Typography>게시글을 찾을 수 없습니다.</Typography>;
+  }
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
@@ -64,13 +119,7 @@ const PostDetail = ({ posts, updatePostRecommend }) => {
       parentId,
       content,
       author: '익명',
-      date: new Date().toLocaleString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
+      date: new Date().toLocaleString('ko-KR'),
     };
     setComments((prevComments) => [...prevComments, newCommentObj]);
     setNewComment('');
@@ -80,90 +129,73 @@ const PostDetail = ({ posts, updatePostRecommend }) => {
     setCurrentPage(pageNumber);
   };
 
-  if (!currentPost) {
-    return <Typography>게시글을 찾을 수 없습니다.</Typography>;
-  }
-
   const handleRecommendChange = (newRecommend) => {
-    updatePostRecommend(currentPost.id, newRecommend);
+    updatePostRecommend(post.id, newRecommend);
+  };
+
+  const handleRowClick = (id) => {
+    navigate(`/community/postDetail/${id}`);
   };
 
   return (
-    <Stack spacing={4} sx={{ padding: '16px' }}>
-      <Paper
-        sx={{
-          padding: '16px',
-          backgroundColor: theme.palette.background.paper,
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          {currentPost.title || '제목 없음'}
-        </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
-          작성자: {currentPost.author || '익명'} | 작성일:{' '}
-          {currentPost.date || '날짜 없음'} | 조회수: {currentPost.view}
-        </Typography>
-        <Typography variant="body1" sx={{ marginTop: '16px' }}>
-          {currentPost.content || '내용 없음'}
-        </Typography>
-        <ReactionButtons
-          recommend={currentPost.recommend}
-          onRecommendChange={handleRecommendChange}
-        />
-        <CommentSection
-          comments={comments}
-          newComment={newComment}
-          onCommentChange={handleCommentChange}
-          onAddComment={handleAddComment}
-        />
-      </Paper>
-      <Box>
-        <TableContainer
-          component={Paper}
-          sx={{ border: '1px solid', borderColor: theme.palette.divider }}
+    <ContainerTheme direction="column" justifyContent="space-between">
+      <Stack spacing={4} sx={{ padding: '16px' }}>
+        {/* 현재 게시글 정보 */}
+        <Paper
+          sx={{
+            padding: '16px',
+            backgroundColor: theme.palette.background.paper,
+          }}
         >
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">번호</TableCell>
-                <TableCell align="center">제목</TableCell>
-                <TableCell align="center">작성자</TableCell>
-                <TableCell align="center">작성일</TableCell>
-                <TableCell align="center">조회수</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedPosts.map((post) => (
-                <TableRow key={post.id} hover>
-                  <TableCell align="center">{post.id}</TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      cursor: 'pointer',
-                      color: theme.palette.primary.main,
-                    }}
-                    onClick={() => navigate(`/community/postdetail/${post.id}`)}
-                  >
-                    {post.title}
-                  </TableCell>
-                  <TableCell align="center">{post.author}</TableCell>
-                  <TableCell align="center">{post.date}</TableCell>
-                  <TableCell align="center">{post.view}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Stack spacing={2} sx={{ marginTop: '16px', alignItems: 'center' }}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
+          <Typography variant="h4" gutterBottom>
+            {post.title || '제목 없음'}
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            작성자: {post.author || '익명'} | 작성일:{' '}
+            {post.createdAt
+              ? new Date(post.createdAt).toLocaleDateString()
+              : '날짜 없음'}{' '}
+            | 조회수: {post.view}
+          </Typography>
+          <Typography variant="body1" sx={{ marginTop: '16px' }}>
+            {post.content || '내용 없음'}
+          </Typography>
+          <ReactionButtons
+            recommend={post.recommend}
+            onRecommendChange={handleRecommendChange}
           />
-        </Stack>
-      </Box>
-    </Stack>
+          <CommentSection
+            comments={comments}
+            newComment={newComment}
+            onCommentChange={handleCommentChange}
+            onAddComment={handleAddComment}
+          />
+        </Paper>
+
+        {/* 게시글 리스트 */}
+        <Box>
+          <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+            자유게시판
+          </Typography>
+          <CommunityTable
+            page={currentPage}
+            rowsPerPage={POSTS_PER_PAGE}
+            sortedRows={paginatedRows}
+            rows={rows}
+            columns={columns}
+            onRowClick={handleRowClick} // 행 클릭 시 상세 페이지 이동
+          />
+          <Stack spacing={2} sx={{ marginTop: '16px', alignItems: 'center' }}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
+        </Box>
+      </Stack>
+    </ContainerTheme>
   );
 };
 
