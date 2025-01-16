@@ -43,7 +43,7 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", foreignKey = @ForeignKey(name = "FK_CATEGORY_TO_POST"))
     private Category category;
 
-    @Column(name="TITLE", length = 100 , nullable = false)
+    @Column(name = "TITLE", length = 100, nullable = false)
     private String title;
 
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
@@ -58,8 +58,8 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments;
 
-    public void updateViewCount(){
-        if(this.view == null){
+    public void updateViewCount() {
+        if (this.view == null) {
             this.view = 0;
         }
         this.view++;
