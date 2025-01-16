@@ -35,8 +35,8 @@ public class SecurityConfig {
                                 .requestMatchers("/oauth/**").permitAll()
                                 .requestMatchers("/home/login/**").permitAll()
                                 .anyRequest().authenticated()) // 나머지는 인증 필요
-                .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userinfo -> userinfo
+                .oauth2Login(oauth -> oauth //ouath 로그인
+                        .userInfoEndpoint(userinfo -> userinfo 
                                 .userService(principalOauth2UserService))  // PrincipalOauth2UserService 사용
                         .loginProcessingUrl("/login/oauth2/code/{registrationId}")  // Spring Security가 자동으로 {registrationId}에 해당하는 로그인 URL 처리
                         .successHandler(new CustomAuthenticationSuccessHandler()))  // 로그인 성공 후 처리 핸들러
