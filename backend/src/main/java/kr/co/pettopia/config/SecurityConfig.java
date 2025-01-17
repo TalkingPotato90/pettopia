@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity(debug = true)
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
