@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import MuiCard from '@mui/material/Card';
 import PropTypes from 'prop-types';
 import { getUserPosts, getUserComments } from '../api/user';
+import ContainerTheme from '../theme/ContainerTheme';
 
 function MyPageActivity() {
   const [myPosts, setMyPosts] = useState([]);
@@ -47,27 +48,28 @@ function MyPageActivity() {
   }
 
   return (
-    <InformationContainer direction="column" justifyContent="space-between">
-      <Card variant="outlined">
-        <Box sx={{ mb: 4 }}>
-          <Header />
-        </Box>
-        <Box sx={{ mb: 4 }}>
-          <NavTabs myPosts={myPosts} myComments={myComments} />
-        </Box>
-      </Card>
-    </InformationContainer>
+    <ContainerTheme direction="column" justifyContent="space-between">
+      <InformationContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <Box sx={{ mb: 4 }}>
+            <Header />
+          </Box>
+          <Box sx={{ mb: 4 }}>
+            <NavTabs myPosts={myPosts} myComments={myComments} />
+          </Box>
+        </Card>
+      </InformationContainer>
+    </ContainerTheme>
   );
 }
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  alignSelf: 'center',
   width: '100%',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  margin: 'auto',
+  margin: '0 auto',
   [theme.breakpoints.up('sm')]: {
     maxWidth: '1440px',
   },
