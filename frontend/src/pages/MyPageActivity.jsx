@@ -202,7 +202,7 @@ function ContentsTable({ myPosts }) {
 
     return {
       no: index + 1,
-      id: myPost.id,
+      id: myPost.postId,
       board: myPost.categoryName,
       title: myPost.title,
       date: formattedDate,
