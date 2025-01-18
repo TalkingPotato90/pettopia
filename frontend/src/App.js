@@ -17,7 +17,7 @@ import PrivateRoute from './components/PrivateRoute';
 import FreeBoardPage from './pages/FreeBoardPage';
 
 function App(props) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // 로그인 상태
   const [userName, setUserName] = useState(''); // 사용자 이름
   const [profileImgUrl, setProfileImgUrl] = useState(''); // 프로필 이미지 경로
   const [posts, setPosts] = useState([]); // posts 상태 관리
@@ -52,6 +52,10 @@ function App(props) {
     };
     fetchLoginStatus();
   }, []);
+
+  if (isLoggedIn === null) {
+    return <div>Loading...</div>; // 로그인 상태를 확인 중일 때 로딩 표시
+  }
 
   // 로그인 핸들러
   const handleLogin = (name, profileImgUrl) => {
