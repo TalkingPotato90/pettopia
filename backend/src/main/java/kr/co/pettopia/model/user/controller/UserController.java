@@ -3,8 +3,8 @@ package kr.co.pettopia.model.user.controller;
 import kr.co.pettopia.model.auth.PrincipalDetails;
 import kr.co.pettopia.model.user.domain.Profile;
 import kr.co.pettopia.model.user.dto.ProfileDTO;
-import kr.co.pettopia.model.user.dto.UserInfoRequest;
-import kr.co.pettopia.model.user.dto.UserInfoResponse;
+import kr.co.pettopia.model.user.dto.ProfileRequest;
+import kr.co.pettopia.model.user.dto.ProfileResponse;
 import kr.co.pettopia.model.user.dto.UserPostsResponse;
 import kr.co.pettopia.model.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,18 +25,18 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserInfoResponse> getProfile(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<ProfileResponse> getProfile(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Profile profile = userService.getUserInfo(principalDetails.getId());
 
-        return ResponseEntity.ok(UserInfoResponse.from(profile));
+        return ResponseEntity.ok(ProfileResponse.from(profile));
     }
 
     @PutMapping
-    public ResponseEntity<UserInfoResponse> updateProfile(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                          @RequestBody UserInfoRequest userInfoRequest) {
-        Profile profile = userService.updateUserInfo(principalDetails.getId(), ProfileDTO.of(userInfoRequest));
+    public ResponseEntity<ProfileResponse> updateProfile(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                         @RequestBody ProfileRequest profileRequest) {
+        Profile profile = userService.updateUserInfo(principalDetails.getId(), ProfileDTO.of(profileRequest));
 
-        return ResponseEntity.ok(UserInfoResponse.from(profile));
+        return ResponseEntity.ok(ProfileResponse.from(profile));
     }
 
     @GetMapping("/posts")
