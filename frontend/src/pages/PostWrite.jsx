@@ -15,6 +15,7 @@ import {
 import ReactQuillEditor from '../components/ReactQuillEditor';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import CommunityTitle from '../components/CommunityTitle';
+import ContainerTheme from "../theme/ContainerTheme";
 
 function PostWrite({user}) {
     const [content, setContent] = useState(''); // 에디터 내용 관리
@@ -69,6 +70,7 @@ function PostWrite({user}) {
   };
 
   return (
+      <ContainerTheme direction="column" justifyContent="space-between">
     <Stack spacing={1}>
       <CommunityBreadCrumbs />
       <CommunityTitle />
@@ -125,6 +127,7 @@ function PostWrite({user}) {
         onCancel={() => navigate('/community/freeboard')}/>
       </Box>
     </Stack>
+      </ContainerTheme>
   );
 }
 
