@@ -43,9 +43,15 @@ public class FreeboardController {
     }
 
     @GetMapping("/freeboard/posts/{id}")
-    public ResponseEntity<ReadSinglePostResponse> findPost(@PathVariable Integer id) {
+    public ResponseEntity<ReadSinglePostResponse> findPost(@PathVariable("id") Integer id) {
         Post post = freeboardService.findPostById(id);
-
+        System.out.println("=============");
+        System.out.println("=============");
+        System.out.println("=============");
+        System.out.println("=============");
+        System.out.println("=============");
+        System.out.println(post.toString());
+        System.out.println(post);
         return ResponseEntity.ok()
                 .body(new ReadSinglePostResponse(post));
     }
