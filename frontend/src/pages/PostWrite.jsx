@@ -34,7 +34,7 @@ function PostWrite({user}) {
         const postData = {
             title,
             content,
-            author: user.userId,
+            userId: user.userId,
             categoryId
         };
 
