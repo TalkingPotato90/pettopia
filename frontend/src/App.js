@@ -115,7 +115,12 @@ function App(props) {
           }
         />
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/community/postwrite" element={<PostWrite />} />
+        <Route
+            path="/community/postwrite"
+            element={
+            <PostWrite user = {{userName, isLoggedIn}}/>
+            }
+        />
 
         <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
           <Route path="/mypage/main" element={<MyPageMain />} />
