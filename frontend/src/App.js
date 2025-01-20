@@ -21,6 +21,7 @@ function App(props) {
   const [userName, setUserName] = useState(''); // 사용자 이름
   const [profileImgUrl, setProfileImgUrl] = useState(''); // 프로필 이미지 경로
   const [posts, setPosts] = useState([]); // posts 상태 관리
+  const [userId, setUserId] = useState('');
 
   // 게시글 데이터 로드
   useEffect(() => {
@@ -44,10 +45,12 @@ function App(props) {
         setIsLoggedIn(status.isLoggedIn);
         setUserName(status.userName || '');
         setProfileImgUrl(status.profileImgUrl || '');
+        setUserId(status.userId || '');
       } catch (error) {
         setIsLoggedIn(false); // 로그인 상태를 false로 설정
         setUserName('');
         setProfileImgUrl('');
+        setUserId('');
       }
     };
     fetchLoginStatus();
@@ -118,7 +121,7 @@ function App(props) {
         <Route
             path="/community/postwrite"
             element={
-            <PostWrite user = {{userName, isLoggedIn}}/>
+            <PostWrite user = {{userId, isLoggedIn}}/>
             }
         />
 

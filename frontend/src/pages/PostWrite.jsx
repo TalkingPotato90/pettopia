@@ -16,11 +16,56 @@ import ReactQuillEditor from '../components/ReactQuillEditor';
 import CommunityBreadCrumbs from '../components/CommunityBreadCrumbs';
 import CommunityTitle from '../components/CommunityTitle';
 
-function PostWrite() {
-  const [content, setContent] = useState(''); // 에디터 내용 관리
+function PostWrite({user}) {
+    const [content, setContent] = useState(''); // 에디터 내용 관리
+    const [title, setTitle] = useState('');
+    const categoryId = '1';
+    const navigate = useNavigate();
 
-  const handleChange = (value) => {
+    const isFormValid = title.trim() !== '' && content.trim() !== '';
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        if(!isFormValid){
+            alert('제목과 내용을 입력해주세요.');
+            return;
+        }
+
+        const postData = {
+            title,
+            content,
+            author: user.userId,
+            categoryId
+        };
+
+        try{
+            const response = await fetch('/freeboard/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify(postData)
+                }
+            );
+
+            if(response.ok){
+                alert('등록 완료');
+                navigate('/community/freeboard');
+            }else {
+                alert('실패');
+            }
+        }catch (e){
+            console.error(e);
+            alert('대실패')
+        }
+    };
+
+  const handleContentChange = (value) => {
     setContent(value); // 에디터에서 변경된 값 반영
+  };
+
+  const handleTitleChange = (event) => {
+      setTitle(event.target.value);
   };
 
   return (
@@ -51,6 +96,8 @@ function PostWrite() {
           variant="outlined"
           size="small"
           placeholder="글 제목을 작성해주세요."
+          value={title}
+          onChange={handleTitleChange}
           autoFocus
         />
       </Box>
@@ -68,37 +115,30 @@ function PostWrite() {
         <ReactQuillEditor
           style={{ width: '100%', height: '250px' }} // 원하는 스타일 적용
           value={content} // 에디터에 바인딩된 값
-          onChange={handleChange} // 값 변경 핸들러
+          onChange={handleContentChange} // 값 변경 핸들러
         />
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', pt: 7 }}>
-        <Buttons />
+        <Buttons
+        onRegister={handleRegister}
+        onCancel={() => navigate('/community/freeboard')}/>
       </Box>
     </Stack>
   );
 }
 
-function Buttons() {
+function Buttons({ onRegister, onCancel }) {
   const buttons = ['등록', '취소'];
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const confirmCancel = () => {
     setIsModalOpen(false);
-    navigate('/community/freeboard');
+    onCancel();
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleRegister = () => {
-    alert('등록');
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(true);
   };
 
   return (
@@ -113,7 +153,7 @@ function Buttons() {
             }}
             variant="contained"
             color={buttonText === '등록' ? 'primary' : 'error'}
-            onClick={buttonText === '등록' ? handleRegister : handleCancel}
+            onClick={buttonText === '등록' ? onRegister : () => setIsModalOpen(true)}
           >
             {buttonText}
           </Button>
