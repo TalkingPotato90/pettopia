@@ -25,15 +25,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserInfoResponse> getUserById(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<UserInfoResponse> getProfile(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Profile profile = userService.getUserInfo(principalDetails.getId());
 
         return ResponseEntity.ok(UserInfoResponse.from(profile));
     }
 
     @PutMapping
-    public ResponseEntity<UserInfoResponse> updateUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                           @RequestBody UserInfoRequest userInfoRequest) {
+    public ResponseEntity<UserInfoResponse> updateProfile(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                          @RequestBody UserInfoRequest userInfoRequest) {
         Profile profile = userService.updateUserInfo(principalDetails.getId(), ProfileDTO.of(userInfoRequest));
 
         return ResponseEntity.ok(UserInfoResponse.from(profile));
