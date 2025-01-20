@@ -6,18 +6,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
 import kr.co.pettopia.model.user.dto.ProfileDTO;
-import kr.co.pettopia.model.user.dto.UserInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
