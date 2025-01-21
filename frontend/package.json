@@ -15,6 +15,7 @@
     "@xeger/quill-image-actions": "^0.7.2",
     "@xeger/quill-image-formats": "^0.7.2",
     "dayjs": "^1.11.13",
+    "dompurify": "^3.2.3",
     "quill-image-resize-module-ts": "^3.0.3",
     "react-quill": "^2.0.0",
     "react-quill-new": "^3.3.3",
