@@ -82,23 +82,32 @@ const PostDetail = ({ updatePostRecommend }) => {
     loadPosts();
   }, []);
 
-  // 댓글 데이터 로드
   useEffect(() => {
     const loadComments = async () => {
       try {
-        const response = await fetch(`/api/posts/${routePostId}/comments`);
+        const response = await fetch(`/freeboard/comment/${routePostId}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setComments(data);
+        // 댓글이 중복되면 안되므로, 기존 댓글과 합칠 때 중복을 피해야 함
+        setComments((prevComments) => {
+          const newComments = data.filter(
+            (newComment) =>
+              !prevComments.some(
+                (existingComment) =>
+                  existingComment.commentId === newComment.commentId,
+              ),
+          );
+          return [...prevComments, ...newComments]; // 새 댓글만 추가
+        });
       } catch (error) {
         console.error('댓글 데이터를 가져오는 중 오류 발생:', error);
       }
     };
 
     loadComments();
-  }, [routePostId]);
+  }, [routePostId]); // routePostId 변경 시에만 데이터 로드
 
   if (loading) {
     return <div>Loading...</div>;
@@ -115,11 +124,11 @@ const PostDetail = ({ updatePostRecommend }) => {
   const handleAddComment = (parentId, content) => {
     if (!content.trim()) return;
     const newCommentObj = {
-      id: Date.now(),
+      commentId: Date.now(),
       parentId,
       content,
-      author: '익명',
-      date: new Date().toLocaleString('ko-KR'),
+      nickname: '익명',
+      createdAt: new Date().toISOString(),
     };
     setComments((prevComments) => [...prevComments, newCommentObj]);
     setNewComment('');
