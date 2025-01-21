@@ -2,6 +2,7 @@ package kr.co.pettopia.model.freeboard.controller;
 
 import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
+import kr.co.pettopia.model.freeboard.dto.ReadCommentListResponse;
 import kr.co.pettopia.model.freeboard.dto.ReadPostListResponse;
 import kr.co.pettopia.model.freeboard.dto.ReadSinglePostResponse;
 import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
@@ -45,22 +46,27 @@ public class FreeboardController {
     @GetMapping("/freeboard/posts/{id}")
     public ResponseEntity<ReadSinglePostResponse> findPost(@PathVariable("id") Integer id) {
         Post post = freeboardService.findPostById(id);
-        System.out.println("=============");
-        System.out.println("=============");
-        System.out.println("=============");
-        System.out.println("=============");
-        System.out.println("=============");
-        System.out.println(post.toString());
-        System.out.println(post);
         return ResponseEntity.ok()
                 .body(new ReadSinglePostResponse(post));
     }
 
     @PutMapping("/freeboard/posts/{id}")
-    public ResponseEntity<UpdatePostRequest> updatePost(@PathVariable Integer id, @RequestBody UpdatePostRequest request) {
+    public ResponseEntity<UpdatePostRequest> updatePost(@PathVariable Integer id,
+                                                        @RequestBody UpdatePostRequest request) {
         Post updatedPost = freeboardService.update(id, request);
 
         return ResponseEntity.ok()
                 .body(new UpdatePostRequest(updatedPost));
+    }
+
+    @GetMapping("/freeboard/comment/{postId}")
+    public ResponseEntity<List<ReadCommentListResponse>> getCommentsByPostId(@PathVariable("postId") Integer postId) {
+        List<ReadCommentListResponse> comments = freeboardService.getAllComments(postId)
+                .stream()
+                .map(ReadCommentListResponse::new)
+                .toList();
+
+        return ResponseEntity.ok()
+                .body(comments);
     }
 }

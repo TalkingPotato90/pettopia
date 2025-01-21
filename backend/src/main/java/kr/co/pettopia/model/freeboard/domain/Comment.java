@@ -32,6 +32,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", foreignKey = @ForeignKey(name = "FK_USERS_TO_COMMENT"))
     private User user;
 
+    @Column(name="NICKNAME", nullable = false)
+    private String nickname;
+
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 }

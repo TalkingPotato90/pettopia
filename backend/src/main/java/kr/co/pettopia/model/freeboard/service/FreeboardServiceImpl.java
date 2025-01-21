@@ -1,10 +1,12 @@
 package kr.co.pettopia.model.freeboard.service;
 
 import kr.co.pettopia.model.freeboard.domain.Category;
+import kr.co.pettopia.model.freeboard.domain.Comment;
 import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
 import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 import kr.co.pettopia.model.freeboard.repository.CategoryRepository;
+import kr.co.pettopia.model.freeboard.repository.CommentRepository;
 import kr.co.pettopia.model.freeboard.repository.FreeboardRepository;
 import kr.co.pettopia.model.user.domain.User;
 import kr.co.pettopia.model.user.repository.UserRepository;
@@ -17,13 +19,17 @@ public class FreeboardServiceImpl implements FreeboardService{
     private final FreeboardRepository freeboardRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
+
 
     public FreeboardServiceImpl(FreeboardRepository freeboardRepository,
                                 UserRepository userRepository,
-                                CategoryRepository categoryRepository) {
+                                CategoryRepository categoryRepository,
+                                CommentRepository commentRepository) {
         this.freeboardRepository = freeboardRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -61,5 +67,10 @@ public class FreeboardServiceImpl implements FreeboardService{
         post.updatePost(request.getTitle(), request.getContent());
 
         return freeboardRepository.save(post);
+    }
+
+    @Override
+    public List<Comment> getAllComments(Integer postId) {
+        return commentRepository.findByPostPostId(postId);
     }
 }
