@@ -119,10 +119,8 @@ function App(props) {
         />
         <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
         <Route
-            path="/community/postwrite"
-            element={
-            <PostWrite user = {{userId, isLoggedIn}}/>
-            }
+          path="/community/postwrite"
+          element={<PostWrite user={{ userId, isLoggedIn }} />}
         />
 
         <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>

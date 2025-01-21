@@ -14,18 +14,18 @@ export const checkSocialLoginStatus = async () => {
 
     // 데이터 검증
     if (
-      (data &&
+      ((data &&
         typeof data.isLoggedIn === 'boolean' &&
         typeof data.userName === 'string' &&
-          (typeof data.profileImgUrl === 'string') ||
-      data.profileImgUrl === null) &&
-        typeof data.userId === 'string'
+        typeof data.profileImgUrl === 'string') ||
+        data.profileImgUrl === null) &&
+      typeof data.userId === 'string'
     ) {
       return {
         isLoggedIn: data.isLoggedIn,
         userName: data.userName,
         profileImgUrl: data.profileImgUrl || '',
-        userId: data.userId
+        userId: data.userId,
       };
     } else {
       throw new Error('Invalid response format');
@@ -35,7 +35,7 @@ export const checkSocialLoginStatus = async () => {
       isLoggedIn: false,
       userName: '',
       profileImgUrl: '',
-      userId: ''
+      userId: '',
     };
   }
 };
