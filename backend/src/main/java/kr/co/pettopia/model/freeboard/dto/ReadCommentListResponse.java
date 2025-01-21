@@ -17,7 +17,7 @@ public class ReadCommentListResponse {
         this.commentId = comment.getCommentId();
         this.postId = comment.getPost().getPostId();
         this.userId = comment.getUser().getUserId();  // User 엔티티에서 userId를 가져옵니다.
-        this.nickname = comment.getNickname();
+        this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
     }
 }
