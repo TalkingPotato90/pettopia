@@ -6,18 +6,16 @@ const CommentSection = ({
   onCommentChange,
   onAddComment,
 }) => {
-  const renderComments = (parentId = null, level = 0) => {
-    return comments
-      .filter((comment) => comment.parentId === parentId)
-      .map((comment) => (
-        <Comment
-          key={comment.id}
-          comment={comment}
-          level={level}
-          onAddComment={onAddComment}
-          renderComments={renderComments}
-        />
-      ));
+  // 댓글 렌더링 함수
+  const renderComments = () => {
+    // 댓글을 필터링 없이 바로 맵핑하여 렌더링
+    return comments.map((comment) => (
+      <Comment
+        key={comment.commentId}
+        comment={comment}
+        onAddComment={onAddComment}
+      />
+    ));
   };
 
   return (
@@ -28,12 +26,12 @@ const CommentSection = ({
         <textarea
           style={styles.textarea}
           placeholder="댓글을 입력하세요..."
-          value={newComment} // 부모에서 전달된 상태 사용
-          onChange={onCommentChange} // 부모 핸들러 사용
+          value={newComment}
+          onChange={onCommentChange} // 댓글 내용 변경 핸들러
         ></textarea>
         <button
           style={styles.submitButton}
-          onClick={() => onAddComment(null, newComment)} // 댓글 추가
+          onClick={() => onAddComment(null, newComment)} // 댓글 작성 버튼 클릭 시
         >
           댓글 작성
         </button>
