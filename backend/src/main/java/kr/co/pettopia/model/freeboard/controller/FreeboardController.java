@@ -1,6 +1,7 @@
 package kr.co.pettopia.model.freeboard.controller;
 
 import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.freeboard.dto.CreateCommentRequest;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
 import kr.co.pettopia.model.freeboard.dto.ReadCommentListResponse;
 import kr.co.pettopia.model.freeboard.dto.ReadPostListResponse;
@@ -9,6 +10,7 @@ import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 import kr.co.pettopia.model.freeboard.service.FreeboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,5 +70,13 @@ public class FreeboardController {
 
         return ResponseEntity.ok()
                 .body(comments);
+    }
+
+    @PostMapping("/freeboard/comment")
+    public ResponseEntity<CreateCommentRequest> createComment(@RequestBody CreateCommentRequest request) {
+        freeboardService.createComment(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(request);
     }
 }
