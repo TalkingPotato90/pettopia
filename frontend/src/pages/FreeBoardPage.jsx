@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchPost } from '../api/fetchPost';
 import FreeBoard from './FreeBoard';
 
-function FreeBoardPage() {
+function FreeBoardPage({ isLoggedIn }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,7 @@ function FreeBoardPage() {
     return <div>Loading...</div>;
   }
 
-  return <FreeBoard posts={posts} isLoggedIn={true} />;
+  return <FreeBoard posts={posts} isLoggedIn={isLoggedIn} />;
 }
 
 export default FreeBoardPage;
