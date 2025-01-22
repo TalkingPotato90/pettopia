@@ -107,7 +107,10 @@ function App(props) {
             <Home posts={posts} isLoggedIn={isLoggedIn} userName={userName} />
           }
         />
-        <Route path="/community/freeboard" element={<FreeBoardPage />} />
+        <Route
+          path="/community/freeboard"
+          element={<FreeBoardPage isLoggedIn={isLoggedIn} />}
+        />
         <Route
           path="/community/postdetail/:postId"
           element={
