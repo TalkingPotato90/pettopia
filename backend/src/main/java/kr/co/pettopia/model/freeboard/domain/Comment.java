@@ -11,8 +11,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
 import kr.co.pettopia.model.user.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -20,6 +22,8 @@ import lombok.Setter;
 @Getter
 @Builder
 @Table(name = "COMMENT")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

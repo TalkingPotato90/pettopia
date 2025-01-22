@@ -31,7 +31,7 @@ const CommentSection = ({
         ></textarea>
         <button
           style={styles.submitButton}
-          onClick={() => onAddComment(null, newComment)} // 댓글 작성 버튼 클릭 시
+          onClick={() => onAddComment(newComment)} // 댓글 작성 버튼 클릭 시
         >
           댓글 작성
         </button>
