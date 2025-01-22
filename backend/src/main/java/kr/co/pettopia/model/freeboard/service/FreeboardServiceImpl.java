@@ -3,6 +3,7 @@ package kr.co.pettopia.model.freeboard.service;
 import kr.co.pettopia.model.freeboard.domain.Category;
 import kr.co.pettopia.model.freeboard.domain.Comment;
 import kr.co.pettopia.model.freeboard.domain.Post;
+import kr.co.pettopia.model.freeboard.dto.CreateCommentRequest;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
 import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 import kr.co.pettopia.model.freeboard.repository.CategoryRepository;
@@ -73,4 +74,19 @@ public class FreeboardServiceImpl implements FreeboardService{
     public List<Comment> getAllComments(Integer postId) {
         return commentRepository.findByPostPostId(postId);
     }
+
+    @Override
+    public Comment createComment(CreateCommentRequest request) {
+        System.out.println(request.getUserId());
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("작성자 ID 오류"));
+
+        Post post = freeboardRepository.findById(request.getPostId())
+                .orElseThrow(() -> new IllegalArgumentException("글 ID 오류"));
+
+        return commentRepository.save(request.toEntity(post, user));
+    }
+
+
+
 }

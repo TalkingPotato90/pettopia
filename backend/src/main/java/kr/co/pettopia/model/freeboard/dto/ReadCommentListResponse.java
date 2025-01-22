@@ -14,6 +14,7 @@ public class ReadCommentListResponse {
     private String nickname;
     private String content;
     private LocalDateTime createdAt;
+
     public ReadCommentListResponse(Comment comment) {
         this.commentId = comment.getCommentId();
         this.postId = comment.getPost().getPostId();
