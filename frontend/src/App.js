@@ -114,6 +114,7 @@ function App(props) {
             <PostDetail
               posts={posts}
               updatePostRecommend={updatePostRecommend} // 추천수 업데이트 함수 전달
+              user={{ userId, isLoggedIn }}
             />
           }
         />

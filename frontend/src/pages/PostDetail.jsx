@@ -14,16 +14,16 @@ import { fetchPost, fetchPostById } from '../api/fetchPost';
 import CommunityTable from '../components/CommunityTable';
 import ContainerTheme from '../theme/ContainerTheme';
 
-const PostDetail = ({ updatePostRecommend }) => {
+const PostDetail = ({ user, updatePostRecommend }) => {
   const { postId: routePostId } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const [post, setPost] = useState(null); // 현재 게시글 상태
   const [posts, setPosts] = useState([]); // 전체 게시글 상태
   const [loading, setLoading] = useState(true);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [comments, setComments] = useState([]); // 댓글 상태
+  const [newComment, setNewComment] = useState(''); // 새 댓글 내용
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
 
   const POSTS_PER_PAGE = 10;
 
@@ -82,32 +82,23 @@ const PostDetail = ({ updatePostRecommend }) => {
     loadPosts();
   }, []);
 
-  useEffect(() => {
-    const loadComments = async () => {
-      try {
-        const response = await fetch(`/freeboard/comment/${routePostId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        // 댓글이 중복되면 안되므로, 기존 댓글과 합칠 때 중복을 피해야 함
-        setComments((prevComments) => {
-          const newComments = data.filter(
-            (newComment) =>
-              !prevComments.some(
-                (existingComment) =>
-                  existingComment.commentId === newComment.commentId,
-              ),
-          );
-          return [...prevComments, ...newComments]; // 새 댓글만 추가
-        });
-      } catch (error) {
-        console.error('댓글 데이터를 가져오는 중 오류 발생:', error);
+  // 댓글 데이터 로드
+  const loadComments = async () => {
+    try {
+      const response = await fetch(`/freeboard/comment/${routePostId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const data = await response.json();
+      setComments(data); // 댓글 상태 갱신
+    } catch (error) {
+      console.error('댓글 데이터를 가져오는 중 오류 발생:', error);
+    }
+  };
 
-    loadComments();
-  }, [routePostId]); // routePostId 변경 시에만 데이터 로드
+  useEffect(() => {
+    loadComments(); // 댓글 초기 로드
+  }, [routePostId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -121,17 +112,42 @@ const PostDetail = ({ updatePostRecommend }) => {
     setNewComment(e.target.value);
   };
 
-  const handleAddComment = (parentId, content) => {
-    if (!content.trim()) return;
+  // 댓글 작성 함수
+  const handleAddComment = async (content) => {
+    if (!user.isLoggedIn) {
+      // 로그인되지 않은 경우
+      navigate('/home/login', {
+        state: { from: '/community/postdetail/' + routePostId },
+      });
+      return;
+    }
+
     const newCommentObj = {
-      commentId: Date.now(),
-      parentId,
       content,
-      nickname: '익명',
-      createdAt: new Date().toISOString(),
+      postId: routePostId,
+      userId: user.userId,
     };
-    setComments((prevComments) => [...prevComments, newCommentObj]);
-    setNewComment('');
+
+    try {
+      // 백엔드로 댓글 전송
+      const response = await fetch(`/freeboard/comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newCommentObj),
+      });
+
+      if (!response.ok) {
+        throw new Error('댓글 작성 실패');
+      }
+
+      // 댓글 작성 후 댓글 목록 새로 고침
+      loadComments(); // 댓글 목록을 새로 불러오는 함수 호출
+      setNewComment(''); // 댓글 입력란 초기화
+    } catch (error) {
+      console.error('댓글 작성 중 오류 발생:', error);
+    }
   };
 
   const handlePageChange = (event, pageNumber) => {
