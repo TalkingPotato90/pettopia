@@ -13,6 +13,7 @@ import CommentSection from '../components/CommentSection';
 import { fetchPost, fetchPostById } from '../api/fetchPost';
 import CommunityTable from '../components/CommunityTable';
 import ContainerTheme from '../theme/ContainerTheme';
+import DOMPurify from 'dompurify';
 
 const PostDetail = ({ user, updatePostRecommend }) => {
   const { postId: routePostId } = useParams();
@@ -162,6 +163,8 @@ const PostDetail = ({ user, updatePostRecommend }) => {
     navigate(`/community/postDetail/${id}`);
   };
 
+  const sanitizedContent = DOMPurify.sanitize(post.content, {})
+
   return (
     <ContainerTheme direction="column" justifyContent="space-between">
       <Stack spacing={4} sx={{ padding: '16px' }}>
@@ -182,9 +185,11 @@ const PostDetail = ({ user, updatePostRecommend }) => {
               : '날짜 없음'}{' '}
             | 조회수: {post.view}
           </Typography>
-          <Typography variant="body1" sx={{ marginTop: '16px' }}>
-            {post.content || '내용 없음'}
-          </Typography>
+          <Typography
+              variant="body1"
+              sx={{ marginTop: '16px' }}
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
           <ReactionButtons
             recommend={post.recommend}
             onRecommendChange={handleRecommendChange}
