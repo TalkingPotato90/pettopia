@@ -157,7 +157,7 @@ const PostDetail = ({ user, updatePostRecommend }) => {
     navigate(`/community/postDetail/${id}`);
   };
 
-  const sanitizedContent = DOMPurify.sanitize(post.content, {})
+  const sanitizedContent = DOMPurify.sanitize(post.content, {});
 
   return (
     <ContainerTheme direction="column" justifyContent="space-between">
@@ -180,9 +180,9 @@ const PostDetail = ({ user, updatePostRecommend }) => {
             | 조회수: {post.view}
           </Typography>
           <Typography
-              variant="body1"
-              sx={{ marginTop: '16px' }}
-              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            variant="body1"
+            sx={{ marginTop: '16px' }}
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
           <ReactionButtons
             recommend={post.recommend}
