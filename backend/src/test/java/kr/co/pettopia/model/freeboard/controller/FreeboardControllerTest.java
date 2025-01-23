@@ -96,7 +96,7 @@ class FreeboardControllerTest {
 
         result.andExpect(status().isCreated());
 
-        List<Post> posts = freeboardRepository.findAllByOrderByIdDesc();
+        List<Post> posts = freeboardRepository.findAllByOrderByPostIdDesc();
 
         assertThat(posts).hasSize(1);
         assertThat(posts.getFirst().getTitle()).isEqualTo(title);
