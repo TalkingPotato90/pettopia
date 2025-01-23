@@ -244,7 +244,7 @@ function WriteButton() {
       sx={{ height: '40px' }}
       variant="contained"
       color="primary"
-      onClick={() => navigate('/community/postwrite')}
+      onClick={() => navigate('/community/freeboard/postwrite')}
     >
       글 작성
     </Button>
