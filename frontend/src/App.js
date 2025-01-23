@@ -130,7 +130,7 @@ function App(props) {
             element={<MyPageActivity myPosts={myPosts} />}
           />
           <Route
-            path="/community/postwrite"
+            path="/community/freeboard/postwrite"
             element={<PostWrite user={{ userId, isLoggedIn }} />}
           />
         </Route>
