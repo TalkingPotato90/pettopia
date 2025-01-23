@@ -5,10 +5,10 @@ const CommentSection = ({
   newComment,
   onCommentChange,
   onAddComment,
+  user, // user 객체를 props로 받음
 }) => {
   // 댓글 렌더링 함수
   const renderComments = () => {
-    // 댓글을 필터링 없이 바로 맵핑하여 렌더링
     return comments.map((comment) => (
       <Comment
         key={comment.commentId}
@@ -22,20 +22,33 @@ const CommentSection = ({
     <div style={styles.commentSection}>
       <h2 style={styles.commentTitle}>댓글</h2>
       <div>{renderComments()}</div>
-      <div style={styles.commentForm}>
-        <textarea
-          style={styles.textarea}
-          placeholder="댓글을 입력하세요..."
-          value={newComment}
-          onChange={onCommentChange} // 댓글 내용 변경 핸들러
-        ></textarea>
-        <button
-          style={styles.submitButton}
-          onClick={() => onAddComment(newComment)} // 댓글 작성 버튼 클릭 시
-        >
-          댓글 작성
-        </button>
-      </div>
+
+      {/* 로그인 상태에 따라 댓글 입력 폼 보이기 */}
+      {user.isLoggedIn ? (
+        <div style={styles.commentForm}>
+          <textarea
+            style={styles.textarea}
+            placeholder="댓글을 입력하세요..."
+            value={newComment}
+            onChange={onCommentChange}
+          ></textarea>
+          <button
+            style={styles.submitButton}
+            onClick={() => onAddComment(newComment)}
+          >
+            댓글 작성
+          </button>
+        </div>
+      ) : (
+        <div style={styles.commentForm}>
+          <textarea
+            style={styles.textarea}
+            placeholder="로그인 후 댓글을 작성할 수 있습니다..."
+            value=""
+            disabled
+          ></textarea>
+        </div>
+      )}
     </div>
   );
 };
@@ -52,6 +65,7 @@ const styles = {
     borderRadius: '4px',
     border: '1px solid #ccc',
     marginBottom: '10px',
+    color: '#888', // 회색 글씨로 로그인 후 표시된 메시지를 강조
   },
   submitButton: {
     alignSelf: 'flex-end',

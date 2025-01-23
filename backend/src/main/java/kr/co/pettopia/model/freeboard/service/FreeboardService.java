@@ -16,4 +16,5 @@ public interface FreeboardService {
 
     List<Comment> getAllComments(Integer postId);
     Comment createComment(CreateCommentRequest request);
+
 }
