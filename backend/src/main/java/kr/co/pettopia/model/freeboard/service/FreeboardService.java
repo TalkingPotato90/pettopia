@@ -4,6 +4,7 @@ import kr.co.pettopia.model.freeboard.domain.Comment;
 import kr.co.pettopia.model.freeboard.domain.Post;
 import kr.co.pettopia.model.freeboard.dto.CreateCommentRequest;
 import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
+import kr.co.pettopia.model.freeboard.dto.UpdateCommentRequest;
 import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface FreeboardService {
 
     List<Comment> getAllComments(Integer postId);
     Comment createComment(CreateCommentRequest request);
-
+    Comment updateComment(Integer commentId,UpdateCommentRequest request);
 }
