@@ -12,6 +12,7 @@ public class ReadPostListResponse {
     private Integer postId;
     private String title;
     private String author;
+    private String avatar;
     private LocalDateTime createdAt;
     private Integer view;
     private Integer recommend;
@@ -20,6 +21,7 @@ public class ReadPostListResponse {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.author = post.getUser().getNickname();
+        this.avatar = post.getUser().getProfileImgUrl();
         this.createdAt = post.getCreatedAt();
         this.view = post.getView();
         this.recommend = post.getRecommend();
