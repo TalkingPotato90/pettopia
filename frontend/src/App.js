@@ -121,7 +121,16 @@ function App(props) {
             />
           }
         />
-        <Route path="/home/login" element={<Login onLogin={handleLogin} />} />
+        <Route
+          path="/home/login"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/home" replace />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
 
         <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
           <Route path="/mypage/main" element={<MyPageMain />} />
