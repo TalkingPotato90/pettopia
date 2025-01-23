@@ -53,35 +53,29 @@ const PostDetail = ({ user, updatePostRecommend }) => {
 
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
-  // 현재 게시글 데이터 로드
+// 게시글 조회, 게시글 목록 조회
   useEffect(() => {
-    const loadPost = async () => {
+    const loadPostAndList = async () => {
       try {
-        const data = await fetchPostById(routePostId);
-        setPost(data);
+        // 현재 게시글 조회
+        const postData = await fetchPostById(routePostId);
+        setPost(postData);
+
+        // 게시글 목록 조회
+        const postsData = await fetchPost();
+        setPosts(postsData.map((post) =>
+            post.postId === routePostId ? { ...post, view: postData.view } : post
+        ));
       } catch (error) {
-        console.error('게시글 로드 중 오류 발생:', error);
+        console.error('데이터 로드 중 오류 발생:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    loadPost();
+    loadPostAndList();
   }, [routePostId]);
 
-  // 전체 게시글 리스트 로드
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const data = await fetchPost();
-        setPosts(data);
-      } catch (error) {
-        console.error('게시글 리스트 로드 중 오류 발생:', error);
-      }
-    };
-
-    loadPosts();
-  }, []);
 
   // 댓글 데이터 로드
   const loadComments = async () => {
