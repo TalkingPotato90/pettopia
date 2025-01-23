@@ -53,7 +53,7 @@ const PostDetail = ({ user, updatePostRecommend }) => {
 
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
-// 게시글 조회, 게시글 목록 조회
+  // 게시글 조회, 게시글 목록 조회
   useEffect(() => {
     const loadPostAndList = async () => {
       try {
@@ -63,9 +63,13 @@ const PostDetail = ({ user, updatePostRecommend }) => {
 
         // 게시글 목록 조회
         const postsData = await fetchPost();
-        setPosts(postsData.map((post) =>
-            post.postId === routePostId ? { ...post, view: postData.view } : post
-        ));
+        setPosts(
+          postsData.map((post) =>
+            post.postId === routePostId
+              ? { ...post, view: postData.view }
+              : post,
+          ),
+        );
       } catch (error) {
         console.error('데이터 로드 중 오류 발생:', error);
       } finally {
@@ -75,7 +79,6 @@ const PostDetail = ({ user, updatePostRecommend }) => {
 
     loadPostAndList();
   }, [routePostId]);
-
 
   // 댓글 데이터 로드
   const loadComments = async () => {
@@ -193,6 +196,7 @@ const PostDetail = ({ user, updatePostRecommend }) => {
             newComment={newComment}
             onCommentChange={handleCommentChange}
             onAddComment={handleAddComment}
+            user={user}
           />
         </Paper>
 
