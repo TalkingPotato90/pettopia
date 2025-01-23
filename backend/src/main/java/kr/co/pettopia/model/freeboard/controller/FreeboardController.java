@@ -6,6 +6,7 @@ import kr.co.pettopia.model.freeboard.dto.CreatePostRequest;
 import kr.co.pettopia.model.freeboard.dto.ReadCommentListResponse;
 import kr.co.pettopia.model.freeboard.dto.ReadPostListResponse;
 import kr.co.pettopia.model.freeboard.dto.ReadSinglePostResponse;
+import kr.co.pettopia.model.freeboard.dto.UpdateCommentRequest;
 import kr.co.pettopia.model.freeboard.dto.UpdatePostRequest;
 import kr.co.pettopia.model.freeboard.service.FreeboardService;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,16 @@ public class FreeboardController {
     @PostMapping("/freeboard/comment")
     public ResponseEntity<CreateCommentRequest> createComment(@RequestBody CreateCommentRequest request) {
         freeboardService.createComment(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(request);
+    }
+
+    @PutMapping("/freeboard/comment/{commentId}")
+    public ResponseEntity<UpdateCommentRequest> updateComment(
+            @PathVariable("commentId") Integer commentId,
+            @RequestBody UpdateCommentRequest request) {
+        freeboardService.updateComment(commentId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(request);

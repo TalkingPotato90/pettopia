@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
+import kr.co.pettopia.model.freeboard.dto.UpdateCommentRequest;
 import kr.co.pettopia.model.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,4 +41,8 @@ public class Comment extends BaseEntity {
 
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    public void update(String content) {
+        this.content = content;
+    }
 }
