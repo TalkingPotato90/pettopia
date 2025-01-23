@@ -35,7 +35,7 @@ public class FreeboardServiceImpl implements FreeboardService{
 
     @Override
     public List<Post> getAllPosts() {
-        return freeboardRepository.findAll();
+        return freeboardRepository.findAllByOrderByPostIdDesc();
     }
 
     @Override
@@ -77,7 +77,6 @@ public class FreeboardServiceImpl implements FreeboardService{
 
     @Override
     public Comment createComment(CreateCommentRequest request) {
-        System.out.println(request.getUserId());
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("작성자 ID 오류"));
 

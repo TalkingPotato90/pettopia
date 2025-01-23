@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface FreeboardRepository extends JpaRepository<Post, Integer> {
     @EntityGraph(attributePaths = {"user"})
-    List<Post> findAll();
+    List<Post> findAllByOrderByPostIdDesc();
     List<Post> findByUser(User user);
 }
