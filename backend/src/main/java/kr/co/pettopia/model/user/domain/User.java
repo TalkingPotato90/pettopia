@@ -10,7 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.core.parameters.P;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -77,6 +81,10 @@ public class User extends BaseEntity {
                 // Base64로 인코딩된 이미지 디코딩
                 byte[] imageBytes = Base64.getDecoder().decode(profileImgBase64);
                 String uploadDir = "backend/src/main/resources/static/profileImages";
+                File directory = new File(uploadDir);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
                 String filePath = uploadDir + "/" + profileImgUrl.replace("profileImages/", "");
                 // 디코딩된 이미지 파일 저장
                 Files.write(Paths.get(filePath), imageBytes);
