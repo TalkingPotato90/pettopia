@@ -22,7 +22,7 @@ import ContainerTheme from '../theme/ContainerTheme';
 import { getUserAndPetInfo, updateUserAndPetInfo } from '../api/user';
 import DatePickerValue from '../components/DatePickerValue';
 
-function MyPageMain() {
+function MyPageMain({ updateProfile }) {
   const [formData, setFormData] = useState({
     hasPet: false,
     nickname: '',
@@ -138,6 +138,7 @@ function MyPageMain() {
 
     try {
       updateUserAndPetInfo(formData);
+      updateProfile(formData.nickname, formData.profileImgUrl);
     } catch (error) {
       console.error('사용자, 반려동물 정보 업데이트 에러 : ' + error);
     }
