@@ -67,6 +67,11 @@ function App(props) {
     setProfileImgUrl(profileImgUrl);
   };
 
+  const updateProfile = (name, profileImgUrl) => {
+    setUserName(name);
+    setProfileImgUrl(profileImgUrl);
+  };
+
   // 로그아웃 핸들러
   const handleLogout = async () => {
     try {
@@ -133,7 +138,10 @@ function App(props) {
         />
 
         <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
-          <Route path="/mypage/main" element={<MyPageMain />} />
+          <Route
+            path="/mypage/main"
+            element={<MyPageMain updateProfile={updateProfile} />}
+          />
           <Route
             path="/mypage/activity"
             element={<MyPageActivity myPosts={myPosts} />}
