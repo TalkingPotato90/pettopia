@@ -82,9 +82,6 @@ function MyPageMain() {
     // 파일 이름을 UUID로 변경 (예: file.name 대신 UUID 사용)
     const fileName = `${Date.now()}_${file.name}`;
 
-    // 파일 경로 생성
-    const filePath = `profileImages/${fileName}`;
-
     // 파일을 Base64로 변환
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -93,7 +90,7 @@ function MyPageMain() {
       // formData 업데이트
       setFormData((prevFormData) => ({
         ...prevFormData,
-        profileImgUrl: filePath,
+        profileImgUrl: fileName,
         profileImgBase64: fileBase64,
       }));
     };
@@ -360,7 +357,7 @@ function introduce(
 }
 
 function inputFileUpload(profileImgUrl, handleProfileImgChange) {
-  const fileName = profileImgUrl.replace('/profileImages/', '');
+  const fileName = profileImgUrl.replace('profileImages/', '');
 
   return (
     <Box
