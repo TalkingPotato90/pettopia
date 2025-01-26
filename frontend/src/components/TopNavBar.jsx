@@ -88,7 +88,7 @@ function TopNavBar({ isLoggedIn, userName, profileImgUrl, onLogout }) {
                 >
                   {profileImgUrl ? (
                     <img
-                      src={`http://localhost:8080/${profileImgUrl}`}
+                      src={`http://localhost:8080/profileImages/${profileImgUrl}`}
                       alt="profileImg"
                       style={{
                         width: 35,
