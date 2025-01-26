@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kr.co.pettopia.model.BaseEntity;
 import kr.co.pettopia.model.user.dto.ProfileDTO;
+import kr.co.pettopia.util.FilePathManager;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -77,12 +78,12 @@ public class User extends BaseEntity {
             try {
                 // Base64로 인코딩된 이미지 디코딩
                 byte[] imageBytes = Base64.getDecoder().decode(profileImgBase64);
-                String uploadDir = "backend/src/main/resources/static/profileImages";
+                String uploadDir = FilePathManager.getImageAbsolutePath();
                 File directory = new File(uploadDir);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
-                String filePath = uploadDir + "/" + profileImgUrl.replace("profileImages/", "");
+                String filePath = uploadDir + "/" + profileImgUrl;
                 // 디코딩된 이미지 파일 저장
                 Files.write(Paths.get(filePath), imageBytes);
             } catch (IOException e) {
